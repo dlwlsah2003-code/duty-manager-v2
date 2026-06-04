@@ -3,20 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="화성차체3부 당직 교환 및 관리 시스템 - 실시간 동기화 지원">
 <meta name="theme-color" content="#667eea">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="당직관리">
 <link rel="manifest" href="./manifest.json">
-<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192x192.png">
-<link rel="apple-touch-icon" href="./icons/icon-192x192.png">
-<title>화성차체3부 당직 관리 시스템 v2.0 PWA</title>
+<link rel="apple-touch-icon" href="./icon-192x192.png">
+<title>화성차체3부 당직 관리 시스템 v2.0</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100vh; }
-
-/* ── 로그인 ── */
 .login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
 .login-box { background: white; border-radius: 16px; padding: 40px; width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; }
 .login-box h1 { color: #667eea; font-size: 22px; margin-bottom: 8px; }
@@ -24,29 +20,21 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 .login-box select, .login-box input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; margin-bottom: 10px; outline: none; }
 .login-box select:focus, .login-box input:focus { border-color: #667eea; }
 .login-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 6px; }
-.login-btn:hover { opacity: 0.9; }
-
-/* ── 헤더 / 탭 ── */
 .main-screen { display: none; }
 .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
 .header h1 { font-size: 18px; }
 .header-right { display: flex; align-items: center; gap: 12px; }
 .user-badge { background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 600; }
 .logout-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 14px; }
-.logout-btn:hover { background: rgba(255,255,255,0.3); }
 .tabs { display: flex; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow-x: auto; }
 .tab { flex: 1; min-width: 60px; padding: 14px 8px; text-align: center; cursor: pointer; font-size: 11px; font-weight: 600; color: #888; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
 .tab.active { color: #667eea; border-bottom-color: #667eea; }
-.tab:hover { color: #667eea; }
 .content { padding: 20px; max-width: 900px; margin: 0 auto; }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
-
-/* ── 캘린더 ── */
 .calendar-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .calendar-nav h2 { font-size: 18px; color: #333; }
 .nav-btn { background: #667eea; color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 16px; font-weight: 700; }
-.nav-btn:hover { background: #5568d3; }
 .calendar-grid { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; }
 .day-headers { display: grid; grid-template-columns: repeat(7, 1fr); background: #667eea; }
 .day-header { padding: 10px; text-align: center; color: white; font-size: 13px; font-weight: 600; }
@@ -65,51 +53,32 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 .duty-name.special-name { background: #8e44ad; }
 .duty-name.exchanged-name { background: #27ae60; }
 .holiday-label { font-size: 10px; color: #e74c3c; margin-bottom: 2px; }
-.exchanged-label { font-size: 9px; color: #27ae60; }
 .duty-order-box { margin-top: 16px; background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.duty-order-title { font-size: 13px; color: #888; margin-bottom: 10px; }
-.duty-order-list { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.order-badge { padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; color: white; white-space: nowrap; }
-.order-arrow { color: #aaa; font-size: 14px; font-weight: 700; }
-
-/* ── 카드 공통 ── */
+.duty-order-list { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
+.order-badge { padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; color: white; }
+.order-arrow { color: #aaa; font-size: 14px; }
 .section-title { font-size: 16px; font-weight: 700; color: #333; padding-bottom: 8px; border-bottom: 2px solid #667eea; margin-bottom: 12px; }
 .card { background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 12px; }
 .empty-msg { text-align: center; color: #aaa; padding: 40px; font-size: 14px; }
-.gap-section { margin-bottom: 24px; }
-
-/* ── 내 당직 ── */
 .duty-card { background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.duty-card-left { display: flex; flex-direction: column; gap: 4px; }
 .duty-date { font-size: 16px; font-weight: 700; color: #333; }
 .duty-type { font-size: 12px; color: #667eea; font-weight: 600; }
 .request-btn { background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
-.request-btn:hover { background: #5568d3; }
-.request-btn.requested { background: #f39c12; }
 .request-btn.accepted { background: #27ae60; cursor: default; }
-
-/* ── 교환 카드 ── */
+.request-btn.requested { background: #f39c12; }
 .exchange-card { background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 12px; }
 .exchange-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.exchange-info { font-size: 14px; color: #333; font-weight: 600; }
-.exchange-reason { font-size: 13px; color: #666; margin-top: 4px; }
-.exchange-date-text { font-size: 12px; color: #aaa; margin-top: 4px; }
 .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
 .status-pending { background: #fff3cd; color: #856404; }
 .status-accepted { background: #d4edda; color: #155724; }
 .status-rejected { background: #f8d7da; color: #721c24; }
 .accept-btn { background: #27ae60; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; margin-top: 8px; }
-.accept-btn:hover { background: #219a52; }
-.cancel-btn { background: #e74c3c; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; margin-top: 8px; margin-left: 8px; }
 .reject-btn { background: #e74c3c; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; margin-top: 8px; margin-left: 8px; }
-
-/* ── 이력 ── */
+.cancel-btn { background: #e74c3c; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; margin-top: 8px; }
 .history-card { background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 12px; border-left: 4px solid #f39c12; }
 .history-badge { background: #fff3cd; color: #856404; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 8px; }
 .history-detail { font-size: 13px; color: #555; line-height: 1.8; }
 .history-time { font-size: 11px; color: #aaa; margin-top: 6px; }
-
-/* ── 설정 ── */
 .settings-box { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 16px; }
 .settings-title { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #667eea; }
 .settings-desc { font-size: 13px; color: #666; margin-bottom: 12px; line-height: 1.6; }
@@ -120,128 +89,73 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 .btn-primary { background: #667eea; color: white; }
 .btn-warning { background: #f39c12; color: white; }
 .btn-danger { background: #e74c3c; color: white; }
-.btn-primary:hover { background: #5568d3; }
-.btn-warning:hover { background: #e67e22; }
-.btn-danger:hover { background: #c0392b; }
 .list-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; margin: 4px 0; background: #f8f9fa; border-radius: 6px; }
 .list-item-date { font-weight: 600; color: #333; margin-right: 12px; font-size: 13px; }
 .list-item-name { flex: 1; color: #555; font-size: 13px; }
 .list-item-person { color: #667eea; font-weight: 600; font-size: 13px; margin-right: 8px; }
 .list-item-delete { color: #e74c3c; font-size: 16px; cursor: pointer; }
-
-/* ── 모달 ── */
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
 .modal-overlay.show { display: flex; }
 .modal { background: white; border-radius: 16px; padding: 30px; width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; }
 .modal h3 { font-size: 18px; color: #333; margin-bottom: 16px; }
 .modal label { font-size: 14px; color: #555; font-weight: 600; display: block; margin-bottom: 6px; margin-top: 12px; }
-.modal select, .modal textarea, .modal input[type=text] { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; outline: none; font-family: inherit; }
-.modal select:focus, .modal textarea:focus { border-color: #667eea; }
+.modal select, .modal textarea { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; outline: none; font-family: inherit; }
 .modal textarea { resize: none; height: 80px; }
 .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
 .modal-confirm { flex: 1; padding: 12px; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; }
-.modal-confirm:hover { background: #5568d3; }
 .modal-cancel-btn { flex: 1; padding: 12px; background: #f0f0f0; color: #555; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; }
-
-/* ── API 상태 배너 ── */
-.api-status { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-.api-status.ok { background: #d4edda; color: #155724; }
-.api-status.err { background: #f8d7da; color: #721c24; }
-.api-status.loading { background: #fff3cd; color: #856404; }
-.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid #ccc; border-top-color: #667eea; border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── Confluence 신청 폼 ── */
 .apply-form { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; }
 .apply-form h3 { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #667eea; }
 .form-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
 .form-row > * { flex: 1; min-width: 130px; }
 .form-row label { font-size: 12px; color: #888; font-weight: 600; display: block; margin-bottom: 4px; }
 .form-row select, .form-row input, .form-row textarea { width: 100%; padding: 9px 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; outline: none; font-family: inherit; }
-.form-row select:focus, .form-row input:focus, .form-row textarea:focus { border-color: #667eea; }
 .submit-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 6px; }
-.submit-btn:hover { opacity: 0.9; }
 .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
 .conf-row { background: white; border-radius: 10px; padding: 14px 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.07); margin-bottom: 10px; border-left: 4px solid #667eea; }
-.conf-row.status-pending { border-left-color: #f39c12; }
-.conf-row.status-accepted { border-left-color: #27ae60; }
-.conf-row.status-rejected { border-left-color: #e74c3c; }
+.conf-row.status-대기중 { border-left-color: #f39c12; }
+.conf-row.status-수락완료 { border-left-color: #3498db; }
+.conf-row.status-승인완료 { border-left-color: #27ae60; }
+.conf-row.status-반려 { border-left-color: #e74c3c; }
 .conf-row-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
 .conf-row-info { font-size: 14px; font-weight: 600; color: #333; }
 .conf-row-detail { font-size: 13px; color: #666; line-height: 1.7; }
 .conf-row-actions { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
-
-/* ── PWA 설치 안내 배너 ── */
-.install-banner { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 16px 20px; box-shadow: 0 -2px 10px rgba(0,0,0,0.2); z-index: 999; align-items: center; justify-content: space-between; }
-.install-banner.show { display: flex; }
-.install-banner-content { flex: 1; }
-.install-banner h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-.install-banner p { font-size: 13px; opacity: 0.9; }
-.install-banner-btns { display: flex; gap: 8px; }
-.install-btn { background: white; color: #667eea; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
-.install-btn:hover { background: #f0f0f0; }
-.install-close { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; }
-
-/* ── 오프라인 알림 ── */
 .offline-banner { display: none; position: fixed; top: 0; left: 0; right: 0; background: #e74c3c; color: white; padding: 10px; text-align: center; font-size: 13px; font-weight: 600; z-index: 1001; }
 .offline-banner.show { display: block; }
-
+.install-banner { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 16px 20px; z-index: 999; }
+.install-banner.show { display: flex; align-items: center; justify-content: space-between; }
+.install-btn { background: white; color: #667eea; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.install-close { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; margin-left: 8px; }
+.fb-status { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+.fb-status.ok { background: #d4edda; color: #155724; }
+.fb-status.err { background: #f8d7da; color: #721c24; }
+.fb-status.loading { background: #fff3cd; color: #856404; }
+.gap-section { margin-bottom: 24px; }
 @media (max-width: 600px) {
   .day-cell { min-height: 60px; padding: 4px; }
   .day-num { font-size: 11px; }
   .duty-name { font-size: 9px; padding: 1px 4px; }
   .content { padding: 12px; }
   .modal { width: 95vw; padding: 20px; }
-  .install-banner { flex-direction: column; gap: 12px; }
-  .install-banner-btns { width: 100%; }
-  .install-btn, .install-close { flex: 1; }
 }
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════
-     🔑 API 설정 (안전하게 보호됨)
-══════════════════════════════════════════ -->
-<script>
-// 💡 API 토큰이 안전하게 제거되었습니다!
-// 처음 사용 시 설정 탭에서 입력하면 브라우저에 안전하게 저장됩니다.
+<div class="offline-banner" id="offlineBanner">⚠️ 오프라인 상태입니다.</div>
 
-// ① Confluence 기본 정보 (공개 가능)
-var CONF_BASE  = 'https://confluence.hmg-corp.io';
-var CONF_PAGE_ID = '1792329494';
-
-// ② 관리자 비밀번호 (기본값 - 설정에서 변경 가능)
-var ADMIN_PASSWORD = 'admin1234';
-
-// ③ API 인증 정보 (브라우저에 암호화 저장)
-var CONF_EMAIL = localStorage.getItem('confEmail') || '';
-var CONF_TOKEN = localStorage.getItem('confToken') || '';
-
-// 🔒 보안: 토큰은 사용자의 브라우저에만 저장되며, 
-//    다른 사람과 공유되지 않습니다.
-</script>
-<!-- ══════════════════════════════════════════ -->
-
-<!-- 오프라인 알림 배너 -->
-<div class="offline-banner" id="offlineBanner">
-  ⚠️ 오프라인 상태입니다. 일부 기능이 제한될 수 있습니다.
-</div>
-
-<!-- PWA 설치 안내 배너 -->
 <div class="install-banner" id="installBanner">
-  <div class="install-banner-content">
-    <h3>📱 앱으로 설치하기</h3>
-    <p>홈 화면에 추가하여 더 편리하게 사용하세요!</p>
+  <div>
+    <div style="font-size:15px;font-weight:700;">📱 앱으로 설치하기</div>
+    <div style="font-size:13px;opacity:0.9;">홈 화면에 추가하여 편리하게 사용하세요!</div>
   </div>
-  <div class="install-banner-btns">
+  <div>
     <button class="install-btn" id="installBtn">설치</button>
     <button class="install-close" id="installClose">닫기</button>
   </div>
 </div>
 
-<!-- 로그인 화면 -->
 <div class="login-screen" id="loginScreen">
   <div class="login-box">
     <h1>🗓️ 화성차체3부</h1>
@@ -260,7 +174,6 @@ var CONF_TOKEN = localStorage.getItem('confToken') || '';
   </div>
 </div>
 
-<!-- 메인 화면 -->
 <div class="main-screen" id="mainScreen">
   <div class="header">
     <h1>🗓️ 화성차체3부 당직 관리</h1>
@@ -269,19 +182,17 @@ var CONF_TOKEN = localStorage.getItem('confToken') || '';
       <button class="logout-btn" onclick="logout()">로그아웃</button>
     </div>
   </div>
-
   <div class="tabs">
-    <div class="tab active"  onclick="showTab('calendar')">📅 캘린더</div>
-    <div class="tab"         onclick="showTab('myduty')">👤 내당직</div>
-    <div class="tab"         onclick="showTab('apply')">📝 교환신청</div>
-    <div class="tab"         onclick="showTab('exchange')">🔄 교환현황</div>
-    <div class="tab"         onclick="showTab('history')">📋 이력</div>
-    <div class="tab"         onclick="showTab('settings')">⚙️ 설정</div>
+    <div class="tab active" onclick="showTab('calendar')">📅 캘린더</div>
+    <div class="tab" onclick="showTab('myduty')">👤 내당직</div>
+    <div class="tab" onclick="showTab('apply')">📝 교환신청</div>
+    <div class="tab" onclick="showTab('exchange')">🔄 교환현황</div>
+    <div class="tab" onclick="showTab('history')">📋 이력</div>
+    <div class="tab" onclick="showTab('settings')">⚙️ 설정</div>
   </div>
-
   <div class="content">
 
-    <!-- ── 캘린더 탭 ── -->
+    <!-- 캘린더 -->
     <div class="tab-content active" id="tab-calendar">
       <div class="calendar-nav">
         <button class="nav-btn" onclick="changeMonth(-1)">◀</button>
@@ -299,74 +210,62 @@ var CONF_TOKEN = localStorage.getItem('confToken') || '';
         <div class="days-grid" id="calendarDays"></div>
       </div>
       <div class="duty-order-box">
-        <div class="duty-order-title">※ 당직운영 (당직순번제)</div>
+        <div style="font-size:13px;color:#888;">※ 당직 순번</div>
         <div class="duty-order-list" id="dutyOrderList"></div>
       </div>
     </div>
 
-    <!-- ── 내 당직 탭 ── -->
+    <!-- 내 당직 -->
     <div class="tab-content" id="tab-myduty">
       <div class="section-title" style="margin-bottom:16px;">👤 내 당직 일정 (2026년)</div>
       <div id="myDutyList"></div>
     </div>
 
-    <!-- ── 교환 신청 탭 (Confluence 연동 핵심) ── -->
+    <!-- 교환 신청 -->
     <div class="tab-content" id="tab-apply">
-      <div id="apiStatusBanner" class="api-status loading">
-        <span class="spinner"></span> Confluence 연결 확인 중...
-      </div>
-
-      <!-- 신청 폼 -->
+      <div id="fbStatusBanner" class="fb-status loading">⏳ Firebase 연결 중...</div>
       <div class="apply-form">
-        <h3>📝 당직 교환 신청서 (Confluence 저장)</h3>
+        <h3>📝 당직 교환 신청</h3>
         <div class="form-row">
           <div>
             <label>신청자</label>
             <select id="fmRequester" disabled></select>
           </div>
           <div>
-            <label>내 당직 날짜 (교환 줄 날짜)</label>
-            <select id="fmMyDate">
-              <option value="">로그인 후 자동 로드</option>
-            </select>
+            <label>내 당직 날짜</label>
+            <select id="fmMyDate"><option value="">선택하세요</option></select>
           </div>
         </div>
         <div class="form-row">
           <div>
             <label>교환 대상자</label>
-            <select id="fmTarget">
-              <option value="">선택하세요</option>
-            </select>
+            <select id="fmTarget"><option value="">선택하세요</option></select>
           </div>
           <div>
-            <label>상대방 당직 날짜 (받을 날짜)</label>
-            <select id="fmTargetDate">
-              <option value="">대상자 선택 후 자동 로드</option>
-            </select>
+            <label>상대방 당직 날짜</label>
+            <select id="fmTargetDate"><option value="">대상자 선택 후 로드</option></select>
           </div>
         </div>
         <div class="form-row">
-          <div style="flex: 2;">
+          <div style="flex:2;">
             <label>교환 사유</label>
-            <textarea id="fmReason" placeholder="교환 사유를 입력하세요..." rows="2"></textarea>
+            <textarea id="fmReason" placeholder="교환 사유를 입력하세요..."></textarea>
           </div>
         </div>
         <button class="submit-btn" id="submitBtn" onclick="submitExchangeRequest()">
-          📤 Confluence에 교환 신청 등록
+          📤 교환 신청 등록
         </button>
       </div>
-
-      <!-- 내가 신청한 목록 -->
       <div class="gap-section">
         <div class="section-title">📤 내가 신청한 교환 요청</div>
-        <div id="myConfRequests"><div class="empty-msg">불러오는 중...</div></div>
+        <div id="myRequests"><div class="empty-msg">불러오는 중...</div></div>
       </div>
     </div>
 
-    <!-- ── 교환 현황 탭 (전체) ── -->
+    <!-- 교환 현황 -->
     <div class="tab-content" id="tab-exchange">
       <div class="gap-section">
-        <div class="section-title">📥 나에게 온 교환 요청 (수락 가능)</div>
+        <div class="section-title">📥 나에게 온 교환 요청</div>
         <div id="incomingRequests"><div class="empty-msg">불러오는 중...</div></div>
       </div>
       <div class="gap-section">
@@ -375,86 +274,41 @@ var CONF_TOKEN = localStorage.getItem('confToken') || '';
       </div>
     </div>
 
-    <!-- ── 이력 탭 ── -->
+    <!-- 이력 -->
     <div class="tab-content" id="tab-history">
       <div class="section-title" style="margin-bottom:16px;">📋 당직 변경 이력</div>
       <div id="historyList"></div>
     </div>
 
-    <!-- ── 설정 탭 ── -->
+    <!-- 설정 -->
     <div class="tab-content" id="tab-settings">
-
-      <!-- API 설정 (모든 사용자) -->
-      <div class="settings-box">
-        <div class="settings-title">🔑 Confluence API 설정</div>
-        <div class="settings-desc">
-          교환 신청 데이터를 공유하려면 Confluence API 연동이 필요합니다.<br>
-          <strong>설정 방법:</strong> 
-          <a href="https://id.atlassian.com/manage-profile/security/api-tokens" target="_blank" style="color:#667eea;">
-            Atlassian 토큰 발급 🔗
-          </a>
-        </div>
-        <div id="apiConfigStatus" class="info-box">
-          <p><strong>연결 상태:</strong> <span id="apiStatusText">미설정</span></p>
-          <p><strong>이메일:</strong> <span id="apiEmailText">-</span></p>
-        </div>
-        <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;margin-top:12px;">Atlassian 계정 이메일</label>
-        <input type="email" id="confEmailInput" placeholder="예: 2917185@kia.com" value=""
-          style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:10px;">
-        
-        <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">API 토큰</label>
-        <input type="password" id="confTokenInput" placeholder="Atlassian API 토큰 입력"
-          style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:12px;">
-        
-        <div class="btn-group">
-          <button class="action-btn btn-primary" onclick="saveApiConfig()">✅ API 설정 저장</button>
-          <button class="action-btn btn-danger" onclick="clearApiConfig()">🗑️ 설정 삭제</button>
-        </div>
-        <div style="margin-top:12px;padding:10px;background:#fff3cd;border-radius:8px;font-size:12px;color:#856404;">
-          ⚠️ <strong>보안 안내:</strong> API 토큰은 본인의 브라우저에만 안전하게 저장되며, 다른 사람과 공유되지 않습니다.
-        </div>
-      </div>
-
       <div class="settings-box">
         <div class="settings-title">📊 시스템 정보</div>
         <div class="info-box">
           <p><strong>현재 사용자:</strong> <span id="settingsUserName"></span>
             <span id="adminBadge" style="display:none;background:#e74c3c;color:white;padding:2px 8px;border-radius:12px;font-size:11px;margin-left:6px;">관리자</span>
           </p>
-          <p><strong>Confluence 페이지:</strong> <a href="javascript:void(0)" onclick="openConfluencePage()" style="color:#667eea;">페이지 열기 🔗</a></p>
-          <p><strong>저장 방식:</strong> Confluence REST API (공유 데이터)</p>
+          <p><strong>저장 방식:</strong> Firebase 실시간 DB (공유 데이터)</p>
+          <p><strong>연결 상태:</strong> <span id="fbConnStatus">확인 중...</span></p>
         </div>
       </div>
 
-      <!-- 관리자: 순번 설정 -->
       <div class="settings-box" id="adminRotationSection" style="display:none;">
         <div class="settings-title">⚙️ 관리자 - 당직 순번 설정</div>
-        <div class="settings-desc">순환 당직의 시작 날짜와 담당자를 설정합니다.<br>
-          <strong style="color:#e74c3c;">⚠️ 변경 즉시 캘린더에 반영됩니다!</strong></div>
-        <div class="info-box">
-          <p><strong>현재 시작 날짜:</strong> <span id="curStartDate"></span></p>
-          <p><strong>현재 시작 담당자:</strong> <span id="curStartPerson"></span></p>
-          <p><strong>건너뛰는 날짜:</strong> <span id="curSkipDates"></span></p>
-        </div>
         <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">시작 날짜</label>
         <input type="date" id="newStartDate" style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:10px;">
         <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">시작 담당자</label>
-        <select id="newStartPerson" style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:10px;">
+        <select id="newStartPerson" style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:12px;">
           <option>류재근</option><option>정희주</option><option>정세정</option>
           <option>이진모</option><option>권영재</option><option>김병오</option>
           <option>안제만</option><option>인원교</option><option>고현우</option>
           <option>정민규</option><option>권석일</option>
         </select>
-        <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">순번에서 건너뛸 날짜 (쉼표로 구분)</label>
-        <input type="text" id="newSkipDates" placeholder="예: 2026-07-18, 2026-09-01"
-          style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:12px;">
         <button class="action-btn btn-warning" onclick="updateDutyRotation()">✅ 순번 변경 적용</button>
       </div>
 
-      <!-- 관리자: 특별배정 -->
       <div class="settings-box" id="adminSpecialSection" style="display:none;">
         <div class="settings-title">📌 관리자 - 특별배정 관리</div>
-        <div class="settings-desc">특정 날짜에 담당자를 고정 배정합니다.</div>
         <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
           <input type="date" id="specialDate" style="flex:1;min-width:130px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
           <select id="specialPerson" style="flex:1;min-width:100px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
@@ -463,64 +317,54 @@ var CONF_TOKEN = localStorage.getItem('confToken') || '';
             <option>안제만</option><option>인원교</option><option>고현우</option>
             <option>정민규</option><option>권석일</option>
           </select>
-          <button class="action-btn btn-primary" onclick="addSpecialSchedule()" style="padding:10px 16px;">➕ 추가</button>
+          <button class="action-btn btn-primary" onclick="addSpecialSchedule()">➕ 추가</button>
         </div>
         <div id="specialScheduleList" style="max-height:250px;overflow-y:auto;border:2px solid #e0e0e0;border-radius:8px;padding:8px;"></div>
       </div>
 
-      <!-- 관리자: 공휴일 -->
       <div class="settings-box" id="adminHolidaySection" style="display:none;">
         <div class="settings-title">🎉 관리자 - 공휴일 관리</div>
         <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
           <input type="date" id="newHolidayDate" style="flex:1;min-width:130px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
           <input type="text" id="newHolidayName" placeholder="공휴일 이름" style="flex:1;min-width:100px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
-          <button class="action-btn btn-primary" onclick="addHoliday()" style="padding:10px 16px;">➕ 추가</button>
+          <button class="action-btn btn-primary" onclick="addHoliday()">➕ 추가</button>
         </div>
         <div id="holidayListContainer" style="max-height:280px;overflow-y:auto;border:2px solid #e0e0e0;border-radius:8px;padding:8px;"></div>
       </div>
 
-      <!-- 관리자: 교환 승인 -->
       <div class="settings-box" id="adminApprovalSection" style="display:none;">
-        <div class="settings-title">✅ 관리자 - 교환 신청 최종 승인</div>
-        <div class="settings-desc">양쪽이 수락한 교환을 최종 승인하여 당직표에 반영합니다.</div>
+        <div class="settings-title">✅ 관리자 - 교환 최종 승인</div>
         <div id="adminApprovalList"><div class="empty-msg">승인 대기 없음</div></div>
       </div>
 
       <div class="settings-box">
         <div class="settings-title">🔄 데이터 초기화</div>
         <div class="btn-group">
-          <button class="action-btn btn-warning" onclick="resetHistory()">이력 초기화</button>
-          <button class="action-btn btn-danger"  onclick="resetAllData()">전체 초기화</button>
+          <button class="action-btn btn-danger" onclick="resetAllData()">전체 초기화</button>
         </div>
       </div>
 
       <div class="settings-box">
         <div class="settings-title">ℹ️ 사용 안내</div>
         <div class="settings-desc">
-          <strong>교환 신청:</strong> 📝 교환신청 탭 → 폼 작성 → Confluence에 저장<br>
-          <strong>교환 수락:</strong> 🔄 교환현황 탭 → 나에게 온 요청 → 수락 버튼<br>
-          <strong>최종 반영:</strong> 관리자가 승인 → 당직표 자동 반영<br><br>
-          <strong>색상 안내:</strong><br>
-          &nbsp;&nbsp;🔴 빨간색 = 내 당직 &nbsp;&nbsp;🔵 파란색 = 다른 사람 당직<br>
-          &nbsp;&nbsp;🟣 보라색 = 특별배정 &nbsp;&nbsp;🟢 초록색 = 교환 완료
+          🔴 빨간색 = 내 당직 &nbsp; 🔵 파란색 = 다른 사람 당직<br>
+          🟣 보라색 = 특별배정 &nbsp; 🟢 초록색 = 교환 완료
         </div>
       </div>
     </div>
 
-  </div><!-- /content -->
-</div><!-- /main-screen -->
+  </div>
+</div>
 
-<!-- 교환 확정 모달 (나에게 온 요청 수락) -->
+<!-- 수락 모달 -->
 <div class="modal-overlay" id="acceptModal">
   <div class="modal">
     <h3>✅ 교환 수락</h3>
     <p style="font-size:14px;color:#555;margin-bottom:12px;">
       <strong id="accRequester"></strong>님의 <strong id="accReqDate"></strong> 당직과 교환합니다.
     </p>
-    <label>내가 줄 당직 날짜 선택</label>
-    <select id="accMyDate">
-      <option value="">선택하세요</option>
-    </select>
+    <label>내가 줄 당직 날짜</label>
+    <select id="accMyDate"><option value="">선택하세요</option></select>
     <div id="accSummary" style="background:#f8f9fa;padding:12px;border-radius:8px;font-size:13px;color:#555;margin-top:10px;display:none;"></div>
     <div class="modal-btns">
       <button class="modal-cancel-btn" onclick="closeAcceptModal()">취소</button>
@@ -529,13 +373,35 @@ var CONF_TOKEN = localStorage.getItem('confToken') || '';
   </div>
 </div>
 
-<script>
-// ══════════════════════════════════════════════════════════
-// 1. 기본 상수
-// ══════════════════════════════════════════════════════════
-var MEMBERS = ['류재근','정희주','정세정','이진모','권영재','김병오','안제만','인원교','고현우','정민규','권석일'];
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getDatabase, ref, set, get, push, update, remove, onValue, serverTimestamp }
+  from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
-var DEFAULT_HOLIDAYS = {
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Firebase 설정
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const firebaseConfig = {
+  apiKey: "AIzaSyAC-zk0cMjuNMprbjD2I8np9oV32gw7Y78",
+  authDomain: "duty-manager-3c981.firebaseapp.com",
+  databaseURL: "https://duty-manager-3c981-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "duty-manager-3c981",
+  storageBucket: "duty-manager-3c981.firebasestorage.app",
+  messagingSenderId: "1077728967909",
+  appId: "1:1077728967909:web:61580080b97c372605680c"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 상수
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const MEMBERS = ['류재근','정희주','정세정','이진모','권영재','김병오','안제만','인원교','고현우','정민규','권석일'];
+const ADMIN_PASSWORD = 'admin1234';
+
+const DEFAULT_HOLIDAYS = {
   '2026-01-01':'신정','2026-01-28':'설날연휴','2026-01-29':'설날','2026-01-30':'설날연휴',
   '2026-03-01':'삼일절','2026-05-05':'어린이날','2026-05-24':'석가탄신일',
   '2026-06-06':'현충일','2026-07-17':'제헌절',
@@ -549,793 +415,534 @@ var DEFAULT_HOLIDAYS = {
   '2026-12-25':'성탄절'
 };
 
-var DEFAULT_SPECIAL = {
+const DEFAULT_SPECIAL = {
   '2026-06-03':'김병오','2026-06-06':'정희주','2026-06-07':'안제만',
   '2026-06-13':'김병오','2026-06-14':'권석일','2026-06-20':'인원교',
   '2026-06-21':'고현우','2026-06-27':'정민규','2026-06-28':'안제만',
   '2026-07-04':'류재근'
 };
 
-var DEFAULT_START_DATE   = '2026-07-05';
-var DEFAULT_START_PERSON = '정세정';
-var DEFAULT_SKIP_DATES   = [];
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 런타임 변수
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let currentUser = '', isAdmin = false;
+let currentYear = 2026, currentMonth = 0;
+let accData = null;
+let HOLIDAYS = {}, SPECIAL_SCHEDULE = {};
+let DUTY_START_DATE = new Date(2026, 6, 5);
+let DUTY_START_INDEX = MEMBERS.indexOf('정세정');
+let allRows = {};
 
-// ══════════════════════════════════════════════════════════
-// 2. 런타임 변수
-// ══════════════════════════════════════════════════════════
-var HOLIDAYS = {}, SPECIAL_SCHEDULE = {}, SKIP_DATES = {};
-var DUTY_START_DATE, DUTY_START_INDEX;
-var currentUser = '', isAdmin = false;
-var currentYear = 2026, currentMonth = 0;
-var accData = null;          // 수락 모달용 임시 데이터
-var confPageVersion = 1;     // Confluence 페이지 현재 버전
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Firebase 실시간 리스너
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function initFirebaseListeners() {
+  // 교환 신청 실시간 동기화
+  onValue(ref(db, 'requests'), (snap) => {
+    allRows = snap.val() || {};
+    if (currentUser) {
+      renderMyRequests();
+      renderExchangeTab();
+      renderCalendar();
+      renderMyDuty();
+    }
+    document.getElementById('fbStatusBanner').className = 'fb-status ok';
+    document.getElementById('fbStatusBanner').textContent = '✅ Firebase 실시간 연결됨';
+    document.getElementById('fbConnStatus').textContent = '✅ 연결됨';
+  }, (err) => {
+    document.getElementById('fbStatusBanner').className = 'fb-status err';
+    document.getElementById('fbStatusBanner').textContent = '❌ Firebase 연결 실패';
+    document.getElementById('fbConnStatus').textContent = '❌ 연결 실패';
+  });
 
-// ══════════════════════════════════════════════════════════
-// 3. localStorage 헬퍼
-// ══════════════════════════════════════════════════════════
-function lsGet(k, d) { try { var v=localStorage.getItem(k); return v!==null?JSON.parse(v):d; } catch(e){return d;} }
-function lsSet(k, v) { try { localStorage.setItem(k,JSON.stringify(v)); } catch(e){} }
+  // 설정 실시간 동기화
+  onValue(ref(db, 'settings'), (snap) => {
+    const s = snap.val();
+    if (s) {
+      if (s.dutyStartDate) {
+        const p = s.dutyStartDate.split('-');
+        DUTY_START_DATE = new Date(+p[0], +p[1]-1, +p[2]);
+      }
+      if (s.dutyStartPerson) DUTY_START_INDEX = MEMBERS.indexOf(s.dutyStartPerson);
+      if (s.holidays) HOLIDAYS = Object.assign({}, DEFAULT_HOLIDAYS, s.holidays);
+      if (s.special) SPECIAL_SCHEDULE = Object.assign({}, DEFAULT_SPECIAL, s.special);
+    } else {
+      HOLIDAYS = {...DEFAULT_HOLIDAYS};
+      SPECIAL_SCHEDULE = {...DEFAULT_SPECIAL};
+    }
+    if (currentUser) { renderCalendar(); renderMyDuty(); }
+  });
 
-// ══════════════════════════════════════════════════════════
-// 4. 데이터 로드
-// ══════════════════════════════════════════════════════════
-function loadHolidays() {
-  HOLIDAYS = {};
-  Object.assign(HOLIDAYS, DEFAULT_HOLIDAYS);
-  Object.assign(HOLIDAYS, lsGet('holidaysAdded',{}));
-  lsGet('holidaysDeleted',[]).forEach(function(k){ delete HOLIDAYS[k]; });
+  // 이력 실시간 동기화
+  onValue(ref(db, 'history'), () => {
+    if (currentUser) renderHistory();
+  });
 }
-function loadSpecialSchedule() {
-  SPECIAL_SCHEDULE = {};
-  Object.assign(SPECIAL_SCHEDULE, DEFAULT_SPECIAL);
-  Object.assign(SPECIAL_SCHEDULE, lsGet('specialAdded',{}));
-  lsGet('specialDeleted',[]).forEach(function(k){ delete SPECIAL_SCHEDULE[k]; });
-}
-function loadDutySettings() {
-  var sd = lsGet('dutyStartDate', DEFAULT_START_DATE);
-  var sp = lsGet('dutyStartPerson', DEFAULT_START_PERSON);
-  var p  = sd.split('-');
-  DUTY_START_DATE  = new Date(+p[0], +p[1]-1, +p[2]);
-  DUTY_START_INDEX = MEMBERS.indexOf(sp);
-  if (DUTY_START_INDEX < 0) DUTY_START_INDEX = 0;
-  SKIP_DATES = {};
-  lsGet('dutySkipDates',[]).forEach(function(d){ SKIP_DATES[d]=true; });
-}
 
-// ══════════════════════════════════════════════════════════
-// 5. 당직 계산
-// ══════════════════════════════════════════════════════════
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 당직 계산
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function dateToStr(date) {
   return date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
 }
 function isDutyDay(date) {
-  var s = dateToStr(date), dow = date.getDay();
-  if (SKIP_DATES[s]) return false;
-  return dow===0||dow===6||!!HOLIDAYS[s]||!!SPECIAL_SCHEDULE[s];
-}
-function getDutyPerson(date) {
-  var s = dateToStr(date);
-  var exd = getExchangedDuties();
-  if (exd[s]) return exd[s];
-  if (SPECIAL_SCHEDULE[s]) return SPECIAL_SCHEDULE[s];
-  if (!isDutyDay(date)) return null;
-  var count = 0, cur = new Date(DUTY_START_DATE);
-  var target = new Date(date);
-  if (target >= DUTY_START_DATE) {
-    while (dateToStr(cur) !== dateToStr(target)) {
-      var cs = dateToStr(cur);
-      if (!SKIP_DATES[cs] && !SPECIAL_SCHEDULE[cs] && (cur.getDay()===0||cur.getDay()===6||HOLIDAYS[cs])) count++;
-      cur.setDate(cur.getDate()+1);
-      if (count > 2000) break;
-    }
-    return MEMBERS[(DUTY_START_INDEX+count)%MEMBERS.length];
-  } else {
-    var prevDays=[], c2=new Date(DUTY_START_DATE); c2.setDate(c2.getDate()-1);
-    for (var i=0;i<400;i++) {
-      var cs2=dateToStr(c2);
-      if (!SKIP_DATES[cs2]&&!SPECIAL_SCHEDULE[cs2]&&(c2.getDay()===0||c2.getDay()===6||HOLIDAYS[cs2])) prevDays.unshift(cs2);
-      c2.setDate(c2.getDate()-1);
-    }
-    var idx2=prevDays.indexOf(s);
-    if (idx2>=0) { var mi=((DUTY_START_INDEX-(prevDays.length-idx2))%MEMBERS.length+MEMBERS.length)%MEMBERS.length; return MEMBERS[mi]; }
-    return null;
-  }
+  const s = dateToStr(date), dow = date.getDay();
+  return dow===0 || dow===6 || !!HOLIDAYS[s] || !!SPECIAL_SCHEDULE[s];
 }
 function getExchangedDuties() {
-  var result={};
-  var rows = lsGet('confRows',[]);
-  rows.forEach(function(r) {
-    if (r.status==='승인완료') {
+  const result = {};
+  Object.values(allRows).forEach(r => {
+    if (r.status === '승인완료') {
       result[r.myDate]     = r.target;
       result[r.targetDate] = r.requester;
     }
   });
   return result;
 }
-function isSpecial(s) { return !!SPECIAL_SCHEDULE[s]; }
+function getDutyPerson(date) {
+  const s = dateToStr(date);
+  const exd = getExchangedDuties();
+  if (exd[s]) return exd[s];
+  if (SPECIAL_SCHEDULE[s]) return SPECIAL_SCHEDULE[s];
+  if (!isDutyDay(date)) return null;
+  let count = 0;
+  const cur = new Date(DUTY_START_DATE);
+  const target = new Date(date);
+  if (target >= DUTY_START_DATE) {
+    while (dateToStr(cur) !== dateToStr(target)) {
+      const cs = dateToStr(cur);
+      if (!SPECIAL_SCHEDULE[cs] && (cur.getDay()===0||cur.getDay()===6||HOLIDAYS[cs])) count++;
+      cur.setDate(cur.getDate()+1);
+      if (count > 2000) break;
+    }
+    return MEMBERS[(DUTY_START_INDEX+count) % MEMBERS.length];
+  }
+  return null;
+}
 function getMyDutyDates(user) {
-  var result=[];
-  for (var m=0;m<12;m++) {
-    var days=new Date(2026,m+1,0).getDate();
-    for (var d=1;d<=days;d++) {
-      var date=new Date(2026,m,d);
-      if (isDutyDay(date)&&getDutyPerson(date)===user) result.push(dateToStr(date));
+  const result = [];
+  for (let m=0; m<12; m++) {
+    const days = new Date(2026, m+1, 0).getDate();
+    for (let d=1; d<=days; d++) {
+      const date = new Date(2026, m, d);
+      if (isDutyDay(date) && getDutyPerson(date) === user) result.push(dateToStr(date));
     }
   }
   return result;
 }
 
-// ══════════════════════════════════════════════════════════
-// 6. Confluence REST API 연동
-// ══════════════════════════════════════════════════════════
-function getAuthHeader() {
-  return 'Basic ' + btoa(CONF_EMAIL + ':' + CONF_TOKEN);
-}
-
-/* 페이지 현재 내용 + 버전 가져오기 */
-function fetchConfluencePage() {
-  return fetch(CONF_BASE+'/rest/api/content/'+CONF_PAGE_ID+'?expand=body.storage,version', {
-    headers: { 'Authorization': getAuthHeader(), 'Content-Type': 'application/json' }
-  }).then(function(r){ return r.json(); });
-}
-
-/* 교환 신청 표 파싱 (HTML 표 → JSON 배열) */
-function parseTableFromBody(bodyHtml) {
-  var rows = [];
-  var parser = new DOMParser();
-  var doc = parser.parseFromString(bodyHtml, 'text/html');
-  var table = doc.querySelector('table');
-  if (!table) return rows;
-  var trs = table.querySelectorAll('tr');
-  for (var i=1; i<trs.length; i++) {
-    var tds = trs[i].querySelectorAll('td');
-    if (tds.length < 7) continue;
-    rows.push({
-      id:        tds[0].textContent.trim(),
-      requester: tds[1].textContent.trim(),
-      myDate:    tds[2].textContent.trim(),
-      target:    tds[3].textContent.trim(),
-      targetDate:tds[4].textContent.trim(),
-      reason:    tds[5].textContent.trim(),
-      status:    tds[6].textContent.trim()
-    });
-  }
-  return rows;
-}
-
-/* JSON 배열 → HTML 표 문자열 */
-function buildTableHtml(rows) {
-  var cols = ['ID','신청자','내 당직날짜','교환대상자','상대방 날짜','사유','상태'];
-  var html = '<table><tbody><tr>';
-  cols.forEach(function(c){ html += '<th><strong>'+c+'</strong></th>'; });
-  html += '</tr>';
-  rows.forEach(function(r) {
-    var color = r.status==='승인완료'?'#d4edda':r.status==='수락완료'?'#cce5ff':r.status==='반려'?'#f8d7da':'#fff3cd';
-    html += '<tr style="background:'+color+';">';
-    html += '<td>'+r.id+'</td><td>'+r.requester+'</td><td>'+r.myDate+'</td>';
-    html += '<td>'+r.target+'</td><td>'+r.targetDate+'</td><td>'+r.reason+'</td>';
-    html += '<td><strong>'+r.status+'</strong></td></tr>';
-  });
-  html += '</tbody></table>';
-  return html;
-}
-
-/* 페이지 업데이트 (표만 교체) */
-function updateConfluencePage(rows, pageData) {
-  var tableHtml = buildTableHtml(rows);
-  var body = pageData.body.storage.value;
-  // 기존 table 제거 후 새 table 삽입
-  var cleaned = body.replace(/<table[\s\S]*?<\/table>/gi, '');
-  var newBody  = cleaned + '\n' + tableHtml;
-  // 표 제목이 없으면 헤더 추가
-  if (!body.includes('당직 교환 신청 현황')) {
-    newBody = '<h2>📋 당직 교환 신청 현황</h2>\n<p>아래 표는 시스템이 자동 관리합니다. 직접 수정하지 마세요.</p>\n' + tableHtml;
-  }
-  return fetch(CONF_BASE+'/rest/api/content/'+CONF_PAGE_ID, {
-    method: 'PUT',
-    headers: { 'Authorization': getAuthHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      version: { number: pageData.version.number + 1 },
-      title: pageData.title,
-      type: 'page',
-      body: { storage: { value: newBody, representation: 'storage' } }
-    })
-  }).then(function(r){ return r.json(); });
-}
-
-/* API 상태 배너 업데이트 */
-function setApiBanner(state, msg) {
-  var el = document.getElementById('apiStatusBanner');
-  el.className = 'api-status ' + state;
-  el.innerHTML = (state==='loading'?'<span class="spinner"></span> ':state==='ok'?'✅ ':'❌ ') + msg;
-}
-
-/* Confluence 데이터 로드 & 화면 갱신 */
-function loadConfluenceData(callback) {
-  fetchConfluencePage().then(function(data) {
-    if (!data || data.statusCode === 401) {
-      setApiBanner('err', 'Confluence 인증 실패. 이메일/토큰을 확인하세요.');
-      return;
-    }
-    var rows = parseTableFromBody(data.body.storage.value);
-    lsSet('confRows', rows);
-    lsSet('confPageData', data);
-    setApiBanner('ok', 'Confluence 연결됨 ✓  (신청 '+rows.length+'건 로드)');
-    if (callback) callback(rows, data);
-  }).catch(function(e) {
-    // CORS 환경(로컬 파일)에서는 fallback
-    setApiBanner('err', 'API 연결 실패. 토큰 확인 또는 로컬 테스트 모드 사용 중.');
-    var rows = lsGet('confRows', []);
-    if (callback) callback(rows, null);
-  });
-}
-
-// ══════════════════════════════════════════════════════════
-// 7. 교환 신청 폼 로직
-// ══════════════════════════════════════════════════════════
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 교환 신청
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function initApplyForm() {
-  // 신청자 고정
-  var req = document.getElementById('fmRequester');
-  req.innerHTML = '<option value="'+currentUser+'">'+currentUser+'</option>';
-
-  // 내 당직 날짜 로드
-  var myDates = getMyDutyDates(currentUser);
-  var myDateSel = document.getElementById('fmMyDate');
+  document.getElementById('fmRequester').innerHTML = `<option>${currentUser}</option>`;
+  const myDates = getMyDutyDates(currentUser);
+  const dn = ['일','월','화','수','목','금','토'];
+  const myDateSel = document.getElementById('fmMyDate');
   myDateSel.innerHTML = '<option value="">선택하세요</option>';
-  myDates.forEach(function(d) {
-    var date = new Date(d); var dn=['일','월','화','수','목','금','토'];
-    myDateSel.innerHTML += '<option value="'+d+'">'+d+' ('+dn[date.getDay()]+')</option>';
+  myDates.forEach(d => {
+    const date = new Date(d);
+    myDateSel.innerHTML += `<option value="${d}">${d} (${dn[date.getDay()]})</option>`;
   });
-
-  // 교환 대상자 (본인 제외)
-  var tgtSel = document.getElementById('fmTarget');
+  const tgtSel = document.getElementById('fmTarget');
   tgtSel.innerHTML = '<option value="">선택하세요</option>';
-  MEMBERS.filter(function(m){ return m!==currentUser; }).forEach(function(m){
-    tgtSel.innerHTML += '<option value="'+m+'">'+m+'</option>';
+  MEMBERS.filter(m => m !== currentUser).forEach(m => {
+    tgtSel.innerHTML += `<option value="${m}">${m}</option>`;
   });
-
-  // 대상자 변경 시 상대방 날짜 로드
   tgtSel.onchange = function() {
-    var tgtDateSel = document.getElementById('fmTargetDate');
+    const tgtDateSel = document.getElementById('fmTargetDate');
     if (!this.value) { tgtDateSel.innerHTML='<option>대상자를 먼저 선택하세요</option>'; return; }
-    var tgtDates = getMyDutyDates(this.value);
+    const tgtDates = getMyDutyDates(this.value);
     tgtDateSel.innerHTML = '<option value="">선택하세요</option>';
-    tgtDates.forEach(function(d) {
-      var date=new Date(d); var dn=['일','월','화','수','목','금','토'];
-      tgtDateSel.innerHTML += '<option value="'+d+'">'+d+' ('+dn[date.getDay()]+')</option>';
+    tgtDates.forEach(d => {
+      const date = new Date(d);
+      tgtDateSel.innerHTML += `<option value="${d}">${d} (${dn[date.getDay()]})</option>`;
     });
   };
 }
 
-function submitExchangeRequest() {
-  var requester  = currentUser;
-  var myDate     = document.getElementById('fmMyDate').value;
-  var target     = document.getElementById('fmTarget').value;
-  var targetDate = document.getElementById('fmTargetDate').value;
-  var reason     = document.getElementById('fmReason').value.trim();
-
+window.submitExchangeRequest = async function() {
+  const myDate     = document.getElementById('fmMyDate').value;
+  const target     = document.getElementById('fmTarget').value;
+  const targetDate = document.getElementById('fmTargetDate').value;
+  const reason     = document.getElementById('fmReason').value.trim();
   if (!myDate||!target||!targetDate||!reason) { alert('모든 항목을 입력해주세요!'); return; }
-  if (!confirm('교환 신청을 Confluence에 등록하시겠습니까?\n\n'+requester+' ('+myDate+') ↔ '+target+' ('+targetDate+')\n사유: '+reason)) return;
-
-  var btn = document.getElementById('submitBtn');
+  if (!confirm(`교환 신청:\n${currentUser} (${myDate}) ↔ ${target} (${targetDate})\n사유: ${reason}`)) return;
+  const btn = document.getElementById('submitBtn');
   btn.disabled = true; btn.textContent = '등록 중...';
-
-  var rows = lsGet('confRows', []);
-  var newId = 'EX-' + Date.now();
-  var newRow = { id:newId, requester:requester, myDate:myDate, target:target, targetDate:targetDate, reason:reason, status:'대기중' };
-  rows.push(newRow);
-
-  var pageData = lsGet('confPageData', null);
-  if (pageData) {
-    updateConfluencePage(rows, pageData).then(function(res) {
-      lsSet('confRows', rows);
-      addHistory({ type:'교환신청', from:requester, to:target, date:myDate, reason:reason, changedAt:new Date().toLocaleString('ko-KR') });
-      btn.disabled=false; btn.textContent='📤 Confluence에 교환 신청 등록';
-      document.getElementById('fmMyDate').value='';
-      document.getElementById('fmTarget').value='';
-      document.getElementById('fmTargetDate').innerHTML='<option>대상자를 먼저 선택하세요</option>';
-      document.getElementById('fmReason').value='';
-      alert('✅ Confluence에 교환 신청이 등록되었습니다!\nID: '+newId);
-      renderMyConfRequests(); renderExchangeTab(); renderCalendar(); renderMyDuty();
-    }).catch(function() {
-      // 로컬 fallback
-      lsSet('confRows', rows);
-      addHistory({ type:'교환신청(로컬)', from:requester, to:target, date:myDate, reason:reason, changedAt:new Date().toLocaleString('ko-KR') });
-      btn.disabled=false; btn.textContent='📤 Confluence에 교환 신청 등록';
-      alert('⚠️ Confluence 저장 실패. 로컬에만 임시 저장되었습니다.\nAPI 토큰을 확인해주세요.');
-      renderMyConfRequests(); renderExchangeTab();
+  try {
+    const newRef = push(ref(db, 'requests'));
+    await set(newRef, {
+      id: newRef.key,
+      requester: currentUser,
+      myDate, target, targetDate, reason,
+      status: '대기중',
+      createdAt: new Date().toLocaleString('ko-KR')
     });
-  } else {
-    lsSet('confRows', rows);
-    btn.disabled=false; btn.textContent='📤 Confluence에 교환 신청 등록';
-    alert('⚠️ 페이지 정보 없음. 로컬 임시 저장.');
-    renderMyConfRequests(); renderExchangeTab();
+    await addHistory({ type:'교환신청', from:currentUser, to:target, date:myDate, reason });
+    document.getElementById('fmMyDate').value='';
+    document.getElementById('fmTarget').value='';
+    document.getElementById('fmTargetDate').innerHTML='<option>대상자를 먼저 선택하세요</option>';
+    document.getElementById('fmReason').value='';
+    alert('✅ 교환 신청이 등록되었습니다!');
+  } catch(e) {
+    alert('❌ 오류 발생: '+e.message);
   }
-}
+  btn.disabled=false; btn.textContent='📤 교환 신청 등록';
+};
 
-// ══════════════════════════════════════════════════════════
-// 8. 교환 현황 렌더링
-// ══════════════════════════════════════════════════════════
-var STATUS_LABEL = { '대기중':'⏳ 대기중', '수락완료':'🤝 수락완료', '승인완료':'✅ 승인완료', '반려':'❌ 반려' };
-var STATUS_CLS   = { '대기중':'status-pending', '수락완료':'status-accepted', '승인완료':'status-accepted', '반려':'status-rejected' };
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 렌더링
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const STATUS_LABEL = { '대기중':'⏳ 대기중', '수락완료':'🤝 수락완료', '승인완료':'✅ 승인완료', '반려':'❌ 반려' };
+const STATUS_CLS   = { '대기중':'status-pending', '수락완료':'status-accepted', '승인완료':'status-accepted', '반려':'status-rejected' };
 
-function renderMyConfRequests() {
-  var rows = lsGet('confRows',[]);
-  var mine = rows.filter(function(r){ return r.requester===currentUser; });
-  var el   = document.getElementById('myConfRequests');
+function renderMyRequests() {
+  const rows = Object.values(allRows).filter(r => r.requester === currentUser);
+  const el = document.getElementById('myRequests');
   if (!el) return;
-  if (mine.length===0) { el.innerHTML='<div class="empty-msg">신청한 교환이 없습니다.</div>'; return; }
-  el.innerHTML = '';
-  mine.slice().reverse().forEach(function(r) {
-    var div = document.createElement('div');
-    div.className = 'conf-row status-'+r.status;
-    div.innerHTML =
-      '<div class="conf-row-top">'+
-      '<span class="conf-row-info">📅 '+r.myDate+' ↔ '+r.targetDate+'</span>'+
-      '<span class="status-badge '+(STATUS_CLS[r.status]||'status-pending')+'">'+(STATUS_LABEL[r.status]||r.status)+'</span>'+
-      '</div>'+
-      '<div class="conf-row-detail">상대방: <strong>'+r.target+'</strong> | 사유: '+r.reason+'</div>'+
-      '<div class="conf-row-detail" style="font-size:11px;color:#aaa;">ID: '+r.id+'</div>'+
-      (r.status==='대기중'?'<div class="conf-row-actions"><button class="cancel-btn" onclick="cancelRequest(\''+r.id+'\')">취소</button></div>':'');
+  if (rows.length===0) { el.innerHTML='<div class="empty-msg">신청한 교환이 없습니다.</div>'; return; }
+  el.innerHTML='';
+  rows.slice().reverse().forEach(r => {
+    const div = document.createElement('div');
+    div.className = `conf-row status-${r.status}`;
+    div.innerHTML = `
+      <div class="conf-row-top">
+        <span class="conf-row-info">📅 ${r.myDate} ↔ ${r.targetDate}</span>
+        <span class="status-badge ${STATUS_CLS[r.status]||'status-pending'}">${STATUS_LABEL[r.status]||r.status}</span>
+      </div>
+      <div class="conf-row-detail">상대방: <strong>${r.target}</strong> | 사유: ${r.reason}</div>
+      ${r.status==='대기중'?`<div class="conf-row-actions"><button class="cancel-btn" onclick="cancelRequest('${r.id}')">취소</button></div>`:''}
+    `;
     el.appendChild(div);
   });
 }
 
 function renderExchangeTab() {
-  var rows = lsGet('confRows',[]);
-
-  // 나에게 온 요청 (대기중이고 대상자가 나인 것)
-  var incoming = rows.filter(function(r){ return r.target===currentUser && r.status==='대기중'; });
-  var inEl = document.getElementById('incomingRequests');
+  const rows = Object.values(allRows);
+  const incoming = rows.filter(r => r.target===currentUser && r.status==='대기중');
+  const inEl = document.getElementById('incomingRequests');
   if (inEl) {
     if (incoming.length===0) { inEl.innerHTML='<div class="empty-msg">수락 가능한 요청이 없습니다.</div>'; }
     else {
       inEl.innerHTML='';
-      incoming.forEach(function(r) {
-        var div=document.createElement('div');
+      incoming.forEach(r => {
+        const div = document.createElement('div');
         div.className='conf-row status-대기중';
-        div.innerHTML=
-          '<div class="conf-row-top">'+
-          '<span class="conf-row-info">📅 '+r.requester+': '+r.myDate+' ↔ 내 '+r.targetDate+'</span>'+
-          '<span class="status-badge status-pending">⏳ 대기중</span>'+
-          '</div>'+
-          '<div class="conf-row-detail">요청자: <strong>'+r.requester+'</strong> | 사유: '+r.reason+'</div>'+
-          '<div class="conf-row-actions">'+
-          '<button class="accept-btn" onclick="openAcceptModal(\''+r.id+'\')">✅ 수락</button>'+
-          '<button class="reject-btn" onclick="rejectRequest(\''+r.id+'\')">❌ 거절</button>'+
-          '</div>';
+        div.innerHTML=`
+          <div class="conf-row-top">
+            <span class="conf-row-info">${r.requester}: ${r.myDate} ↔ 내 ${r.targetDate}</span>
+            <span class="status-badge status-pending">⏳ 대기중</span>
+          </div>
+          <div class="conf-row-detail">요청자: <strong>${r.requester}</strong> | 사유: ${r.reason}</div>
+          <div class="conf-row-actions">
+            <button class="accept-btn" onclick="openAcceptModal('${r.id}')">✅ 수락</button>
+            <button class="reject-btn" onclick="rejectRequest('${r.id}')">❌ 거절</button>
+          </div>
+        `;
         inEl.appendChild(div);
       });
     }
   }
-
-  // 전체 현황
-  var allEl = document.getElementById('allRequests');
+  const allEl = document.getElementById('allRequests');
   if (allEl) {
     if (rows.length===0) { allEl.innerHTML='<div class="empty-msg">교환 신청 내역이 없습니다.</div>'; return; }
     allEl.innerHTML='';
-    rows.slice().reverse().forEach(function(r) {
-      var div=document.createElement('div');
+    rows.slice().reverse().forEach(r => {
+      const div = document.createElement('div');
       div.className='conf-row';
-      div.innerHTML=
-        '<div class="conf-row-top">'+
-        '<span class="conf-row-info">'+r.requester+' ('+r.myDate+') ↔ '+r.target+' ('+r.targetDate+')</span>'+
-        '<span class="status-badge '+(STATUS_CLS[r.status]||'status-pending')+'">'+(STATUS_LABEL[r.status]||r.status)+'</span>'+
-        '</div>'+
-        '<div class="conf-row-detail">사유: '+r.reason+'</div>';
+      div.innerHTML=`
+        <div class="conf-row-top">
+          <span class="conf-row-info">${r.requester} (${r.myDate}) ↔ ${r.target} (${r.targetDate})</span>
+          <span class="status-badge ${STATUS_CLS[r.status]||'status-pending'}">${STATUS_LABEL[r.status]||r.status}</span>
+        </div>
+        <div class="conf-row-detail">사유: ${r.reason}</div>
+      `;
       allEl.appendChild(div);
     });
   }
-
-  // 관리자: 수락완료된 것 승인 대기 목록
   if (isAdmin) renderAdminApproval();
 }
 
 function renderAdminApproval() {
-  var rows   = lsGet('confRows',[]);
-  var pending = rows.filter(function(r){ return r.status==='수락완료'; });
-  var el = document.getElementById('adminApprovalList');
+  const pending = Object.values(allRows).filter(r => r.status==='수락완료');
+  const el = document.getElementById('adminApprovalList');
   if (!el) return;
   if (pending.length===0) { el.innerHTML='<div class="empty-msg">승인 대기 없음</div>'; return; }
   el.innerHTML='';
-  pending.forEach(function(r) {
-    var div=document.createElement('div');
+  pending.forEach(r => {
+    const div = document.createElement('div');
     div.className='conf-row';
-    div.innerHTML=
-      '<div class="conf-row-top">'+
-      '<span class="conf-row-info">'+r.requester+' ('+r.myDate+') ↔ '+r.target+' ('+r.targetDate+')</span>'+
-      '<span class="status-badge status-accepted">🤝 수락완료</span>'+
-      '</div>'+
-      '<div class="conf-row-detail">사유: '+r.reason+'</div>'+
-      '<div class="conf-row-actions">'+
-      '<button class="accept-btn" onclick="adminApprove(\''+r.id+'\')">✅ 최종 승인 (당직표 반영)</button>'+
-      '<button class="reject-btn" onclick="adminReject(\''+r.id+'\')">❌ 반려</button>'+
-      '</div>';
+    div.innerHTML=`
+      <div class="conf-row-top">
+        <span class="conf-row-info">${r.requester} (${r.myDate}) ↔ ${r.target} (${r.targetDate})</span>
+        <span class="status-badge status-accepted">🤝 수락완료</span>
+      </div>
+      <div class="conf-row-detail">사유: ${r.reason}</div>
+      <div class="conf-row-actions">
+        <button class="accept-btn" onclick="adminApprove('${r.id}')">✅ 최종 승인</button>
+        <button class="reject-btn" onclick="adminReject('${r.id}')">❌ 반려</button>
+      </div>
+    `;
     el.appendChild(div);
   });
 }
 
-// ══════════════════════════════════════════════════════════
-// 9. 수락 / 거절 / 취소 / 관리자 승인
-// ══════════════════════════════════════════════════════════
-function openAcceptModal(id) {
-  var rows = lsGet('confRows',[]);
-  var row  = rows.find(function(r){ return r.id===id; });
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 수락 / 거절 / 취소 / 관리자 승인
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+window.openAcceptModal = function(id) {
+  const row = allRows[id];
   if (!row) return;
   accData = row;
   document.getElementById('accRequester').textContent = row.requester;
   document.getElementById('accReqDate').textContent   = row.myDate;
   document.getElementById('accSummary').style.display = 'none';
-  var sel = document.getElementById('accMyDate');
-  sel.innerHTML = '<option value="">선택하세요 (내 당직 날짜)</option>';
-  getMyDutyDates(currentUser).forEach(function(d) {
-    var date=new Date(d); var dn=['일','월','화','수','목','금','토'];
-    sel.innerHTML += '<option value="'+d+'">'+d+' ('+dn[date.getDay()]+')</option>';
+  const sel = document.getElementById('accMyDate');
+  const dn  = ['일','월','화','수','목','금','토'];
+  sel.innerHTML = '<option value="">선택하세요</option>';
+  getMyDutyDates(currentUser).forEach(d => {
+    const date = new Date(d);
+    sel.innerHTML += `<option value="${d}">${d} (${dn[date.getDay()]})</option>`;
   });
   sel.onchange = function() {
     if (this.value) {
-      var s = document.getElementById('accSummary');
+      const s = document.getElementById('accSummary');
       s.style.display='block';
-      s.innerHTML='💡 <strong>교환 결과:</strong><br>'+currentUser+': '+this.value+' → '+row.myDate+'<br>'+row.requester+': '+row.myDate+' → '+this.value;
+      s.innerHTML=`💡 <strong>교환 결과:</strong><br>${currentUser}: ${this.value} → ${row.myDate}<br>${row.requester}: ${row.myDate} → ${this.value}`;
     }
   };
   document.getElementById('acceptModal').classList.add('show');
-}
-function closeAcceptModal() { document.getElementById('acceptModal').classList.remove('show'); accData=null; }
+};
+window.closeAcceptModal = function() { document.getElementById('acceptModal').classList.remove('show'); accData=null; };
 
-function confirmAccept() {
-  var myDate = document.getElementById('accMyDate').value;
+window.confirmAccept = async function() {
+  const myDate = document.getElementById('accMyDate').value;
   if (!myDate) { alert('내 당직 날짜를 선택해주세요!'); return; }
-  if (!confirm('수락하시겠습니까?\n'+currentUser+'('+myDate+') ↔ '+accData.requester+'('+accData.myDate+')')) return;
-  updateRowStatus(accData.id, '수락완료', { targetDate: myDate });
-  addHistory({ type:'교환수락', from:currentUser, to:accData.requester, date:accData.myDate,
-    reason:'수락: '+currentUser+'('+myDate+') ↔ '+accData.requester+'('+accData.myDate+')',
-    changedAt:new Date().toLocaleString('ko-KR') });
+  if (!confirm(`수락하시겠습니까?\n${currentUser}(${myDate}) ↔ ${accData.requester}(${accData.myDate})`)) return;
+  await update(ref(db, `requests/${accData.id}`), { status:'수락완료', targetDate: myDate });
+  await addHistory({ type:'교환수락', from:currentUser, to:accData.requester, date:accData.myDate, reason:`${currentUser}(${myDate}) ↔ ${accData.requester}(${accData.myDate})` });
   closeAcceptModal();
-  renderExchangeTab(); renderMyConfRequests();
   alert('✅ 수락 완료! 관리자 최종 승인을 기다려주세요.');
-}
+};
 
-function rejectRequest(id) {
+window.rejectRequest = async function(id) {
   if (!confirm('거절하시겠습니까?')) return;
-  updateRowStatus(id, '반려');
-  addHistory({ type:'교환거절', from:currentUser, to:'', date:'', reason:'거절', changedAt:new Date().toLocaleString('ko-KR') });
-  renderExchangeTab(); renderMyConfRequests();
-}
+  await update(ref(db, `requests/${id}`), { status:'반려' });
+  await addHistory({ type:'교환거절', from:currentUser, to:'', date:'', reason:'거절' });
+};
 
-function cancelRequest(id) {
+window.cancelRequest = async function(id) {
   if (!confirm('교환 신청을 취소하시겠습니까?')) return;
-  var rows = lsGet('confRows',[]).filter(function(r){ return r.id!==id; });
-  lsSet('confRows', rows);
-  saveRowsToConfluence(rows);
-  addHistory({ type:'교환취소', from:currentUser, to:'', date:'', reason:'신청 취소', changedAt:new Date().toLocaleString('ko-KR') });
-  renderMyConfRequests(); renderExchangeTab(); renderCalendar(); renderMyDuty();
-}
+  await remove(ref(db, `requests/${id}`));
+  await addHistory({ type:'교환취소', from:currentUser, to:'', date:'', reason:'신청 취소' });
+};
 
-function adminApprove(id) {
+window.adminApprove = async function(id) {
   if (!confirm('최종 승인하시겠습니까? 당직표에 반영됩니다.')) return;
-  updateRowStatus(id, '승인완료');
-  addHistory({ type:'관리자승인', from:currentUser, to:'', date:'', reason:'최종 승인: '+id, changedAt:new Date().toLocaleString('ko-KR') });
-  renderCalendar(); renderMyDuty(); renderExchangeTab(); renderAdminApproval(); renderSettings();
+  await update(ref(db, `requests/${id}`), { status:'승인완료' });
+  await addHistory({ type:'관리자승인', from:currentUser, to:'', date:'', reason:`최종 승인: ${id}` });
   alert('✅ 최종 승인 완료! 당직표에 반영되었습니다.');
-}
+};
 
-function adminReject(id) {
+window.adminReject = async function(id) {
   if (!confirm('반려하시겠습니까?')) return;
-  updateRowStatus(id, '반려');
-  addHistory({ type:'관리자반려', from:currentUser, to:'', date:'', reason:'반려: '+id, changedAt:new Date().toLocaleString('ko-KR') });
-  renderExchangeTab(); renderAdminApproval();
-}
+  await update(ref(db, `requests/${id}`), { status:'반려' });
+  await addHistory({ type:'관리자반려', from:currentUser, to:'', date:'', reason:`반려: ${id}` });
+};
 
-function updateRowStatus(id, newStatus, extra) {
-  var rows = lsGet('confRows',[]).map(function(r) {
-    if (r.id===id) { r.status=newStatus; if(extra) Object.assign(r,extra); }
-    return r;
-  });
-  lsSet('confRows', rows);
-  saveRowsToConfluence(rows);
-}
-
-function saveRowsToConfluence(rows) {
-  var pageData = lsGet('confPageData', null);
-  if (!pageData) return;
-  updateConfluencePage(rows, pageData).then(function(res) {
-    if (res && res.version) lsSet('confPageData', res);
-  }).catch(function(){});
-}
-
-// ══════════════════════════════════════════════════════════
-// 10. 캘린더
-// ══════════════════════════════════════════════════════════
-function changeMonth(dir) {
-  currentMonth+=dir;
-  if(currentMonth>11){currentMonth=0;currentYear++;}
-  if(currentMonth<0){currentMonth=11;currentYear--;}
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 캘린더
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+window.changeMonth = function(dir) {
+  currentMonth += dir;
+  if (currentMonth>11){currentMonth=0;currentYear++;}
+  if (currentMonth<0){currentMonth=11;currentYear--;}
   renderCalendar();
-}
+};
+
 function renderCalendar() {
-  var mn=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
-  document.getElementById('calendarTitle').textContent=currentYear+'년 '+mn[currentMonth];
-  var firstDay=new Date(currentYear,currentMonth,1).getDay();
-  var daysInMonth=new Date(currentYear,currentMonth+1,0).getDate();
-  var today=new Date(), exd=getExchangedDuties();
-  var grid=document.getElementById('calendarDays'); grid.innerHTML='';
-  for(var i=0;i<firstDay;i++){var e=document.createElement('div');e.className='day-cell empty';grid.appendChild(e);}
-  for(var d=1;d<=daysInMonth;d++){
-    var date=new Date(currentYear,currentMonth,d), str=dateToStr(date), dow=date.getDay();
-    var cell=document.createElement('div'), cls=['day-cell'];
-    if(dow===0)cls.push('sunday'); if(dow===6)cls.push('saturday');
-    if(date.toDateString()===today.toDateString())cls.push('today');
-    var duty=isDutyDay(date), person=duty?getDutyPerson(date):null;
-    var isEx=!!exd[str], isSp=isSpecial(str)&&!isEx;
-    if(duty){if(isEx&&person===currentUser)cls.push('exchanged');else if(person===currentUser)cls.push('my-duty');else cls.push('duty-day');}
-    cell.className=cls.join(' ');
-    var nd=document.createElement('div'); nd.className='day-num'; nd.textContent=d; cell.appendChild(nd);
-    if(HOLIDAYS[str]){var hd=document.createElement('div');hd.className='holiday-label';hd.textContent=HOLIDAYS[str];cell.appendChild(hd);}
-    if(person){var pd=document.createElement('div');var nc='duty-name';if(isEx)nc+=' exchanged-name';else if(isSp)nc+=' special-name';else if(person===currentUser)nc+=' my-name';pd.className=nc;pd.textContent=person;cell.appendChild(pd);}
+  const mn=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  document.getElementById('calendarTitle').textContent=`${currentYear}년 ${mn[currentMonth]}`;
+  const firstDay=new Date(currentYear,currentMonth,1).getDay();
+  const daysInMonth=new Date(currentYear,currentMonth+1,0).getDate();
+  const today=new Date(), exd=getExchangedDuties();
+  const grid=document.getElementById('calendarDays'); grid.innerHTML='';
+  for(let i=0;i<firstDay;i++){const e=document.createElement('div');e.className='day-cell empty';grid.appendChild(e);}
+  for(let d=1;d<=daysInMonth;d++){
+    const date=new Date(currentYear,currentMonth,d), str=dateToStr(date), dow=date.getDay();
+    const cell=document.createElement('div');
+    let cls='day-cell';
+    if(dow===0)cls+=' sunday'; if(dow===6)cls+=' saturday';
+    if(date.toDateString()===today.toDateString())cls+=' today';
+    const duty=isDutyDay(date), person=duty?getDutyPerson(date):null;
+    const isEx=!!exd[str], isSp=!!SPECIAL_SCHEDULE[str]&&!isEx;
+    if(duty){if(isEx&&person===currentUser)cls+=' exchanged';else if(person===currentUser)cls+=' my-duty';else cls+=' duty-day';}
+    cell.className=cls;
+    const nd=document.createElement('div'); nd.className='day-num'; nd.textContent=d; cell.appendChild(nd);
+    if(HOLIDAYS[str]){const hd=document.createElement('div');hd.className='holiday-label';hd.textContent=HOLIDAYS[str];cell.appendChild(hd);}
+    if(person){const pd=document.createElement('div');let nc='duty-name';if(isEx)nc+=' exchanged-name';else if(isSp)nc+=' special-name';else if(person===currentUser)nc+=' my-name';pd.className=nc;pd.textContent=person;cell.appendChild(pd);}
     grid.appendChild(cell);
   }
   renderDutyOrder();
 }
+
 function renderDutyOrder() {
-  var c=document.getElementById('dutyOrderList'); if(!c)return; c.innerHTML='';
-  MEMBERS.forEach(function(name,i){
-    var b=document.createElement('div');b.className='order-badge';b.style.background=name===currentUser?'#e74c3c':'#667eea';b.textContent=name;c.appendChild(b);
-    if(i<MEMBERS.length-1){var a=document.createElement('div');a.className='order-arrow';a.textContent='→';c.appendChild(a);}
+  const c=document.getElementById('dutyOrderList'); if(!c)return; c.innerHTML='';
+  MEMBERS.forEach((name,i)=>{
+    const b=document.createElement('div');b.className='order-badge';b.style.background=name===currentUser?'#e74c3c':'#667eea';b.textContent=name;c.appendChild(b);
+    if(i<MEMBERS.length-1){const a=document.createElement('div');a.className='order-arrow';a.textContent='→';c.appendChild(a);}
   });
 }
 
-// ══════════════════════════════════════════════════════════
-// 11. 내 당직 탭
-// ══════════════════════════════════════════════════════════
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 내 당직
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function renderMyDuty() {
-  var list=document.getElementById('myDutyList'); list.innerHTML='';
-  var dn=['일','월','화','수','목','금','토'];
-  var myDates=getMyDutyDates(currentUser), exd=getExchangedDuties();
-  var rows=lsGet('confRows',[]);
+  const list=document.getElementById('myDutyList'); list.innerHTML='';
+  const dn=['일','월','화','수','목','금','토'];
+  const myDates=getMyDutyDates(currentUser), exd=getExchangedDuties();
+  const rows=Object.values(allRows);
   if(myDates.length===0){list.innerHTML='<div class="empty-msg">담당 당직이 없습니다.</div>';return;}
-  myDates.forEach(function(str){
-    var date=new Date(str), dow=date.getDay();
-    var isEx=!!exd[str], isSp=isSpecial(str);
-    var reqRow=rows.find(function(r){return r.requester===currentUser&&r.myDate===str;});
-    var type=HOLIDAYS[str]||(dow===0?'일요일':dow===6?'토요일':'');
+  myDates.forEach(str=>{
+    const date=new Date(str), dow=date.getDay();
+    const isEx=!!exd[str], isSp=!!SPECIAL_SCHEDULE[str];
+    const reqRow=rows.find(r=>r.requester===currentUser&&r.myDate===str);
+    let type=HOLIDAYS[str]||(dow===0?'일요일':dow===6?'토요일':'');
     if(isSp&&!type)type='특별배정';
-    var btnTxt='교환 요청', btnCls='request-btn', btnDis='';
+    let btnTxt='교환 요청', btnCls='request-btn', btnDis='';
     if(isEx){btnTxt='🔄 교환완료';btnCls='request-btn accepted';btnDis='disabled';}
     else if(reqRow){
       if(reqRow.status==='대기중'){btnTxt='⏳ 요청중';btnCls='request-btn requested';btnDis='disabled';}
       else if(reqRow.status==='수락완료'){btnTxt='🤝 수락됨';btnCls='request-btn requested';btnDis='disabled';}
       else if(reqRow.status==='승인완료'){btnTxt='✅ 승인완료';btnCls='request-btn accepted';btnDis='disabled';}
     }
-    var card=document.createElement('div'); card.className='duty-card';
-    card.innerHTML='<div class="duty-card-left"><div class="duty-date">📅 '+str.replace('2026-','')+'  ('+dn[dow]+')</div>'+(type?'<div class="duty-type">'+type+'</div>':'')+(isEx?'<div style="font-size:12px;color:#27ae60;">🔄 교환완료</div>':'')+'</div><button class="'+btnCls+'" '+btnDis+((!btnDis)?(' onclick="showTab(\'apply\')"'):'')+'>'+btnTxt+'</button>';
+    const card=document.createElement('div'); card.className='duty-card';
+    card.innerHTML=`<div><div class="duty-date">📅 ${str.replace('2026-','')} (${dn[dow]})</div>${type?`<div class="duty-type">${type}</div>`:''}</div><button class="${btnCls}" ${btnDis}${!btnDis?` onclick="showTab('apply')"`:''}}>${btnTxt}</button>`;
     list.appendChild(card);
   });
 }
 
-// ══════════════════════════════════════════════════════════
-// 12. 이력
-// ══════════════════════════════════════════════════════════
-function addHistory(item) {
-  var h=lsGet('dutyHistory',[]); h.unshift(item); if(h.length>100)h=h.slice(0,100); lsSet('dutyHistory',h);
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 이력
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+async function addHistory(item) {
+  item.changedAt = new Date().toLocaleString('ko-KR');
+  await push(ref(db, 'history'), item);
 }
+
 function renderHistory() {
-  var list=document.getElementById('historyList'); if(!list)return; list.innerHTML='';
-  var hist=lsGet('dutyHistory',[]);
-  if(hist.length===0){list.innerHTML='<div class="empty-msg">변경 이력이 없습니다.</div>';return;}
-  var labels={'교환신청':'📝 교환 신청','교환수락':'✅ 교환 수락','교환거절':'❌ 교환 거절','교환취소':'🚫 교환 취소','관리자승인':'👑 관리자 승인','관리자반려':'👑 관리자 반려','순번변경':'⚙️ 순번 변경','공휴일추가':'🎉 공휴일 추가','공휴일삭제':'🗑️ 공휴일 삭제','특별배정추가':'📌 특별배정 추가','특별배정삭제':'📌 특별배정 삭제','초기화':'🗑️ 초기화'};
-  hist.forEach(function(item){
-    var card=document.createElement('div'); card.className='history-card';
-    var detail='';
-    if(item.type==='교환신청')detail='<strong>'+item.from+'</strong>님이 <strong>'+item.to+'</strong>님에게 교환 신청 ('+item.date+')<br>사유: '+item.reason;
-    else if(item.type==='교환수락')detail='<strong>'+item.from+'</strong>님이 수락: '+item.reason;
-    else detail='<strong>'+item.from+'</strong>님: '+item.reason;
-    card.innerHTML='<div class="history-badge">'+(labels[item.type]||item.type)+'</div><div class="history-detail">'+detail+'</div><div class="history-time">⏰ '+item.changedAt+'</div>';
-    list.appendChild(card);
+  const list=document.getElementById('historyList'); if(!list)return;
+  get(ref(db,'history')).then(snap=>{
+    const hist=snap.val()?Object.values(snap.val()).reverse():[];
+    if(hist.length===0){list.innerHTML='<div class="empty-msg">변경 이력이 없습니다.</div>';return;}
+    list.innerHTML='';
+    const labels={'교환신청':'📝 교환 신청','교환수락':'✅ 교환 수락','교환거절':'❌ 교환 거절','교환취소':'🚫 교환 취소','관리자승인':'👑 관리자 승인','관리자반려':'👑 관리자 반려','순번변경':'⚙️ 순번 변경'};
+    hist.forEach(item=>{
+      const card=document.createElement('div'); card.className='history-card';
+      let detail='';
+      if(item.type==='교환신청')detail=`<strong>${item.from}</strong>님이 <strong>${item.to}</strong>님에게 교환 신청 (${item.date})<br>사유: ${item.reason}`;
+      else detail=`<strong>${item.from}</strong>님: ${item.reason}`;
+      card.innerHTML=`<div class="history-badge">${labels[item.type]||item.type}</div><div class="history-detail">${detail}</div><div class="history-time">⏰ ${item.changedAt}</div>`;
+      list.appendChild(card);
+    });
   });
 }
 
-// ══════════════════════════════════════════════════════════
-// 13. 설정
-// ══════════════════════════════════════════════════════════
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 설정
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function renderSettings() {
   document.getElementById('settingsUserName').textContent=currentUser;
-  
-  // API 설정 상태 표시
-  updateApiConfigStatus();
-  
   if(isAdmin){
     document.getElementById('adminBadge').style.display='inline-block';
-    ['adminRotationSection','adminSpecialSection','adminHolidaySection','adminApprovalSection'].forEach(function(id){document.getElementById(id).style.display='block';});
-    document.getElementById('curStartDate').textContent=dateToStr(DUTY_START_DATE);
-    document.getElementById('curStartPerson').textContent=MEMBERS[DUTY_START_INDEX]||'-';
-    document.getElementById('curSkipDates').textContent=Object.keys(SKIP_DATES).join(', ')||'없음';
-    document.getElementById('newStartDate').value=dateToStr(DUTY_START_DATE);
-    document.getElementById('newStartPerson').value=MEMBERS[DUTY_START_INDEX];
-    document.getElementById('newSkipDates').value=Object.keys(SKIP_DATES).join(', ');
+    ['adminRotationSection','adminSpecialSection','adminHolidaySection','adminApprovalSection'].forEach(id=>{document.getElementById(id).style.display='block';});
     renderSpecialList(); renderHolidayList(); renderAdminApproval();
   } else {
     document.getElementById('adminBadge').style.display='none';
-    ['adminRotationSection','adminSpecialSection','adminHolidaySection','adminApprovalSection'].forEach(function(id){document.getElementById(id).style.display='none';});
+    ['adminRotationSection','adminSpecialSection','adminHolidaySection','adminApprovalSection'].forEach(id=>{document.getElementById(id).style.display='none';});
   }
 }
 
-// API 설정 저장
-function saveApiConfig() {
-  var email = document.getElementById('confEmailInput').value.trim();
-  var token = document.getElementById('confTokenInput').value.trim();
-  
-  if (!email || !token) {
-    alert('이메일과 API 토큰을 모두 입력해주세요!');
-    return;
-  }
-  
-  // 이메일 형식 검증
-  if (!email.includes('@')) {
-    alert('올바른 이메일 형식이 아닙니다!');
-    return;
-  }
-  
-  // LocalStorage에 저장
-  localStorage.setItem('confEmail', email);
-  localStorage.setItem('confToken', token);
-  
-  // 전역 변수 업데이트
-  CONF_EMAIL = email;
-  CONF_TOKEN = token;
-  
-  // 토큰 입력란 초기화 (보안)
-  document.getElementById('confTokenInput').value = '';
-  
-  alert('✅ API 설정이 안전하게 저장되었습니다!\n\n이제 교환 신청 기능을 사용할 수 있습니다.');
-  
-  // 상태 업데이트
-  updateApiConfigStatus();
-  
-  // Confluence 연결 테스트
-  loadConfluenceData(function() {
-    console.log('API 설정 완료 - Confluence 연결 테스트 성공');
-  });
-}
-
-// API 설정 삭제
-function clearApiConfig() {
-  if (!confirm('API 설정을 삭제하시겠습니까?\n\n교환 신청 기능을 사용할 수 없게 됩니다.')) {
-    return;
-  }
-  
-  localStorage.removeItem('confEmail');
-  localStorage.removeItem('confToken');
-  
-  CONF_EMAIL = '';
-  CONF_TOKEN = '';
-  
-  document.getElementById('confEmailInput').value = '';
-  document.getElementById('confTokenInput').value = '';
-  
-  alert('🗑️ API 설정이 삭제되었습니다.');
-  updateApiConfigStatus();
-}
-
-// API 설정 상태 업데이트
-function updateApiConfigStatus() {
-  var statusText = document.getElementById('apiStatusText');
-  var emailText = document.getElementById('apiEmailText');
-  var emailInput = document.getElementById('confEmailInput');
-  
-  if (CONF_EMAIL && CONF_TOKEN) {
-    statusText.textContent = '✅ 연결됨';
-    statusText.style.color = '#27ae60';
-    statusText.style.fontWeight = '700';
-    emailText.textContent = CONF_EMAIL;
-    emailInput.value = CONF_EMAIL;
-  } else {
-    statusText.textContent = '❌ 미설정';
-    statusText.style.color = '#e74c3c';
-    statusText.style.fontWeight = '700';
-    emailText.textContent = '-';
-    emailInput.value = '';
-  }
-}
-function updateDutyRotation() {
+window.updateDutyRotation = async function() {
   if(!isAdmin)return;
-  var nd=document.getElementById('newStartDate').value, np=document.getElementById('newStartPerson').value, si=document.getElementById('newSkipDates').value.trim();
+  const nd=document.getElementById('newStartDate').value, np=document.getElementById('newStartPerson').value;
   if(!nd||!np){alert('날짜와 담당자를 입력해주세요!');return;}
-  if(!confirm('순번 변경: '+nd+'부터 '+np+' 시작'))return;
-  var p=nd.split('-'); DUTY_START_DATE=new Date(+p[0],+p[1]-1,+p[2]); DUTY_START_INDEX=MEMBERS.indexOf(np);
-  SKIP_DATES={}; var sa=[];
-  if(si){si.split(',').forEach(function(d){var t=d.trim();if(t){SKIP_DATES[t]=true;sa.push(t);}});}
-  lsSet('dutyStartDate',nd); lsSet('dutyStartPerson',np); lsSet('dutySkipDates',sa);
-  addHistory({type:'순번변경',from:currentUser,to:np,date:nd,reason:'순번 변경: '+nd+'부터 '+np+' 시작 / 건너뜀: '+(sa.join(',')||'없음'),changedAt:new Date().toLocaleString('ko-KR')});
-  renderCalendar(); renderMyDuty(); renderSettings(); alert('✅ 순번 변경 완료!');
-}
-function addSpecialSchedule() {
+  if(!confirm(`순번 변경: ${nd}부터 ${np} 시작`))return;
+  await update(ref(db,'settings'),{ dutyStartDate:nd, dutyStartPerson:np });
+  await addHistory({type:'순번변경',from:currentUser,to:np,date:nd,reason:`${nd}부터 ${np} 시작`});
+  alert('✅ 순번 변경 완료!');
+};
+
+window.addSpecialSchedule = async function() {
   if(!isAdmin)return;
-  var date=document.getElementById('specialDate').value, person=document.getElementById('specialPerson').value;
+  const date=document.getElementById('specialDate').value, person=document.getElementById('specialPerson').value;
   if(!date||!person){alert('날짜와 담당자를 입력해주세요!');return;}
-  SPECIAL_SCHEDULE[date]=person;
-  var added=lsGet('specialAdded',{}); added[date]=person; lsSet('specialAdded',added);
-  var deleted=lsGet('specialDeleted',[]).filter(function(d){return d!==date;}); lsSet('specialDeleted',deleted);
-  addHistory({type:'특별배정추가',from:currentUser,to:person,date:date,reason:'특별배정: '+date+'→'+person,changedAt:new Date().toLocaleString('ko-KR')});
+  await update(ref(db,`settings/special`),{[date]:person});
   document.getElementById('specialDate').value='';
-  renderSpecialList(); renderCalendar(); renderMyDuty(); alert('✅ 특별배정 추가: '+date+' → '+person);
-}
-function deleteSpecialSchedule(date) {
+  alert(`✅ 특별배정 추가: ${date} → ${person}`);
+};
+
+window.deleteSpecialSchedule = async function(date) {
   if(!isAdmin)return;
-  var person=SPECIAL_SCHEDULE[date];
-  if(!confirm('특별배정 삭제: '+date+' ('+person+')'))return;
-  delete SPECIAL_SCHEDULE[date];
-  var deleted=lsGet('specialDeleted',[]); if(deleted.indexOf(date)===-1)deleted.push(date); lsSet('specialDeleted',deleted);
-  var added=lsGet('specialAdded',{}); delete added[date]; lsSet('specialAdded',added);
-  addHistory({type:'특별배정삭제',from:currentUser,to:'',date:date,reason:'특별배정 삭제: '+date+' ('+person+')',changedAt:new Date().toLocaleString('ko-KR')});
-  renderSpecialList(); renderCalendar(); renderMyDuty();
-}
+  if(!confirm(`특별배정 삭제: ${date}`))return;
+  await remove(ref(db,`settings/special/${date}`));
+};
+
 function renderSpecialList() {
-  var c=document.getElementById('specialScheduleList'); if(!c)return; c.innerHTML='';
-  var sorted=Object.keys(SPECIAL_SCHEDULE).sort();
+  const c=document.getElementById('specialScheduleList'); if(!c)return; c.innerHTML='';
+  const dn=['일','월','화','수','목','금','토'];
+  const sorted=Object.keys(SPECIAL_SCHEDULE).sort();
   if(sorted.length===0){c.innerHTML='<div style="padding:16px;text-align:center;color:#aaa;">특별배정이 없습니다.</div>';return;}
-  var dn=['일','월','화','수','목','금','토'];
-  sorted.forEach(function(date){
-    var person=SPECIAL_SCHEDULE[date], d=new Date(date);
-    var item=document.createElement('div'); item.className='list-item';
-    item.innerHTML='<span class="list-item-date">'+date+'</span><span style="color:#888;font-size:12px;margin-right:8px;">('+dn[d.getDay()]+')</span><span class="list-item-person">'+person+'</span><span class="list-item-delete" onclick="deleteSpecialSchedule(\''+date+'\')">🗑️</span>';
+  sorted.forEach(date=>{
+    const person=SPECIAL_SCHEDULE[date], d=new Date(date);
+    const item=document.createElement('div'); item.className='list-item';
+    item.innerHTML=`<span class="list-item-date">${date}</span><span style="color:#888;font-size:12px;margin-right:8px;">(${dn[d.getDay()]})</span><span class="list-item-person">${person}</span><span class="list-item-delete" onclick="deleteSpecialSchedule('${date}')">🗑️</span>`;
     c.appendChild(item);
   });
 }
-function addHoliday() {
+
+window.addHoliday = async function() {
   if(!isAdmin)return;
-  var date=document.getElementById('newHolidayDate').value, name=document.getElementById('newHolidayName').value.trim();
+  const date=document.getElementById('newHolidayDate').value, name=document.getElementById('newHolidayName').value.trim();
   if(!date||!name){alert('날짜와 이름을 입력해주세요!');return;}
-  if(HOLIDAYS[date]){alert('이미 등록된 공휴일입니다!');return;}
-  HOLIDAYS[date]=name;
-  var added=lsGet('holidaysAdded',{}); added[date]=name; lsSet('holidaysAdded',added);
-  var deleted=lsGet('holidaysDeleted',[]).filter(function(d){return d!==date;}); lsSet('holidaysDeleted',deleted);
-  addHistory({type:'공휴일추가',from:currentUser,to:'',date:date,reason:'공휴일 추가: '+date+' ('+name+')',changedAt:new Date().toLocaleString('ko-KR')});
+  await update(ref(db,`settings/holidays`),{[date]:name});
   document.getElementById('newHolidayDate').value=''; document.getElementById('newHolidayName').value='';
-  renderHolidayList(); renderCalendar(); renderMyDuty();
-}
-function deleteHoliday(date) {
+};
+
+window.deleteHoliday = async function(date) {
   if(!isAdmin)return;
-  var name=HOLIDAYS[date];
-  if(!confirm('공휴일 삭제: '+date+' ('+name+')'))return;
-  delete HOLIDAYS[date];
-  var deleted=lsGet('holidaysDeleted',[]); if(deleted.indexOf(date)===-1)deleted.push(date); lsSet('holidaysDeleted',deleted);
-  var added=lsGet('holidaysAdded',{}); delete added[date]; lsSet('holidaysAdded',added);
-  addHistory({type:'공휴일삭제',from:currentUser,to:'',date:date,reason:'공휴일 삭제: '+date+' ('+name+')',changedAt:new Date().toLocaleString('ko-KR')});
-  renderHolidayList(); renderCalendar(); renderMyDuty();
-}
+  if(!confirm(`공휴일 삭제: ${date}`))return;
+  await remove(ref(db,`settings/holidays/${date}`));
+};
+
 function renderHolidayList() {
-  var c=document.getElementById('holidayListContainer'); if(!c)return; c.innerHTML='';
-  Object.keys(HOLIDAYS).sort().forEach(function(date){
-    var item=document.createElement('div'); item.className='list-item';
-    item.innerHTML='<span class="list-item-date">'+date+'</span><span class="list-item-name">'+HOLIDAYS[date]+'</span><span class="list-item-delete" onclick="deleteHoliday(\''+date+'\')">🗑️</span>';
+  const c=document.getElementById('holidayListContainer'); if(!c)return; c.innerHTML='';
+  Object.keys(HOLIDAYS).sort().forEach(date=>{
+    const item=document.createElement('div'); item.className='list-item';
+    item.innerHTML=`<span class="list-item-date">${date}</span><span class="list-item-name">${HOLIDAYS[date]}</span><span class="list-item-delete" onclick="deleteHoliday('${date}')">🗑️</span>`;
     c.appendChild(item);
   });
 }
-function resetHistory() {
-  if(!confirm('이력을 초기화하시겠습니까?'))return;
-  lsSet('dutyHistory',[]); renderHistory(); renderSettings();
-}
-function resetAllData() {
+
+window.resetAllData = async function() {
+  if(!isAdmin){alert('관리자만 초기화 가능합니다!');return;}
   if(!confirm('⚠️ 모든 데이터를 초기화합니까?'))return;
   if(prompt('확인을 위해 "초기화"를 입력하세요')!=='초기화'){alert('취소');return;}
-  ['dutyHistory','dutyStartDate','dutyStartPerson','dutySkipDates','holidaysAdded','holidaysDeleted','specialAdded','specialDeleted','dutyUser','confRows','confPageData'].forEach(function(k){localStorage.removeItem(k);});
-  var p=DEFAULT_START_DATE.split('-'); DUTY_START_DATE=new Date(+p[0],+p[1]-1,+p[2]); DUTY_START_INDEX=MEMBERS.indexOf(DEFAULT_START_PERSON);
-  SKIP_DATES={}; loadHolidays(); loadSpecialSchedule();
-  renderCalendar(); renderMyDuty(); renderExchangeTab(); renderHistory(); renderSettings();
+  await remove(ref(db,'requests'));
+  await remove(ref(db,'history'));
   alert('✅ 초기화 완료');
-}
-function openConfluencePage() { window.open(CONF_BASE+'/pages/viewpage.action?pageId='+CONF_PAGE_ID,'_blank'); }
+};
 
-// ══════════════════════════════════════════════════════════
-// 14. 로그인 / 로그아웃 / 탭
-// ══════════════════════════════════════════════════════════
-function login() {
-  var sel=document.getElementById('userSelect').value;
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 로그인 / 로그아웃 / 탭
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+window.login = function() {
+  const sel=document.getElementById('userSelect').value;
   if(!sel){alert('이름을 선택해주세요!');return;}
   isAdmin=false;
   if(sel==='이진모'){
-    var pwd=document.getElementById('adminPassword').value;
+    const pwd=document.getElementById('adminPassword').value;
     if(!pwd){alert('관리자 비밀번호를 입력해주세요!');return;}
     if(pwd!==ADMIN_PASSWORD){alert('비밀번호가 틀렸습니다!');document.getElementById('adminPassword').value='';return;}
     isAdmin=true;
@@ -1344,205 +951,82 @@ function login() {
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('mainScreen').style.display='block';
   document.getElementById('userBadge').textContent=sel+(isAdmin?' 👑 관리자':' 님');
-  var now=new Date(); currentYear=now.getFullYear()<2026?2026:now.getFullYear(); currentMonth=now.getFullYear()<2026?0:now.getMonth();
+  const now=new Date();
+  currentYear=now.getFullYear()<2026?2026:now.getFullYear();
+  currentMonth=now.getFullYear()<2026?0:now.getMonth();
   initApplyForm();
-  loadConfluenceData(function(rows, pageData) {
-    renderExchangeTab(); renderMyConfRequests();
-  });
-  renderCalendar(); renderMyDuty(); renderHistory(); showTab('calendar');
-}
-function logout() {
+  renderCalendar(); renderMyDuty(); renderHistory(); renderSettings();
+  showTab('calendar');
+};
+
+window.logout = function() {
   currentUser=''; isAdmin=false;
   document.getElementById('loginScreen').style.display='flex';
   document.getElementById('mainScreen').style.display='none';
   document.getElementById('userSelect').value='';
   document.getElementById('adminPassword').value='';
   document.getElementById('adminPasswordDiv').style.display='none';
-}
-function showTab(name) {
-  var tabs=['calendar','myduty','apply','exchange','history','settings'];
-  document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',tabs[i]===name);});
-  document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active');});
-  document.getElementById('tab-'+name).classList.add('active');
-  if(name==='apply'){initApplyForm();renderMyConfRequests();}
-  if(name==='exchange'){loadConfluenceData(function(){renderExchangeTab();});}
+};
+
+window.showTab = function(name) {
+  const tabs=['calendar','myduty','apply','exchange','history','settings'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===name));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+  if(name==='apply'){initApplyForm();renderMyRequests();}
+  if(name==='exchange')renderExchangeTab();
   if(name==='history')renderHistory();
   if(name==='calendar')renderCalendar();
   if(name==='myduty')renderMyDuty();
   if(name==='settings')renderSettings();
-}
-
-// ══════════════════════════════════════════════════════════
-// 15. 초기화 (페이지 로드)
-// ══════════════════════════════════════════════════════════
-window.onload = function() {
-  loadHolidays(); loadSpecialSchedule(); loadDutySettings();
-  document.getElementById('userSelect').addEventListener('change', function(){
-    var pd=document.getElementById('adminPasswordDiv');
-    if(this.value==='이진모'){pd.style.display='block';document.getElementById('adminPassword').focus();}
-    else{pd.style.display='none';document.getElementById('adminPassword').value='';}
-  });
-  document.getElementById('loginScreen').style.display='flex';
-  document.getElementById('mainScreen').style.display='none';
-  
-  // PWA 초기화
-  initPWA();
 };
 
-// ══════════════════════════════════════════════════════════
-// 16. PWA 기능 (Service Worker, 설치, 오프라인 감지)
-// ══════════════════════════════════════════════════════════
-var deferredPrompt = null;
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// PWA
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let deferredPrompt = null;
 
-function initPWA() {
-  // Service Worker 등록
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js')
-      .then(function(reg) {
-        console.log('[PWA] Service Worker 등록 완료:', reg.scope);
-        
-        // 업데이트 확인
-        reg.addEventListener('updatefound', function() {
-          var newWorker = reg.installing;
-          console.log('[PWA] 새 버전 발견, 업데이트 중...');
-          newWorker.addEventListener('statechange', function() {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              if (confirm('새로운 버전이 있습니다. 지금 업데이트하시겠습니까?')) {
-                window.location.reload();
-              }
-            }
-          });
-        });
-      })
-      .catch(function(err) {
-        console.warn('[PWA] Service Worker 등록 실패:', err);
-      });
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt=e;
+  if(!window.matchMedia('(display-mode: standalone)').matches && !localStorage.getItem('pwa-dismissed')) {
+    document.getElementById('installBanner').classList.add('show');
   }
+});
 
-  // 설치 가능 이벤트 감지
-  window.addEventListener('beforeinstallprompt', function(e) {
-    e.preventDefault();
-    deferredPrompt = e;
-    
-    // 이미 설치되었는지 확인
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      console.log('[PWA] 이미 설치된 상태입니다.');
-      return;
-    }
-    
-    // 설치 배너 표시 (처음 1회만)
-    if (!localStorage.getItem('pwa-install-dismissed')) {
-      document.getElementById('installBanner').classList.add('show');
-    }
+document.getElementById('installBtn').addEventListener('click', () => {
+  if(!deferredPrompt){alert('크롬 브라우저에서 시도해주세요.');return;}
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(r=>{
+    if(r.outcome==='accepted') document.getElementById('installBanner').classList.remove('show');
+    deferredPrompt=null;
   });
+});
 
-  // 설치 버튼 클릭
-  document.getElementById('installBtn').addEventListener('click', function() {
-    if (!deferredPrompt) {
-      alert('이 브라우저는 설치를 지원하지 않습니다.\n\nChrome, Edge, Safari에서 시도해주세요.');
-      return;
-    }
-    
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(function(result) {
-      if (result.outcome === 'accepted') {
-        console.log('[PWA] 사용자가 설치를 수락했습니다.');
-        document.getElementById('installBanner').classList.remove('show');
-      }
-      deferredPrompt = null;
-    });
-  });
+document.getElementById('installClose').addEventListener('click', () => {
+  document.getElementById('installBanner').classList.remove('show');
+  localStorage.setItem('pwa-dismissed','true');
+});
 
-  // 설치 배너 닫기
-  document.getElementById('installClose').addEventListener('click', function() {
-    document.getElementById('installBanner').classList.remove('show');
-    localStorage.setItem('pwa-install-dismissed', 'true');
-  });
+window.addEventListener('offline', ()=>document.getElementById('offlineBanner').classList.add('show'));
+window.addEventListener('online',  ()=>document.getElementById('offlineBanner').classList.remove('show'));
 
-  // 앱이 설치되면 배너 숨기기
-  window.addEventListener('appinstalled', function() {
-    console.log('[PWA] 앱이 설치되었습니다!');
-    document.getElementById('installBanner').classList.remove('show');
-  });
-
-  // 오프라인/온라인 감지
-  window.addEventListener('offline', function() {
-    console.log('[PWA] 오프라인 상태');
-    document.getElementById('offlineBanner').classList.add('show');
-    setApiBanner('err', '오프라인 상태입니다. 연결을 확인해주세요.');
-  });
-
-  window.addEventListener('online', function() {
-    console.log('[PWA] 온라인 복구');
-    document.getElementById('offlineBanner').classList.remove('show');
-    
-    // 온라인 복구시 Confluence 데이터 다시 로드
-    if (currentUser) {
-      loadConfluenceData(function(rows, pageData) {
-        renderExchangeTab();
-        renderMyConfRequests();
-        renderCalendar();
-        renderMyDuty();
-        setApiBanner('ok', '온라인 연결 복구됨 ✓');
-      });
-    }
-  });
-
-  // 초기 온라인 상태 확인
-  if (!navigator.onLine) {
-    document.getElementById('offlineBanner').classList.add('show');
-  }
-
-  // 페이지 가시성 변경 감지 (백그라운드에서 복귀시 데이터 갱신)
-  document.addEventListener('visibilitychange', function() {
-    if (!document.hidden && currentUser && navigator.onLine) {
-      console.log('[PWA] 페이지 활성화, 데이터 갱신 중...');
-      loadConfluenceData(function() {
-        renderExchangeTab();
-        renderMyConfRequests();
-      });
-    }
-  });
-
-  console.log('[PWA] 초기화 완료');
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
 }
 
-// PWA 알림 권한 요청 (향후 푸시 알림용)
-function requestNotificationPermission() {
-  if (!('Notification' in window)) {
-    console.warn('[PWA] 이 브라우저는 알림을 지원하지 않습니다.');
-    return;
-  }
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 초기화
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+document.getElementById('userSelect').addEventListener('change', function() {
+  const pd=document.getElementById('adminPasswordDiv');
+  if(this.value==='이진모'){pd.style.display='block';document.getElementById('adminPassword').focus();}
+  else{pd.style.display='none';document.getElementById('adminPassword').value='';}
+});
 
-  if (Notification.permission === 'default') {
-    Notification.requestPermission().then(function(permission) {
-      if (permission === 'granted') {
-        console.log('[PWA] 알림 권한 허용됨');
-        // 테스트 알림
-        new Notification('당직 관리 시스템', {
-          body: '알림이 활성화되었습니다! 교환 신청이 오면 알려드릴게요.',
-          icon: './icons/icon-192x192.png',
-          badge: './icons/icon-72x72.png'
-        });
-      }
-    });
-  }
-}
+HOLIDAYS = {...DEFAULT_HOLIDAYS};
+SPECIAL_SCHEDULE = {...DEFAULT_SPECIAL};
 
-// 로그인 성공시 알림 권한 요청 (기존 login 함수 수정 필요)
-var originalLogin = login;
-login = function() {
-  originalLogin();
-  // 로그인 후 알림 권한 요청 (1회만)
-  if (!localStorage.getItem('notification-requested')) {
-    setTimeout(function() {
-      if (confirm('교환 신청 알림을 받으시겠습니까?\n\n나에게 온 교환 요청을 실시간으로 알려드립니다.')) {
-        requestNotificationPermission();
-      }
-      localStorage.setItem('notification-requested', 'true');
-    }, 2000);
-  }
-};
+initFirebaseListeners();
 
 </script>
 </body>
