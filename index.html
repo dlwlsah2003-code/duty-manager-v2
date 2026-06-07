@@ -13,8 +13,6 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100vh; }
-
-/* ── 로그인 ── */
 .login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
 .login-box { background: white; border-radius: 16px; padding: 40px; width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; }
 .login-box h1 { color: #667eea; font-size: 22px; margin-bottom: 8px; }
@@ -22,31 +20,27 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 .login-box select, .login-box input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; margin-bottom: 10px; outline: none; }
 .login-box select:focus, .login-box input:focus { border-color: #667eea; }
 .login-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 6px; }
-
-/* ── 헤더/탭 ── */
 .main-screen { display: none; }
 .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
 .header h1 { font-size: 18px; }
 .header-right { display: flex; align-items: center; gap: 12px; }
 .user-badge { background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 600; }
 .logout-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 14px; }
-.tabs { display: flex; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow-x: auto; }
-.tab { flex: 1; min-width: 50px; padding: 12px 4px; text-align: center; cursor: pointer; font-size: 9px; font-weight: 600; color: #888; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
+
+/* ── 탭 (모바일 최적화) ── */
+.tabs { display: flex; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { flex: 0 0 auto; min-width: 48px; padding: 12px 8px; text-align: center; cursor: pointer; font-size: 10px; font-weight: 600; color: #888; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
 .tab.active { color: #667eea; border-bottom-color: #667eea; }
+
 .content { padding: 20px; max-width: 900px; margin: 0 auto; }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
-
-/* ── 공지 배너 ── */
 .notice-banner { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 12px 16px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; font-weight: 600; display: none; }
 .notice-banner.show { display: block; }
-
-/* ── 교환구합니다 배너 ── */
 .wanted-banner { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 12px 16px; border-radius: 10px; margin-bottom: 10px; font-size: 13px; }
-.wanted-banner-top { display: flex; justify-content: space-between; align-items: center; }
-.wanted-accept-btn { background: white; color: #e74c3c; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
-
-/* ── 캘린더 ── */
+.wanted-banner-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.wanted-accept-btn { background: white; color: #e74c3c; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .calendar-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .calendar-nav h2 { font-size: 18px; color: #333; }
 .nav-btn { background: #667eea; color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 16px; font-weight: 700; }
@@ -73,8 +67,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 .duty-order-list { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
 .order-badge { padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; color: white; }
 .order-arrow { color: #aaa; font-size: 14px; }
-
-/* ── 공통 카드 ── */
 .section-title { font-size: 16px; font-weight: 700; color: #333; padding-bottom: 8px; border-bottom: 2px solid #667eea; margin-bottom: 12px; }
 .empty-msg { text-align: center; color: #aaa; padding: 40px; font-size: 14px; }
 .gap-section { margin-bottom: 24px; }
@@ -85,8 +77,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 .request-btn.accepted { background: #27ae60; cursor: default; }
 .request-btn.requested { background: #f39c12; }
 .wanted-btn { background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
-
-/* ── 교환 카드 ── */
 .conf-row { background: white; border-radius: 10px; padding: 14px 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.07); margin-bottom: 10px; border-left: 4px solid #667eea; }
 .conf-row.status-대기중 { border-left-color: #f39c12; }
 .conf-row.status-수락완료 { border-left-color: #3498db; }
@@ -103,14 +93,10 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 .accept-btn { background: #27ae60; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
 .reject-btn { background: #e74c3c; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
 .cancel-btn { background: #e74c3c; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
-
-/* ── 이력 ── */
 .history-card { background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 12px; border-left: 4px solid #f39c12; }
 .history-badge { background: #fff3cd; color: #856404; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 8px; }
 .history-detail { font-size: 13px; color: #555; line-height: 1.8; }
 .history-time { font-size: 11px; color: #aaa; margin-top: 6px; }
-
-/* ── 설정 ── */
 .settings-box { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 16px; }
 .settings-title { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #667eea; }
 .settings-desc { font-size: 13px; color: #666; margin-bottom: 12px; line-height: 1.6; }
@@ -126,8 +112,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 .list-item-name { flex: 1; color: #555; font-size: 13px; }
 .list-item-person { color: #667eea; font-weight: 600; font-size: 13px; margin-right: 8px; }
 .list-item-delete { color: #e74c3c; font-size: 16px; cursor: pointer; }
-
-/* ── 멤버 관리 ── */
 .member-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; margin: 4px 0; background: #f8f9fa; border-radius: 8px; }
 .member-name { font-weight: 600; color: #333; font-size: 14px; flex: 1; }
 .member-order { color: #667eea; font-size: 12px; margin-right: 8px; min-width: 40px; }
@@ -136,8 +120,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 .order-btn:disabled { background: #ccc; cursor: default; }
 .member-delete { background: #e74c3c; color: white; border: none; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 14px; }
 .member-delete:disabled { background: #ccc; cursor: default; }
-
-/* ── 신청 폼 ── */
 .apply-form { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; }
 .apply-form h3 { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #667eea; }
 .form-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
@@ -147,8 +129,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 .form-row select:focus, .form-row input:focus, .form-row textarea:focus { border-color: #667eea; }
 .submit-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 6px; }
 .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-/* ── 모달 ── */
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
 .modal-overlay.show { display: flex; }
 .modal { background: white; border-radius: 16px; padding: 30px; width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; }
@@ -159,8 +139,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
 .modal-confirm { flex: 1; padding: 12px; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; }
 .modal-cancel-btn { flex: 1; padding: 12px; background: #f0f0f0; color: #555; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; }
-
-/* ── 상태 배너 ── */
 .fb-status { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
 .fb-status.ok { background: #d4edda; color: #155724; }
 .fb-status.err { background: #f8d7da; color: #721c24; }
@@ -171,20 +149,18 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 .install-banner.show { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
 .install-btn { background: white; color: #667eea; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
 .install-close { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; margin-left: 8px; }
-
-/* ── 통계 ── */
 .stat-bar-wrap { margin: 8px 0; }
 .stat-name { font-size: 13px; font-weight: 600; color: #333; margin-bottom: 3px; display: flex; justify-content: space-between; }
 .stat-bar-bg { background: #f0f0f0; border-radius: 10px; height: 12px; overflow: hidden; }
 .stat-bar { background: linear-gradient(135deg, #667eea, #764ba2); height: 100%; border-radius: 10px; transition: width 0.5s; }
 .stat-bar.my-bar { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-
 @media (max-width: 600px) {
   .day-cell { min-height: 60px; padding: 4px; }
   .day-num { font-size: 11px; }
   .duty-name { font-size: 9px; padding: 1px 4px; }
   .content { padding: 12px; }
   .modal { width: 95vw; padding: 20px; }
+  .header h1 { font-size: 15px; }
 }
 </style>
 </head>
@@ -226,17 +202,16 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
     </div>
   </div>
   <div class="tabs">
-    <div class="tab active"  onclick="showTab('calendar')">📅 캘린더</div>
-    <div class="tab"         onclick="showTab('myduty')">👤 내당직</div>
-    <div class="tab"         onclick="showTab('wanted')">🙋 당직 교환 구합니다!!</div>
-    <div class="tab"         onclick="showTab('apply')">📝 교환신청</div>
-    <div class="tab"         onclick="showTab('exchange')">🔄 현황</div>
-    <div class="tab"         onclick="showTab('history')">📋 이력</div>
-    <div class="tab"         onclick="showTab('settings')">⚙️ 설정</div>
+    <div class="tab active" onclick="showTab('calendar')">📅 캘린더</div>
+    <div class="tab" onclick="showTab('myduty')">👤 내당직</div>
+    <div class="tab" onclick="showTab('wanted')">🙋 당직교환</div>
+    <div class="tab" onclick="showTab('apply')">📝 교환신청</div>
+    <div class="tab" onclick="showTab('exchange')">🔄 현황</div>
+    <div class="tab" onclick="showTab('history')">📋 이력</div>
+    <div class="tab" onclick="showTab('settings')">⚙️ 설정</div>
   </div>
   <div class="content">
 
-    <!-- 캘린더 -->
     <div class="tab-content active" id="tab-calendar">
       <div id="noticeBannerCal" class="notice-banner"></div>
       <div class="calendar-nav">
@@ -260,14 +235,12 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
       </div>
     </div>
 
-    <!-- 내 당직 -->
     <div class="tab-content" id="tab-myduty">
       <div id="noticeBannerDuty" class="notice-banner"></div>
       <div class="section-title" style="margin-bottom:16px;">👤 내 당직 일정</div>
       <div id="myDutyList"></div>
     </div>
 
-    <!-- 🙋 당직 교환 구합니다 게시판 -->
     <div class="tab-content" id="tab-wanted">
       <div id="noticeBannerWanted" class="notice-banner"></div>
       <div class="gap-section">
@@ -281,7 +254,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
       </div>
     </div>
 
-    <!-- 교환 신청 -->
     <div class="tab-content" id="tab-apply">
       <div id="fbStatusBanner" class="fb-status loading">⏳ Firebase 연결 중...</div>
       <div class="apply-form">
@@ -320,7 +292,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
       </div>
     </div>
 
-    <!-- 교환 현황 -->
     <div class="tab-content" id="tab-exchange">
       <div class="gap-section">
         <div class="section-title">📥 나에게 온 교환 요청</div>
@@ -332,13 +303,11 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
       </div>
     </div>
 
-    <!-- 이력 -->
     <div class="tab-content" id="tab-history">
       <div class="section-title" style="margin-bottom:16px;">📋 당직 변경 이력</div>
       <div id="historyList"></div>
     </div>
 
-    <!-- 설정 -->
     <div class="tab-content" id="tab-settings">
       <div class="settings-box">
         <div class="settings-title">📊 시스템 정보</div>
@@ -351,25 +320,19 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
           <p><strong>총 멤버:</strong> <span id="totalMembers">-</span>명</p>
         </div>
       </div>
-
-      <!-- 관리자: 공지사항 -->
       <div class="settings-box" id="adminNoticeSection" style="display:none;">
         <div class="settings-title">📢 관리자 - 공지사항</div>
         <textarea id="noticeInput" placeholder="공지사항을 입력하세요..."
           style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;height:80px;font-family:inherit;margin-bottom:10px;resize:none;"></textarea>
         <div class="btn-group">
           <button class="action-btn btn-primary" onclick="saveNotice()">📢 공지 등록</button>
-          <button class="action-btn btn-danger"  onclick="clearNotice()">🗑️ 공지 삭제</button>
+          <button class="action-btn btn-danger" onclick="clearNotice()">🗑️ 공지 삭제</button>
         </div>
       </div>
-
-      <!-- 관리자: 멤버 관리 -->
       <div class="settings-box" id="adminMemberSection" style="display:none;">
         <div class="settings-title">👥 관리자 - 멤버 관리</div>
-        <div class="settings-desc">
-          멤버 추가/삭제 및 당직 순번을 조정합니다.<br>
-          <strong style="color:#e74c3c;">⚠️ 변경 즉시 캘린더에 반영됩니다!</strong>
-        </div>
+        <div class="settings-desc">멤버 추가/삭제 및 당직 순번을 조정합니다.<br>
+          <strong style="color:#e74c3c;">⚠️ 변경 즉시 캘린더에 반영됩니다!</strong></div>
         <div style="display:flex;gap:8px;margin-bottom:12px;">
           <input type="text" id="newMemberName" placeholder="새 멤버 이름 입력"
             style="flex:1;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
@@ -377,8 +340,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
         </div>
         <div id="memberList" style="max-height:350px;overflow-y:auto;"></div>
       </div>
-
-      <!-- 관리자: 순번 설정 -->
       <div class="settings-box" id="adminRotationSection" style="display:none;">
         <div class="settings-title">⚙️ 관리자 - 당직 시작 설정</div>
         <div class="info-box">
@@ -393,14 +354,10 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
           style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:12px;"></select>
         <button class="action-btn btn-warning" onclick="updateDutyRotation()">✅ 순번 변경 적용</button>
       </div>
-
-      <!-- 관리자: 스마트 휴일 -->
       <div class="settings-box" id="adminHolidaySection" style="display:none;">
         <div class="settings-title">🎉 관리자 - 스마트 휴일 관리</div>
-        <div class="settings-desc">
-          휴일 지정 시 해당 날짜 당직이 없어지고<br>
-          <strong>이후 순번이 자동으로 재계산됩니다!</strong>
-        </div>
+        <div class="settings-desc">휴일 지정 시 해당 날짜 당직이 없어지고<br>
+          <strong>이후 순번이 자동으로 재계산됩니다!</strong></div>
         <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
           <input type="date" id="newHolidayDate"
             style="flex:1;min-width:130px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
@@ -411,8 +368,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
         <div id="holidayListContainer"
           style="max-height:280px;overflow-y:auto;border:2px solid #e0e0e0;border-radius:8px;padding:8px;"></div>
       </div>
-
-      <!-- 관리자: 특별배정 -->
       <div class="settings-box" id="adminSpecialSection" style="display:none;">
         <div class="settings-title">📌 관리자 - 특별배정</div>
         <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
@@ -425,27 +380,19 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
         <div id="specialScheduleList"
           style="max-height:250px;overflow-y:auto;border:2px solid #e0e0e0;border-radius:8px;padding:8px;"></div>
       </div>
-
-      <!-- 관리자: 최종 승인 -->
       <div class="settings-box" id="adminApprovalSection" style="display:none;">
         <div class="settings-title">✅ 관리자 - 교환 최종 승인</div>
         <div id="adminApprovalList"><div class="empty-msg">승인 대기 없음</div></div>
       </div>
-
-      <!-- 당직 통계 -->
       <div class="settings-box">
         <div class="settings-title">📊 당직 통계</div>
         <div id="dutyStats"></div>
       </div>
-
       <div class="settings-box">
         <div class="settings-title">🔄 데이터 초기화</div>
-        <div class="settings-desc" style="color:#e74c3c;">
-          ⚠️ 관리자만 가능. 교환/이력/구합니다 데이터가 삭제됩니다.
-        </div>
+        <div class="settings-desc" style="color:#e74c3c;">⚠️ 관리자만 가능. 교환/이력/구합니다 데이터가 삭제됩니다.</div>
         <button class="action-btn btn-danger" onclick="resetAllData()">전체 초기화</button>
       </div>
-
       <div class="settings-box">
         <div class="settings-title">ℹ️ 색상 안내</div>
         <div class="settings-desc">
@@ -458,7 +405,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
   </div>
 </div>
 
-<!-- 수락 모달 -->
 <div class="modal-overlay" id="acceptModal">
   <div class="modal">
     <h3>✅ 교환 수락</h3>
@@ -475,7 +421,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
   </div>
 </div>
 
-<!-- 교환구합니다 게시 모달 -->
 <div class="modal-overlay" id="wantedModal">
   <div class="modal">
     <h3>🙋 당직 교환 구합니다!!</h3>
@@ -491,7 +436,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
   </div>
 </div>
 
-<!-- 구합니다 제안 모달 -->
 <div class="modal-overlay" id="wantedAcceptModal">
   <div class="modal">
     <h3>🤝 교환 제안하기</h3>
@@ -512,9 +456,6 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getDatabase, ref, set, get, push, update, remove, onValue }
   from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Firebase 설정
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const firebaseConfig = {
   apiKey: "AIzaSyAC-zk0cMjuNMprbjD2I8np9oV32gw7Y78",
   authDomain: "duty-manager-3c981.firebaseapp.com",
@@ -527,14 +468,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 상수
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const ADMIN_USER     = '이진모';
 const ADMIN_PASSWORD = 'admin1234';
-
 const DEFAULT_MEMBERS = ['류재근','정희주','정세정','이진모','권영재','김병오','안제만','인원교','고현우','정민규','권석일'];
-
 const DEFAULT_HOLIDAYS = {
   '2026-01-01':'신정','2026-01-28':'설날연휴','2026-01-29':'설날','2026-01-30':'설날연휴',
   '2026-03-01':'삼일절','2026-05-05':'어린이날','2026-05-24':'석가탄신일',
@@ -548,7 +484,6 @@ const DEFAULT_HOLIDAYS = {
   '2026-10-03':'개천절','2026-10-05':'대체휴무','2026-10-09':'한글날',
   '2026-12-25':'성탄절'
 };
-
 const DEFAULT_SPECIAL = {
   '2026-06-03':'김병오','2026-06-06':'정희주','2026-06-07':'안제만',
   '2026-06-13':'김병오','2026-06-14':'권석일','2026-06-20':'인원교',
@@ -556,281 +491,226 @@ const DEFAULT_SPECIAL = {
   '2026-07-04':'류재근'
 };
 
-const DEFAULT_START_DATE   = '2026-07-05';
-const DEFAULT_START_PERSON = '정세정';
+let currentUser='', isAdmin=false;
+let currentYear=2026, currentMonth=0;
+let accData=null, wantedAccData=null;
+let MEMBERS=[...DEFAULT_MEMBERS];
+let HOLIDAYS={...DEFAULT_HOLIDAYS};
+let SPECIAL_SCHEDULE={...DEFAULT_SPECIAL};
+let DUTY_START_DATE=new Date(2026,6,5);
+let DUTY_START_INDEX=MEMBERS.indexOf('정세정');
+let allRows={}, allWanted={};
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 런타임 변수
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-let currentUser = '', isAdmin = false;
-let currentYear = 2026, currentMonth = 0;
-let accData = null, wantedAccData = null;
-let MEMBERS = [...DEFAULT_MEMBERS];
-let HOLIDAYS = {...DEFAULT_HOLIDAYS};
-let SPECIAL_SCHEDULE = {...DEFAULT_SPECIAL};
-let DUTY_START_DATE = new Date(2026, 6, 5);
-let DUTY_START_INDEX = MEMBERS.indexOf(DEFAULT_START_PERSON);
-let allRows = {}, allWanted = {};
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Firebase 리스너
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function initFirebaseListeners() {
-
-  onValue(ref(db,'requests'), snap => {
-    allRows = snap.val() || {};
-    if(currentUser){ renderMyRequests(); renderExchangeTab(); renderCalendar(); renderMyDuty(); }
+function initFirebaseListeners(){
+  onValue(ref(db,'requests'),snap=>{
+    allRows=snap.val()||{};
+    if(currentUser){renderMyRequests();renderExchangeTab();renderCalendar();renderMyDuty();}
     document.getElementById('fbStatusBanner').className='fb-status ok';
     document.getElementById('fbStatusBanner').textContent='✅ Firebase 실시간 연결됨';
     document.getElementById('fbConnStatus').textContent='✅ 연결됨';
-  }, () => {
+  },()=>{
     document.getElementById('fbStatusBanner').className='fb-status err';
     document.getElementById('fbStatusBanner').textContent='❌ Firebase 연결 실패';
     document.getElementById('fbConnStatus').textContent='❌ 연결 실패';
   });
 
-  onValue(ref(db,'settings'), snap => {
-    const s = snap.val() || {};
-    MEMBERS = (s.members && Array.isArray(s.members) && s.members.length > 0)
-      ? s.members : [...DEFAULT_MEMBERS];
-    if(s.dutyStartDate) {
-      const p = s.dutyStartDate.split('-');
-      DUTY_START_DATE = new Date(+p[0], +p[1]-1, +p[2]);
-    }
-    if(s.dutyStartPerson) {
-      const idx = MEMBERS.indexOf(s.dutyStartPerson);
-      DUTY_START_INDEX = idx >= 0 ? idx : 0;
-    }
-    HOLIDAYS = {...DEFAULT_HOLIDAYS};
-    if(s.holidays) Object.assign(HOLIDAYS, s.holidays);
-    SPECIAL_SCHEDULE = {...DEFAULT_SPECIAL};
-    if(s.special) Object.assign(SPECIAL_SCHEDULE, s.special);
-    if(currentUser){
-      renderCalendar(); renderMyDuty();
-      populateMemberSelects();
-      if(isAdmin) renderSettings();
-    }
-    const tmEl = document.getElementById('totalMembers');
-    if(tmEl) tmEl.textContent = MEMBERS.length;
+  onValue(ref(db,'settings'),snap=>{
+    const s=snap.val()||{};
+    MEMBERS=(s.members&&Array.isArray(s.members)&&s.members.length>0)?s.members:[...DEFAULT_MEMBERS];
+    if(s.dutyStartDate){const p=s.dutyStartDate.split('-');DUTY_START_DATE=new Date(+p[0],+p[1]-1,+p[2]);}
+    if(s.dutyStartPerson){const idx=MEMBERS.indexOf(s.dutyStartPerson);DUTY_START_INDEX=idx>=0?idx:0;}
+    HOLIDAYS={...DEFAULT_HOLIDAYS};
+    if(s.holidays)Object.assign(HOLIDAYS,s.holidays);
+    SPECIAL_SCHEDULE={...DEFAULT_SPECIAL};
+    if(s.special)Object.assign(SPECIAL_SCHEDULE,s.special);
+    if(currentUser){renderCalendar();renderMyDuty();populateMemberSelects();if(isAdmin)renderSettings();}
+    const tmEl=document.getElementById('totalMembers');
+    if(tmEl)tmEl.textContent=MEMBERS.length;
   });
 
-  onValue(ref(db,'wanted'), snap => {
-    allWanted = snap.val() || {};
-    if(currentUser) renderWantedList();
+  onValue(ref(db,'wanted'),snap=>{
+    allWanted=snap.val()||{};
+    if(currentUser)renderWantedList();
   });
 
-  onValue(ref(db,'notice'), snap => {
-    const notice = snap.val() || '';
-    ['noticeBannerCal','noticeBannerDuty','noticeBannerWanted'].forEach(id => {
-      const el = document.getElementById(id);
-      if(!el) return;
-      if(notice){ el.textContent='📢 '+notice; el.classList.add('show'); }
+  onValue(ref(db,'notice'),snap=>{
+    const notice=snap.val()||'';
+    ['noticeBannerCal','noticeBannerDuty','noticeBannerWanted'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(!el)return;
+      if(notice){el.textContent='📢 '+notice;el.classList.add('show');}
       else el.classList.remove('show');
     });
-    const ni = document.getElementById('noticeInput');
-    if(ni) ni.value = notice;
+    const ni=document.getElementById('noticeInput');
+    if(ni)ni.value=notice;
   });
 
-  onValue(ref(db,'history'), () => {
-    if(currentUser) renderHistory();
-  });
+  onValue(ref(db,'history'),()=>{if(currentUser)renderHistory();});
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 당직 계산
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function dateToStr(date) {
+function dateToStr(date){
   return date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
 }
-
-function isDutyDay(date) {
-  const s = dateToStr(date), dow = date.getDay();
-  return dow===0 || dow===6 || !!HOLIDAYS[s] || !!SPECIAL_SCHEDULE[s];
+function isDutyDay(date){
+  const s=dateToStr(date),dow=date.getDay();
+  return dow===0||dow===6||!!HOLIDAYS[s]||!!SPECIAL_SCHEDULE[s];
 }
-
-function getExchangedDuties() {
-  const result = {};
-  Object.values(allRows).forEach(r => {
-    if(r.status==='승인완료'){
-      result[r.myDate]     = r.target;
-      result[r.targetDate] = r.requester;
-    }
+function getExchangedDuties(){
+  const result={};
+  Object.values(allRows).forEach(r=>{
+    if(r.status==='승인완료'){result[r.myDate]=r.target;result[r.targetDate]=r.requester;}
   });
   return result;
 }
-
-function getDutyPerson(date) {
-  if(MEMBERS.length === 0) return null;
-  const s = dateToStr(date);
-  const exd = getExchangedDuties();
-  if(exd[s]) return exd[s];
-  if(SPECIAL_SCHEDULE[s]) return SPECIAL_SCHEDULE[s];
-  if(!isDutyDay(date)) return null;
-
-  let count = 0;
-  const cur = new Date(DUTY_START_DATE);
-  const target = new Date(date);
-
-  if(target >= DUTY_START_DATE) {
-    while(dateToStr(cur) !== dateToStr(target)) {
-      const cs = dateToStr(cur);
-      if(!SPECIAL_SCHEDULE[cs] && (cur.getDay()===0||cur.getDay()===6||HOLIDAYS[cs])) count++;
+function getDutyPerson(date){
+  if(MEMBERS.length===0)return null;
+  const s=dateToStr(date);
+  const exd=getExchangedDuties();
+  if(exd[s])return exd[s];
+  if(SPECIAL_SCHEDULE[s])return SPECIAL_SCHEDULE[s];
+  if(!isDutyDay(date))return null;
+  let count=0;
+  const cur=new Date(DUTY_START_DATE);
+  const target=new Date(date);
+  if(target>=DUTY_START_DATE){
+    while(dateToStr(cur)!==dateToStr(target)){
+      const cs=dateToStr(cur);
+      if(!SPECIAL_SCHEDULE[cs]&&(cur.getDay()===0||cur.getDay()===6||HOLIDAYS[cs]))count++;
       cur.setDate(cur.getDate()+1);
-      if(count > 5000) break;
+      if(count>5000)break;
     }
-    return MEMBERS[(DUTY_START_INDEX + count) % MEMBERS.length];
+    return MEMBERS[(DUTY_START_INDEX+count)%MEMBERS.length];
   } else {
-    let prevDays = [], c2 = new Date(DUTY_START_DATE);
+    let prevDays=[],c2=new Date(DUTY_START_DATE);
     c2.setDate(c2.getDate()-1);
-    for(let i=0; i<500; i++){
-      const cs2 = dateToStr(c2);
-      if(!SPECIAL_SCHEDULE[cs2] && (c2.getDay()===0||c2.getDay()===6||HOLIDAYS[cs2])) prevDays.unshift(cs2);
+    for(let i=0;i<500;i++){
+      const cs2=dateToStr(c2);
+      if(!SPECIAL_SCHEDULE[cs2]&&(c2.getDay()===0||c2.getDay()===6||HOLIDAYS[cs2]))prevDays.unshift(cs2);
       c2.setDate(c2.getDate()-1);
     }
-    const idx2 = prevDays.indexOf(s);
-    if(idx2 >= 0){
-      const mi = ((DUTY_START_INDEX-(prevDays.length-idx2))%MEMBERS.length+MEMBERS.length)%MEMBERS.length;
+    const idx2=prevDays.indexOf(s);
+    if(idx2>=0){
+      const mi=((DUTY_START_INDEX-(prevDays.length-idx2))%MEMBERS.length+MEMBERS.length)%MEMBERS.length;
       return MEMBERS[mi];
     }
     return null;
   }
 }
-
-function getMyDutyDates(user) {
-  const result = [];
-  const now = new Date();
-  const year = now.getFullYear() < 2026 ? 2026 : now.getFullYear();
-  for(let m=0; m<12; m++){
-    const days = new Date(year, m+1, 0).getDate();
-    for(let d=1; d<=days; d++){
-      const date = new Date(year, m, d);
-      if(isDutyDay(date) && getDutyPerson(date)===user) result.push(dateToStr(date));
+function getMyDutyDates(user){
+  const result=[];
+  const now=new Date();
+  const year=now.getFullYear()<2026?2026:now.getFullYear();
+  for(let m=0;m<12;m++){
+    const days=new Date(year,m+1,0).getDate();
+    for(let d=1;d<=days;d++){
+      const date=new Date(year,m,d);
+      if(isDutyDay(date)&&getDutyPerson(date)===user)result.push(dateToStr(date));
     }
   }
   return result;
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 멤버 select 채우기
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function populateMemberSelects() {
-  const userSel = document.getElementById('userSelect');
-  const curVal = userSel.value;
-  userSel.innerHTML = '<option value="">이름을 선택하세요</option>';
-  MEMBERS.forEach(m => { userSel.innerHTML += `<option value="${m}">${m}</option>`; });
-  if(curVal) userSel.value = curVal;
-
-  ['specialPerson','newStartPerson'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el){ el.innerHTML=''; MEMBERS.forEach(m => { el.innerHTML+=`<option>${m}</option>`; }); }
+function populateMemberSelects(){
+  const userSel=document.getElementById('userSelect');
+  const curVal=userSel.value;
+  userSel.innerHTML='<option value="">이름을 선택하세요</option>';
+  MEMBERS.forEach(m=>{userSel.innerHTML+=`<option value="${m}">${m}</option>`;});
+  if(curVal)userSel.value=curVal;
+  ['specialPerson','newStartPerson'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.innerHTML='';MEMBERS.forEach(m=>{el.innerHTML+=`<option>${m}</option>`;});}
   });
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 교환 신청 폼
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function initApplyForm() {
-  document.getElementById('fmRequester').innerHTML = `<option>${currentUser}</option>`;
-  const dn = ['일','월','화','수','목','금','토'];
-  const myDates = getMyDutyDates(currentUser);
-  const myDateSel = document.getElementById('fmMyDate');
-  myDateSel.innerHTML = '<option value="">선택하세요</option>';
-  myDates.forEach(d => {
-    myDateSel.innerHTML += `<option value="${d}">${d} (${dn[new Date(d).getDay()]})</option>`;
-  });
-  const tgtSel = document.getElementById('fmTarget');
-  tgtSel.innerHTML = '<option value="">선택하세요</option>';
-  MEMBERS.filter(m => m!==currentUser).forEach(m => {
-    tgtSel.innerHTML += `<option value="${m}">${m}</option>`;
-  });
-  tgtSel.onchange = function(){
-    const tgtDateSel = document.getElementById('fmTargetDate');
-    if(!this.value){ tgtDateSel.innerHTML='<option>대상자를 먼저 선택하세요</option>'; return; }
-    const tgtDates = getMyDutyDates(this.value);
-    tgtDateSel.innerHTML = '<option value="">선택하세요</option>';
-    tgtDates.forEach(d => {
-      tgtDateSel.innerHTML += `<option value="${d}">${d} (${dn[new Date(d).getDay()]})</option>`;
-    });
+function initApplyForm(){
+  document.getElementById('fmRequester').innerHTML=`<option>${currentUser}</option>`;
+  const dn=['일','월','화','수','목','금','토'];
+  const myDates=getMyDutyDates(currentUser);
+  const myDateSel=document.getElementById('fmMyDate');
+  myDateSel.innerHTML='<option value="">선택하세요</option>';
+  myDates.forEach(d=>{myDateSel.innerHTML+=`<option value="${d}">${d} (${dn[new Date(d).getDay()]})</option>`;});
+  const tgtSel=document.getElementById('fmTarget');
+  tgtSel.innerHTML='<option value="">선택하세요</option>';
+  MEMBERS.filter(m=>m!==currentUser).forEach(m=>{tgtSel.innerHTML+=`<option value="${m}">${m}</option>`;});
+  tgtSel.onchange=function(){
+    const tgtDateSel=document.getElementById('fmTargetDate');
+    if(!this.value){tgtDateSel.innerHTML='<option>대상자를 먼저 선택하세요</option>';return;}
+    const tgtDates=getMyDutyDates(this.value);
+    tgtDateSel.innerHTML='<option value="">선택하세요</option>';
+    tgtDates.forEach(d=>{tgtDateSel.innerHTML+=`<option value="${d}">${d} (${dn[new Date(d).getDay()]})</option>`;});
   };
 }
 
-window.submitExchangeRequest = async function(){
-  const myDate     = document.getElementById('fmMyDate').value;
-  const target     = document.getElementById('fmTarget').value;
-  const targetDate = document.getElementById('fmTargetDate').value;
-  const reason     = document.getElementById('fmReason').value.trim();
-  if(!myDate||!target||!targetDate||!reason){ alert('모든 항목을 입력해주세요!'); return; }
-  const dup = Object.values(allRows).find(r => r.requester===currentUser && r.myDate===myDate && r.status!=='반려');
-  if(dup){ alert('이미 해당 날짜로 신청한 교환이 있습니다!'); return; }
-  if(!confirm(`교환 신청:\n${currentUser} (${myDate}) ↔ ${target} (${targetDate})\n사유: ${reason}`)) return;
-  const btn = document.getElementById('submitBtn');
-  btn.disabled=true; btn.textContent='등록 중...';
-  try {
-    const newRef = push(ref(db,'requests'));
-    await set(newRef,{ id:newRef.key, requester:currentUser, myDate, target, targetDate, reason, status:'대기중', createdAt:new Date().toLocaleString('ko-KR') });
-    await addHistory({ type:'교환신청', from:currentUser, to:target, date:myDate, reason });
+window.submitExchangeRequest=async function(){
+  const myDate=document.getElementById('fmMyDate').value;
+  const target=document.getElementById('fmTarget').value;
+  const targetDate=document.getElementById('fmTargetDate').value;
+  const reason=document.getElementById('fmReason').value.trim();
+  if(!myDate||!target||!targetDate||!reason){alert('모든 항목을 입력해주세요!');return;}
+  const dup=Object.values(allRows).find(r=>r.requester===currentUser&&r.myDate===myDate&&r.status!=='반려');
+  if(dup){alert('이미 해당 날짜로 신청한 교환이 있습니다!');return;}
+  if(!confirm(`교환 신청:\n${currentUser} (${myDate}) ↔ ${target} (${targetDate})\n사유: ${reason}`))return;
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.textContent='등록 중...';
+  try{
+    const newRef=push(ref(db,'requests'));
+    await set(newRef,{id:newRef.key,requester:currentUser,myDate,target,targetDate,reason,status:'대기중',createdAt:new Date().toLocaleString('ko-KR')});
+    await addHistory({type:'교환신청',from:currentUser,to:target,date:myDate,reason});
     document.getElementById('fmMyDate').value='';
     document.getElementById('fmTarget').value='';
     document.getElementById('fmTargetDate').innerHTML='<option>대상자를 먼저 선택하세요</option>';
     document.getElementById('fmReason').value='';
     alert('✅ 교환 신청이 등록되었습니다!');
-  } catch(e){ alert('❌ 오류: '+e.message); }
-  btn.disabled=false; btn.textContent='📤 교환 신청 등록';
+  }catch(e){alert('❌ 오류: '+e.message);}
+  btn.disabled=false;btn.textContent='📤 교환 신청 등록';
 };
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 교환 구합니다 게시판
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-window.openWantedModal = function(preDate=''){
-  const dn = ['일','월','화','수','목','금','토'];
-  const myDates = getMyDutyDates(currentUser);
-  const sel = document.getElementById('wantedMyDate');
-  sel.innerHTML = '<option value="">선택하세요</option>';
-  myDates.forEach(d => {
-    sel.innerHTML += `<option value="${d}">${d} (${dn[new Date(d).getDay()]})</option>`;
-  });
-  if(preDate) sel.value = preDate;
+window.openWantedModal=function(preDate=''){
+  const dn=['일','월','화','수','목','금','토'];
+  const myDates=getMyDutyDates(currentUser);
+  const sel=document.getElementById('wantedMyDate');
+  sel.innerHTML='<option value="">선택하세요</option>';
+  myDates.forEach(d=>{sel.innerHTML+=`<option value="${d}">${d} (${dn[new Date(d).getDay()]})</option>`;});
+  if(preDate)sel.value=preDate;
   document.getElementById('wantedReason').value='';
   document.getElementById('wantedModal').classList.add('show');
 };
-window.closeWantedModal = function(){ document.getElementById('wantedModal').classList.remove('show'); };
+window.closeWantedModal=function(){document.getElementById('wantedModal').classList.remove('show');};
 
-window.submitWanted = async function(){
-  const myDate = document.getElementById('wantedMyDate').value;
-  const reason = document.getElementById('wantedReason').value.trim();
-  if(!myDate||!reason){ alert('날짜와 사유를 입력해주세요!'); return; }
-  const dup = Object.values(allWanted).find(w => w.requester===currentUser && w.myDate===myDate && w.status==='active');
-  if(dup){ alert('이미 해당 날짜로 게시된 글이 있습니다!'); return; }
-  try {
-    const newRef = push(ref(db,'wanted'));
-    await set(newRef,{ id:newRef.key, requester:currentUser, myDate, reason, status:'active', createdAt:new Date().toLocaleString('ko-KR') });
-    await addHistory({ type:'교환구합니다', from:currentUser, to:'', date:myDate, reason });
+window.submitWanted=async function(){
+  const myDate=document.getElementById('wantedMyDate').value;
+  const reason=document.getElementById('wantedReason').value.trim();
+  if(!myDate||!reason){alert('날짜와 사유를 입력해주세요!');return;}
+  const dup=Object.values(allWanted).find(w=>w.requester===currentUser&&w.myDate===myDate&&w.status==='active');
+  if(dup){alert('이미 해당 날짜로 게시된 글이 있습니다!');return;}
+  try{
+    const newRef=push(ref(db,'wanted'));
+    await set(newRef,{id:newRef.key,requester:currentUser,myDate,reason,status:'active',createdAt:new Date().toLocaleString('ko-KR')});
+    await addHistory({type:'교환구합니다',from:currentUser,to:'',date:myDate,reason});
     closeWantedModal();
     alert('✅ 게시되었습니다!');
-  } catch(e){ alert('❌ 오류: '+e.message); }
+  }catch(e){alert('❌ 오류: '+e.message);}
 };
 
 function renderWantedList(){
-  const el = document.getElementById('wantedList');
-  const items = Object.values(allWanted).filter(w => w.status==='active');
-  if(items.length===0){ el.innerHTML='<div class="empty-msg">게시된 글이 없습니다.<br>내 당직 탭에서도 게시할 수 있어요!</div>'; return; }
+  const el=document.getElementById('wantedList');
+  const items=Object.values(allWanted).filter(w=>w.status==='active');
+  if(items.length===0){el.innerHTML='<div class="empty-msg">게시된 글이 없습니다.<br>내 당직 탭에서도 게시할 수 있어요!</div>';return;}
   el.innerHTML='';
-  items.sort((a,b)=>new Date(a.myDate)-new Date(b.myDate)).forEach(w => {
-    const isMe = w.requester===currentUser;
-    const div = document.createElement('div');
+  items.sort((a,b)=>new Date(a.myDate)-new Date(b.myDate)).forEach(w=>{
+    const isMe=w.requester===currentUser;
+    const div=document.createElement('div');
     div.className='wanted-banner';
-    div.style.background = isMe
-      ? 'linear-gradient(135deg, #8e44ad, #6c3483)'
-      : 'linear-gradient(135deg, #e74c3c, #c0392b)';
+    div.style.background=isMe?'linear-gradient(135deg, #8e44ad, #6c3483)':'linear-gradient(135deg, #e74c3c, #c0392b)';
     div.innerHTML=`
       <div class="wanted-banner-top">
         <div style="flex:1;">
-          <div style="font-size:15px;font-weight:700;">📢 ${w.requester}님 ${w.myDate} 당직 교환 구합니다!!</div>
+          <div style="font-size:14px;font-weight:700;">📢 ${w.requester}님 ${w.myDate} 당직 교환 구합니다!!</div>
           <div style="font-size:12px;opacity:0.9;margin-top:4px;">사유: ${w.reason}</div>
           <div style="font-size:11px;opacity:0.7;margin-top:2px;">${w.createdAt}</div>
         </div>
         <div style="display:flex;gap:6px;flex-direction:column;align-items:flex-end;margin-left:8px;">
-          ${!isMe?`<button class="wanted-accept-btn" onclick="openWantedAcceptModal('${w.id}')">✋ 제안하기</button>`:''}
+          ${!isMe?`<button class="wanted-accept-btn" onclick="openWantedAcceptModal('${w.id}')">✋ 제안</button>`:''}
           ${isMe?`<button class="wanted-accept-btn" onclick="deleteWanted('${w.id}')" style="color:#8e44ad;">🗑️ 삭제</button>`:''}
         </div>
       </div>
@@ -839,62 +719,52 @@ function renderWantedList(){
   });
 }
 
-window.openWantedAcceptModal = function(id){
-  const w = allWanted[id];
-  if(!w) return;
-  if(w.requester===currentUser){ alert('본인 게시글에는 제안할 수 없습니다!'); return; }
-  wantedAccData = w;
-  document.getElementById('wantedAcceptName').textContent = w.requester;
-  document.getElementById('wantedAcceptDate').textContent = w.myDate;
-  const dn = ['일','월','화','수','목','금','토'];
-  const sel = document.getElementById('wantedAcceptMyDate');
-  sel.innerHTML = '<option value="">선택하세요</option>';
-  getMyDutyDates(currentUser).forEach(d => {
-    sel.innerHTML += `<option value="${d}">${d} (${dn[new Date(d).getDay()]})</option>`;
-  });
+window.openWantedAcceptModal=function(id){
+  const w=allWanted[id];
+  if(!w)return;
+  if(w.requester===currentUser){alert('본인 게시글에는 제안할 수 없습니다!');return;}
+  wantedAccData=w;
+  document.getElementById('wantedAcceptName').textContent=w.requester;
+  document.getElementById('wantedAcceptDate').textContent=w.myDate;
+  const dn=['일','월','화','수','목','금','토'];
+  const sel=document.getElementById('wantedAcceptMyDate');
+  sel.innerHTML='<option value="">선택하세요</option>';
+  getMyDutyDates(currentUser).forEach(d=>{sel.innerHTML+=`<option value="${d}">${d} (${dn[new Date(d).getDay()]})</option>`;});
   document.getElementById('wantedAcceptModal').classList.add('show');
 };
-window.closeWantedAcceptModal = function(){ document.getElementById('wantedAcceptModal').classList.remove('show'); wantedAccData=null; };
+window.closeWantedAcceptModal=function(){document.getElementById('wantedAcceptModal').classList.remove('show');wantedAccData=null;};
 
-window.confirmWantedAccept = async function(){
-  const myDate = document.getElementById('wantedAcceptMyDate').value;
-  if(!myDate){ alert('내 당직 날짜를 선택해주세요!'); return; }
-  if(!wantedAccData) return;
-  if(!confirm(`${wantedAccData.requester}님(${wantedAccData.myDate}) ↔ 나(${myDate})\n교환 신청하시겠습니까?`)) return;
-  try {
-    const newRef = push(ref(db,'requests'));
-    await set(newRef,{
-      id:newRef.key, requester:currentUser, myDate,
-      target:wantedAccData.requester, targetDate:wantedAccData.myDate,
-      reason:'🙋 당직 교환 구합니다!! 게시판을 통한 교환 신청',
-      status:'대기중', createdAt:new Date().toLocaleString('ko-KR')
-    });
-    await update(ref(db,`wanted/${wantedAccData.id}`),{ status:'matched' });
-    await addHistory({ type:'교환제안', from:currentUser, to:wantedAccData.requester, date:myDate, reason:'구합니다 게시판 통해 제안' });
+window.confirmWantedAccept=async function(){
+  const myDate=document.getElementById('wantedAcceptMyDate').value;
+  if(!myDate){alert('내 당직 날짜를 선택해주세요!');return;}
+  if(!wantedAccData)return;
+  if(!confirm(`${wantedAccData.requester}님(${wantedAccData.myDate}) ↔ 나(${myDate})\n교환 신청하시겠습니까?`))return;
+  try{
+    const newRef=push(ref(db,'requests'));
+    await set(newRef,{id:newRef.key,requester:currentUser,myDate,target:wantedAccData.requester,targetDate:wantedAccData.myDate,reason:'🙋 당직 교환 구합니다!! 게시판을 통한 교환 신청',status:'대기중',createdAt:new Date().toLocaleString('ko-KR')});
+    await update(ref(db,`wanted/${wantedAccData.id}`),{status:'matched'});
+    await addHistory({type:'교환제안',from:currentUser,to:wantedAccData.requester,date:myDate,reason:'구합니다 게시판 통해 제안'});
     closeWantedAcceptModal();
     alert('✅ 교환 신청 완료!\n교환현황 탭에서 확인하세요.');
-  } catch(e){ alert('❌ 오류: '+e.message); }
+  }catch(e){alert('❌ 오류: '+e.message);}
 };
 
-window.deleteWanted = async function(id){
-  if(!confirm('게시글을 삭제하시겠습니까?')) return;
+window.deleteWanted=async function(id){
+  if(!confirm('게시글을 삭제하시겠습니까?'))return;
   await remove(ref(db,`wanted/${id}`));
 };
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 교환 현황 렌더링
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const STATUS_LABEL = { '대기중':'⏳ 대기중','수락완료':'🤝 수락완료','승인완료':'✅ 승인완료','반려':'❌ 반려' };
-const STATUS_CLS   = { '대기중':'status-pending','수락완료':'status-accepted','승인완료':'status-accepted','반려':'status-rejected' };
+const STATUS_LABEL={'대기중':'⏳ 대기중','수락완료':'🤝 수락완료','승인완료':'✅ 승인완료','반려':'❌ 반려'};
+const STATUS_CLS={'대기중':'status-pending','수락완료':'status-accepted','승인완료':'status-accepted','반려':'status-rejected'};
 
 function renderMyRequests(){
-  const rows = Object.values(allRows).filter(r => r.requester===currentUser);
-  const el = document.getElementById('myRequests');
-  if(!el) return;
-  if(rows.length===0){ el.innerHTML='<div class="empty-msg">신청한 교환이 없습니다.</div>'; return; }
+  const rows=Object.values(allRows).filter(r=>r.requester===currentUser);
+  const el=document.getElementById('myRequests');
+  if(!el)return;
+  if(rows.length===0){el.innerHTML='<div class="empty-msg">신청한 교환이 없습니다.</div>';return;}
   el.innerHTML='';
-  rows.slice().reverse().forEach(r => {
-    const div = document.createElement('div');
+  rows.slice().reverse().forEach(r=>{
+    const div=document.createElement('div');
     div.className=`conf-row status-${r.status}`;
     div.innerHTML=`
       <div class="conf-row-top">
@@ -909,15 +779,15 @@ function renderMyRequests(){
 }
 
 function renderExchangeTab(){
-  const rows = Object.values(allRows);
-  const incoming = rows.filter(r => r.target===currentUser && r.status==='대기중');
-  const inEl = document.getElementById('incomingRequests');
+  const rows=Object.values(allRows);
+  const incoming=rows.filter(r=>r.target===currentUser&&r.status==='대기중');
+  const inEl=document.getElementById('incomingRequests');
   if(inEl){
-    if(incoming.length===0){ inEl.innerHTML='<div class="empty-msg">수락 가능한 요청이 없습니다.</div>'; }
-    else {
+    if(incoming.length===0){inEl.innerHTML='<div class="empty-msg">수락 가능한 요청이 없습니다.</div>';}
+    else{
       inEl.innerHTML='';
-      incoming.forEach(r => {
-        const div = document.createElement('div');
+      incoming.forEach(r=>{
+        const div=document.createElement('div');
         div.className='conf-row status-대기중';
         div.innerHTML=`
           <div class="conf-row-top">
@@ -934,12 +804,12 @@ function renderExchangeTab(){
       });
     }
   }
-  const allEl = document.getElementById('allRequests');
+  const allEl=document.getElementById('allRequests');
   if(allEl){
-    if(rows.length===0){ allEl.innerHTML='<div class="empty-msg">교환 신청 내역이 없습니다.</div>'; return; }
+    if(rows.length===0){allEl.innerHTML='<div class="empty-msg">교환 신청 내역이 없습니다.</div>';return;}
     allEl.innerHTML='';
-    rows.slice().reverse().forEach(r => {
-      const div = document.createElement('div');
+    rows.slice().reverse().forEach(r=>{
+      const div=document.createElement('div');
       div.className='conf-row';
       div.innerHTML=`
         <div class="conf-row-top">
@@ -951,17 +821,17 @@ function renderExchangeTab(){
       allEl.appendChild(div);
     });
   }
-  if(isAdmin) renderAdminApproval();
+  if(isAdmin)renderAdminApproval();
 }
 
 function renderAdminApproval(){
-  const pending = Object.values(allRows).filter(r => r.status==='수락완료');
-  const el = document.getElementById('adminApprovalList');
-  if(!el) return;
-  if(pending.length===0){ el.innerHTML='<div class="empty-msg">승인 대기 없음</div>'; return; }
+  const pending=Object.values(allRows).filter(r=>r.status==='수락완료');
+  const el=document.getElementById('adminApprovalList');
+  if(!el)return;
+  if(pending.length===0){el.innerHTML='<div class="empty-msg">승인 대기 없음</div>';return;}
   el.innerHTML='';
-  pending.forEach(r => {
-    const div = document.createElement('div');
+  pending.forEach(r=>{
+    const div=document.createElement('div');
     div.className='conf-row';
     div.innerHTML=`
       <div class="conf-row-top">
@@ -978,117 +848,107 @@ function renderAdminApproval(){
   });
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 수락 / 거절 / 취소 / 관리자
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-window.openAcceptModal = function(id){
-  const row = allRows[id];
-  if(!row) return;
-  accData = row;
-  document.getElementById('accRequester').textContent = row.requester;
-  document.getElementById('accReqDate').textContent   = row.myDate;
-  document.getElementById('accSummary').style.display = 'none';
-  const dn = ['일','월','화','수','목','금','토'];
-  const sel = document.getElementById('accMyDate');
-  sel.innerHTML = '<option value="">선택하세요</option>';
-  getMyDutyDates(currentUser).forEach(d => {
-    sel.innerHTML += `<option value="${d}">${d} (${dn[new Date(d).getDay()]})</option>`;
-  });
-  sel.onchange = function(){
+window.openAcceptModal=function(id){
+  const row=allRows[id];
+  if(!row)return;
+  accData=row;
+  document.getElementById('accRequester').textContent=row.requester;
+  document.getElementById('accReqDate').textContent=row.myDate;
+  document.getElementById('accSummary').style.display='none';
+  const dn=['일','월','화','수','목','금','토'];
+  const sel=document.getElementById('accMyDate');
+  sel.innerHTML='<option value="">선택하세요</option>';
+  getMyDutyDates(currentUser).forEach(d=>{sel.innerHTML+=`<option value="${d}">${d} (${dn[new Date(d).getDay()]})</option>`;});
+  sel.onchange=function(){
     if(this.value){
-      const s = document.getElementById('accSummary');
+      const s=document.getElementById('accSummary');
       s.style.display='block';
       s.innerHTML=`💡 <strong>교환 결과:</strong><br>${currentUser}: ${this.value} → ${row.myDate}<br>${row.requester}: ${row.myDate} → ${this.value}`;
     }
   };
   document.getElementById('acceptModal').classList.add('show');
 };
-window.closeAcceptModal = function(){ document.getElementById('acceptModal').classList.remove('show'); accData=null; };
+window.closeAcceptModal=function(){document.getElementById('acceptModal').classList.remove('show');accData=null;};
 
-window.confirmAccept = async function(){
-  const myDate = document.getElementById('accMyDate').value;
-  if(!myDate){ alert('내 당직 날짜를 선택해주세요!'); return; }
-  if(!accData) return;
-  if(!confirm(`수락하시겠습니까?\n${currentUser}(${myDate}) ↔ ${accData.requester}(${accData.myDate})`)) return;
-  await update(ref(db,`requests/${accData.id}`),{ status:'수락완료', targetDate:myDate });
-  await addHistory({ type:'교환수락', from:currentUser, to:accData.requester, date:accData.myDate, reason:`${currentUser}(${myDate}) ↔ ${accData.requester}(${accData.myDate})` });
+window.confirmAccept=async function(){
+  const myDate=document.getElementById('accMyDate').value;
+  if(!myDate){alert('내 당직 날짜를 선택해주세요!');return;}
+  if(!accData)return;
+  if(!confirm(`수락하시겠습니까?\n${currentUser}(${myDate}) ↔ ${accData.requester}(${accData.myDate})`))return;
+  await update(ref(db,`requests/${accData.id}`),{status:'수락완료',targetDate:myDate});
+  await addHistory({type:'교환수락',from:currentUser,to:accData.requester,date:accData.myDate,reason:`${currentUser}(${myDate}) ↔ ${accData.requester}(${accData.myDate})`});
   closeAcceptModal();
   alert('✅ 수락 완료! 관리자 최종 승인을 기다려주세요.');
 };
 
-window.rejectRequest = async function(id){
-  if(!confirm('거절하시겠습니까?')) return;
-  await update(ref(db,`requests/${id}`),{ status:'반려' });
-  await addHistory({ type:'교환거절', from:currentUser, to:'', date:'', reason:'거절' });
+window.rejectRequest=async function(id){
+  if(!confirm('거절하시겠습니까?'))return;
+  await update(ref(db,`requests/${id}`),{status:'반려'});
+  await addHistory({type:'교환거절',from:currentUser,to:'',date:'',reason:'거절'});
 };
 
-window.cancelRequest = async function(id){
-  if(!confirm('교환 신청을 취소하시겠습니까?')) return;
+window.cancelRequest=async function(id){
+  if(!confirm('교환 신청을 취소하시겠습니까?'))return;
   await remove(ref(db,`requests/${id}`));
-  await addHistory({ type:'교환취소', from:currentUser, to:'', date:'', reason:'신청 취소' });
+  await addHistory({type:'교환취소',from:currentUser,to:'',date:'',reason:'신청 취소'});
 };
 
-window.adminApprove = async function(id){
-  if(!confirm('최종 승인하시겠습니까? 당직표에 반영됩니다.')) return;
-  await update(ref(db,`requests/${id}`),{ status:'승인완료' });
-  await addHistory({ type:'관리자승인', from:currentUser, to:'', date:'', reason:`최종 승인: ${id}` });
+window.adminApprove=async function(id){
+  if(!confirm('최종 승인하시겠습니까? 당직표에 반영됩니다.'))return;
+  await update(ref(db,`requests/${id}`),{status:'승인완료'});
+  await addHistory({type:'관리자승인',from:currentUser,to:'',date:'',reason:`최종 승인: ${id}`});
   alert('✅ 최종 승인 완료!');
 };
 
-window.adminReject = async function(id){
-  if(!confirm('반려하시겠습니까?')) return;
-  await update(ref(db,`requests/${id}`),{ status:'반려' });
-  await addHistory({ type:'관리자반려', from:currentUser, to:'', date:'', reason:`반려: ${id}` });
+window.adminReject=async function(id){
+  if(!confirm('반려하시겠습니까?'))return;
+  await update(ref(db,`requests/${id}`),{status:'반려'});
+  await addHistory({type:'관리자반려',from:currentUser,to:'',date:'',reason:`반려: ${id}`});
 };
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 멤버 관리
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-window.addMember = async function(){
-  const name = document.getElementById('newMemberName').value.trim();
-  if(!name){ alert('이름을 입력해주세요!'); return; }
-  if(MEMBERS.includes(name)){ alert('이미 존재하는 멤버입니다!'); return; }
-  const newMembers = [...MEMBERS, name];
-  await update(ref(db,'settings'),{ members:newMembers });
-  await addHistory({ type:'멤버추가', from:currentUser, to:name, date:'', reason:`멤버 추가: ${name}` });
+window.addMember=async function(){
+  const name=document.getElementById('newMemberName').value.trim();
+  if(!name){alert('이름을 입력해주세요!');return;}
+  if(MEMBERS.includes(name)){alert('이미 존재하는 멤버입니다!');return;}
+  const newMembers=[...MEMBERS,name];
+  await update(ref(db,'settings'),{members:newMembers});
+  await addHistory({type:'멤버추가',from:currentUser,to:name,date:'',reason:`멤버 추가: ${name}`});
   document.getElementById('newMemberName').value='';
   alert(`✅ ${name}님이 추가되었습니다!`);
 };
 
-window.deleteMember = async function(name){
-  if(name===ADMIN_USER){ alert('관리자는 삭제할 수 없습니다!'); return; }
-  if(!confirm(`${name}님을 삭제하시겠습니까?\n⚠️ 당직 순번에서도 제거됩니다!`)) return;
-  const newMembers = MEMBERS.filter(m => m!==name);
-  if(newMembers.length===0){ alert('최소 1명은 있어야 합니다!'); return; }
-  const curPerson = MEMBERS[DUTY_START_INDEX];
-  const newStartPerson = curPerson===name ? newMembers[0] : curPerson;
-  await update(ref(db,'settings'),{ members:newMembers, dutyStartPerson:newStartPerson });
-  await addHistory({ type:'멤버삭제', from:currentUser, to:name, date:'', reason:`멤버 삭제: ${name}` });
+window.deleteMember=async function(name){
+  if(name===ADMIN_USER){alert('관리자는 삭제할 수 없습니다!');return;}
+  if(!confirm(`${name}님을 삭제하시겠습니까?\n⚠️ 당직 순번에서도 제거됩니다!`))return;
+  const newMembers=MEMBERS.filter(m=>m!==name);
+  if(newMembers.length===0){alert('최소 1명은 있어야 합니다!');return;}
+  const curPerson=MEMBERS[DUTY_START_INDEX];
+  const newStartPerson=curPerson===name?newMembers[0]:curPerson;
+  await update(ref(db,'settings'),{members:newMembers,dutyStartPerson:newStartPerson});
+  await addHistory({type:'멤버삭제',from:currentUser,to:name,date:'',reason:`멤버 삭제: ${name}`});
   alert(`✅ ${name}님이 삭제되었습니다!`);
 };
 
-window.moveMemberUp = async function(idx){
-  if(idx===0) return;
-  const newMembers = [...MEMBERS];
+window.moveMemberUp=async function(idx){
+  if(idx===0)return;
+  const newMembers=[...MEMBERS];
   [newMembers[idx-1],newMembers[idx]]=[newMembers[idx],newMembers[idx-1]];
-  const curPerson = MEMBERS[DUTY_START_INDEX];
-  await update(ref(db,'settings'),{ members:newMembers, dutyStartPerson:curPerson });
+  await update(ref(db,'settings'),{members:newMembers,dutyStartPerson:MEMBERS[DUTY_START_INDEX]});
 };
 
-window.moveMemberDown = async function(idx){
-  if(idx===MEMBERS.length-1) return;
-  const newMembers = [...MEMBERS];
+window.moveMemberDown=async function(idx){
+  if(idx===MEMBERS.length-1)return;
+  const newMembers=[...MEMBERS];
   [newMembers[idx],newMembers[idx+1]]=[newMembers[idx+1],newMembers[idx]];
-  const curPerson = MEMBERS[DUTY_START_INDEX];
-  await update(ref(db,'settings'),{ members:newMembers, dutyStartPerson:curPerson });
+  await update(ref(db,'settings'),{members:newMembers,dutyStartPerson:MEMBERS[DUTY_START_INDEX]});
 };
 
 function renderMemberList(){
-  const el = document.getElementById('memberList');
-  if(!el) return;
+  const el=document.getElementById('memberList');
+  if(!el)return;
   el.innerHTML='';
   MEMBERS.forEach((name,idx)=>{
-    const div = document.createElement('div');
+    const div=document.createElement('div');
     div.className='member-item';
     div.innerHTML=`
       <span class="member-order">${idx+1}번째</span>
@@ -1103,10 +963,7 @@ function renderMemberList(){
   });
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 캘린더
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-window.changeMonth = function(dir){
+window.changeMonth=function(dir){
   currentMonth+=dir;
   if(currentMonth>11){currentMonth=0;currentYear++;}
   if(currentMonth<0){currentMonth=11;currentYear--;}
@@ -1118,25 +975,25 @@ function renderCalendar(){
   document.getElementById('calendarTitle').textContent=`${currentYear}년 ${mn[currentMonth]}`;
   const firstDay=new Date(currentYear,currentMonth,1).getDay();
   const daysInMonth=new Date(currentYear,currentMonth+1,0).getDate();
-  const today=new Date(), exd=getExchangedDuties();
-  const grid=document.getElementById('calendarDays'); grid.innerHTML='';
+  const today=new Date(),exd=getExchangedDuties();
+  const grid=document.getElementById('calendarDays');grid.innerHTML='';
   for(let i=0;i<firstDay;i++){const e=document.createElement('div');e.className='day-cell empty';grid.appendChild(e);}
   for(let d=1;d<=daysInMonth;d++){
-    const date=new Date(currentYear,currentMonth,d), str=dateToStr(date), dow=date.getDay();
+    const date=new Date(currentYear,currentMonth,d),str=dateToStr(date),dow=date.getDay();
     const cell=document.createElement('div');
     let cls='day-cell';
-    if(dow===0)cls+=' sunday'; if(dow===6)cls+=' saturday';
+    if(dow===0)cls+=' sunday';if(dow===6)cls+=' saturday';
     if(date.toDateString()===today.toDateString())cls+=' today';
-    if(HOLIDAYS[str]) cls+=' holiday-cell';
-    const duty=isDutyDay(date), person=duty?getDutyPerson(date):null;
-    const isEx=!!exd[str], isSp=!!SPECIAL_SCHEDULE[str]&&!isEx;
+    if(HOLIDAYS[str])cls+=' holiday-cell';
+    const duty=isDutyDay(date),person=duty?getDutyPerson(date):null;
+    const isEx=!!exd[str],isSp=!!SPECIAL_SCHEDULE[str]&&!isEx;
     if(duty){
       if(isEx&&person===currentUser)cls+=' exchanged';
       else if(person===currentUser)cls+=' my-duty';
       else cls+=' duty-day';
     }
     cell.className=cls;
-    const nd=document.createElement('div'); nd.className='day-num'; nd.textContent=d; cell.appendChild(nd);
+    const nd=document.createElement('div');nd.className='day-num';nd.textContent=d;cell.appendChild(nd);
     if(HOLIDAYS[str]){const hd=document.createElement('div');hd.className='holiday-label';hd.textContent=HOLIDAYS[str];cell.appendChild(hd);}
     if(person){
       const pd=document.createElement('div');
@@ -1144,7 +1001,7 @@ function renderCalendar(){
       if(isEx)nc+=' exchanged-name';
       else if(isSp)nc+=' special-name';
       else if(person===currentUser)nc+=' my-name';
-      pd.className=nc; pd.textContent=person; cell.appendChild(pd);
+      pd.className=nc;pd.textContent=person;cell.appendChild(pd);
     }
     grid.appendChild(cell);
   }
@@ -1152,41 +1009,37 @@ function renderCalendar(){
 }
 
 function renderDutyOrder(){
-  const c=document.getElementById('dutyOrderList'); if(!c)return; c.innerHTML='';
+  const c=document.getElementById('dutyOrderList');if(!c)return;c.innerHTML='';
   MEMBERS.forEach((name,i)=>{
-    const b=document.createElement('div');
-    b.className='order-badge';
+    const b=document.createElement('div');b.className='order-badge';
     b.style.background=name===currentUser?'#e74c3c':'#667eea';
-    b.textContent=name; c.appendChild(b);
+    b.textContent=name;c.appendChild(b);
     if(i<MEMBERS.length-1){const a=document.createElement('div');a.className='order-arrow';a.textContent='→';c.appendChild(a);}
   });
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 내 당직
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function renderMyDuty(){
-  const list=document.getElementById('myDutyList'); list.innerHTML='';
+  const list=document.getElementById('myDutyList');list.innerHTML='';
   const dn=['일','월','화','수','목','금','토'];
-  const myDates=getMyDutyDates(currentUser), exd=getExchangedDuties();
+  const myDates=getMyDutyDates(currentUser),exd=getExchangedDuties();
   const rows=Object.values(allRows);
   const wantedItems=Object.values(allWanted).filter(w=>w.requester===currentUser&&w.status==='active');
   if(myDates.length===0){list.innerHTML='<div class="empty-msg">담당 당직이 없습니다.</div>';return;}
   myDates.forEach(str=>{
-    const date=new Date(str), dow=date.getDay();
-    const isEx=!!exd[str], isSp=!!SPECIAL_SCHEDULE[str];
+    const date=new Date(str),dow=date.getDay();
+    const isEx=!!exd[str],isSp=!!SPECIAL_SCHEDULE[str];
     const reqRow=rows.find(r=>r.requester===currentUser&&r.myDate===str);
     const isWanted=wantedItems.find(w=>w.myDate===str);
     let type=HOLIDAYS[str]||(dow===0?'일요일':dow===6?'토요일':'');
     if(isSp&&!type)type='특별배정';
-    let btnTxt='교환 요청', btnCls='request-btn', btnDis='';
+    let btnTxt='교환 요청',btnCls='request-btn',btnDis='';
     if(isEx){btnTxt='🔄 교환완료';btnCls='request-btn accepted';btnDis='disabled';}
     else if(reqRow){
       if(reqRow.status==='대기중'){btnTxt='⏳ 요청중';btnCls='request-btn requested';btnDis='disabled';}
       else if(reqRow.status==='수락완료'){btnTxt='🤝 수락됨';btnCls='request-btn requested';btnDis='disabled';}
       else if(reqRow.status==='승인완료'){btnTxt='✅ 승인완료';btnCls='request-btn accepted';btnDis='disabled';}
     }
-    const card=document.createElement('div'); card.className='duty-card';
+    const card=document.createElement('div');card.className='duty-card';
     card.innerHTML=`
       <div>
         <div class="duty-date">📅 ${str.replace(/^\d{4}-/,'')} (${dn[dow]})</div>
@@ -1203,31 +1056,24 @@ function renderMyDuty(){
   });
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 당직 통계
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function renderDutyStats(){
-  const el = document.getElementById('dutyStats');
-  if(!el||MEMBERS.length===0) return;
-  const stats = {};
-  MEMBERS.forEach(m => { stats[m]=0; });
-  const now = new Date();
-  const year = now.getFullYear()<2026?2026:now.getFullYear();
+  const el=document.getElementById('dutyStats');
+  if(!el||MEMBERS.length===0)return;
+  const stats={};
+  MEMBERS.forEach(m=>{stats[m]=0;});
+  const now=new Date();
+  const year=now.getFullYear()<2026?2026:now.getFullYear();
   for(let mo=0;mo<12;mo++){
     const days=new Date(year,mo+1,0).getDate();
     for(let d=1;d<=days;d++){
       const date=new Date(year,mo,d);
-      if(isDutyDay(date)){
-        const p=getDutyPerson(date);
-        if(p&&stats[p]!==undefined) stats[p]++;
-      }
+      if(isDutyDay(date)){const p=getDutyPerson(date);if(p&&stats[p]!==undefined)stats[p]++;}
     }
   }
   const max=Math.max(...Object.values(stats),1);
   el.innerHTML='';
   Object.entries(stats).sort((a,b)=>b[1]-a[1]).forEach(([name,cnt])=>{
-    const div=document.createElement('div');
-    div.className='stat-bar-wrap';
+    const div=document.createElement('div');div.className='stat-bar-wrap';
     div.innerHTML=`
       <div class="stat-name">
         <span>${name}${name===currentUser?' (나)':''}</span>
@@ -1241,29 +1087,20 @@ function renderDutyStats(){
   });
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 이력
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 async function addHistory(item){
   item.changedAt=new Date().toLocaleString('ko-KR');
   await push(ref(db,'history'),item);
 }
 
 function renderHistory(){
-  const list=document.getElementById('historyList'); if(!list)return;
+  const list=document.getElementById('historyList');if(!list)return;
   get(ref(db,'history')).then(snap=>{
     const hist=snap.val()?Object.values(snap.val()).reverse():[];
     if(hist.length===0){list.innerHTML='<div class="empty-msg">변경 이력이 없습니다.</div>';return;}
     list.innerHTML='';
-    const labels={
-      '교환신청':'📝 교환 신청','교환수락':'✅ 교환 수락','교환거절':'❌ 교환 거절',
-      '교환취소':'🚫 교환 취소','관리자승인':'👑 관리자 승인','관리자반려':'👑 관리자 반려',
-      '순번변경':'⚙️ 순번 변경','멤버추가':'👤 멤버 추가','멤버삭제':'👤 멤버 삭제',
-      '공휴일추가':'🎉 공휴일 추가','공휴일삭제':'🗑️ 공휴일 삭제',
-      '특별배정추가':'📌 특별배정','교환구합니다':'🙋 교환구합니다','교환제안':'🤝 교환제안'
-    };
+    const labels={'교환신청':'📝 교환 신청','교환수락':'✅ 교환 수락','교환거절':'❌ 교환 거절','교환취소':'🚫 교환 취소','관리자승인':'👑 관리자 승인','관리자반려':'👑 관리자 반려','순번변경':'⚙️ 순번 변경','멤버추가':'👤 멤버 추가','멤버삭제':'👤 멤버 삭제','공휴일추가':'🎉 공휴일 추가','공휴일삭제':'🗑️ 공휴일 삭제','특별배정추가':'📌 특별배정','교환구합니다':'🙋 교환구합니다','교환제안':'🤝 교환제안'};
     hist.slice(0,50).forEach(item=>{
-      const card=document.createElement('div'); card.className='history-card';
+      const card=document.createElement('div');card.className='history-card';
       let detail='';
       if(item.type==='교환신청')detail=`<strong>${item.from}</strong>님 → <strong>${item.to}</strong>님 교환 신청 (${item.date})<br>사유: ${item.reason}`;
       else detail=`<strong>${item.from}</strong>님: ${item.reason}`;
@@ -1273,30 +1110,27 @@ function renderHistory(){
   });
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 설정
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-window.saveNotice = async function(){
+window.saveNotice=async function(){
   const notice=document.getElementById('noticeInput').value.trim();
   if(!notice){alert('공지 내용을 입력해주세요!');return;}
   await set(ref(db,'notice'),notice);
   alert('✅ 공지사항이 등록되었습니다!');
 };
-window.clearNotice = async function(){
+window.clearNotice=async function(){
   if(!confirm('공지사항을 삭제하시겠습니까?'))return;
   await remove(ref(db,'notice'));
   alert('✅ 공지사항이 삭제되었습니다!');
 };
-window.updateDutyRotation = async function(){
+window.updateDutyRotation=async function(){
   const nd=document.getElementById('newStartDate').value;
   const np=document.getElementById('newStartPerson').value;
   if(!nd||!np){alert('날짜와 담당자를 입력해주세요!');return;}
   if(!confirm(`순번 변경: ${nd}부터 ${np} 시작`))return;
-  await update(ref(db,'settings'),{ dutyStartDate:nd, dutyStartPerson:np });
+  await update(ref(db,'settings'),{dutyStartDate:nd,dutyStartPerson:np});
   await addHistory({type:'순번변경',from:currentUser,to:np,date:nd,reason:`${nd}부터 ${np} 시작`});
   alert('✅ 순번 변경 완료!');
 };
-window.addSpecialSchedule = async function(){
+window.addSpecialSchedule=async function(){
   const date=document.getElementById('specialDate').value;
   const person=document.getElementById('specialPerson').value;
   if(!date||!person){alert('날짜와 담당자를 입력해주세요!');return;}
@@ -1305,11 +1139,11 @@ window.addSpecialSchedule = async function(){
   document.getElementById('specialDate').value='';
   alert(`✅ 특별배정: ${date} → ${person}`);
 };
-window.deleteSpecialSchedule = async function(date){
+window.deleteSpecialSchedule=async function(date){
   if(!confirm(`특별배정 삭제: ${date}`))return;
   await remove(ref(db,`settings/special/${date}`));
 };
-window.addHoliday = async function(){
+window.addHoliday=async function(){
   const date=document.getElementById('newHolidayDate').value;
   const name=document.getElementById('newHolidayName').value.trim();
   if(!date||!name){alert('날짜와 이름을 입력해주세요!');return;}
@@ -1319,7 +1153,7 @@ window.addHoliday = async function(){
   document.getElementById('newHolidayDate').value='';
   document.getElementById('newHolidayName').value='';
 };
-window.deleteHoliday = async function(date){
+window.deleteHoliday=async function(date){
   if(!confirm(`공휴일 삭제: ${date} (${HOLIDAYS[date]})`))return;
   await remove(ref(db,`settings/holidays/${date}`));
   await addHistory({type:'공휴일삭제',from:currentUser,to:'',date,reason:`공휴일 삭제: ${date}`});
@@ -1332,42 +1166,38 @@ function renderSettings(){
   document.getElementById('curStartPerson').textContent=MEMBERS[DUTY_START_INDEX]||'-';
   if(isAdmin){
     document.getElementById('adminBadge').style.display='inline-block';
-    ['adminNoticeSection','adminMemberSection','adminRotationSection',
-     'adminHolidaySection','adminSpecialSection','adminApprovalSection'
-    ].forEach(id=>{document.getElementById(id).style.display='block';});
-    renderMemberList(); renderHolidayList(); renderSpecialList(); renderAdminApproval();
-  } else {
+    ['adminNoticeSection','adminMemberSection','adminRotationSection','adminHolidaySection','adminSpecialSection','adminApprovalSection'].forEach(id=>{document.getElementById(id).style.display='block';});
+    renderMemberList();renderHolidayList();renderSpecialList();renderAdminApproval();
+  }else{
     document.getElementById('adminBadge').style.display='none';
-    ['adminNoticeSection','adminMemberSection','adminRotationSection',
-     'adminHolidaySection','adminSpecialSection','adminApprovalSection'
-    ].forEach(id=>{document.getElementById(id).style.display='none';});
+    ['adminNoticeSection','adminMemberSection','adminRotationSection','adminHolidaySection','adminSpecialSection','adminApprovalSection'].forEach(id=>{document.getElementById(id).style.display='none';});
   }
   renderDutyStats();
 }
 
 function renderHolidayList(){
-  const c=document.getElementById('holidayListContainer'); if(!c)return; c.innerHTML='';
+  const c=document.getElementById('holidayListContainer');if(!c)return;c.innerHTML='';
   Object.keys(HOLIDAYS).sort().forEach(date=>{
-    const item=document.createElement('div'); item.className='list-item';
+    const item=document.createElement('div');item.className='list-item';
     item.innerHTML=`<span class="list-item-date">${date}</span><span class="list-item-name">${HOLIDAYS[date]}</span><span class="list-item-delete" onclick="deleteHoliday('${date}')">🗑️</span>`;
     c.appendChild(item);
   });
 }
 
 function renderSpecialList(){
-  const c=document.getElementById('specialScheduleList'); if(!c)return; c.innerHTML='';
+  const c=document.getElementById('specialScheduleList');if(!c)return;c.innerHTML='';
   const dn=['일','월','화','수','목','금','토'];
   const sorted=Object.keys(SPECIAL_SCHEDULE).sort();
   if(sorted.length===0){c.innerHTML='<div style="padding:16px;text-align:center;color:#aaa;">특별배정이 없습니다.</div>';return;}
   sorted.forEach(date=>{
     const d=new Date(date);
-    const item=document.createElement('div'); item.className='list-item';
+    const item=document.createElement('div');item.className='list-item';
     item.innerHTML=`<span class="list-item-date">${date}</span><span style="color:#888;font-size:12px;margin-right:8px;">(${dn[d.getDay()]})</span><span class="list-item-person">${SPECIAL_SCHEDULE[date]}</span><span class="list-item-delete" onclick="deleteSpecialSchedule('${date}')">🗑️</span>`;
     c.appendChild(item);
   });
 }
 
-window.resetAllData = async function(){
+window.resetAllData=async function(){
   if(!isAdmin){alert('관리자만 초기화 가능합니다!');return;}
   if(!confirm('⚠️ 교환/이력/구합니다 데이터를 초기화합니까?\n(멤버/설정은 유지됩니다)'))return;
   if(prompt('확인을 위해 "초기화"를 입력하세요')!=='초기화'){alert('취소');return;}
@@ -1377,10 +1207,7 @@ window.resetAllData = async function(){
   alert('✅ 초기화 완료');
 };
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 로그인 / 로그아웃 / 탭
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-window.login = function(){
+window.login=function(){
   const sel=document.getElementById('userSelect').value;
   if(!sel){alert('이름을 선택해주세요!');return;}
   isAdmin=false;
@@ -1398,12 +1225,12 @@ window.login = function(){
   currentYear=now.getFullYear()<2026?2026:now.getFullYear();
   currentMonth=now.getFullYear()<2026?0:now.getMonth();
   initApplyForm();
-  renderCalendar(); renderMyDuty(); renderHistory(); renderSettings();
+  renderCalendar();renderMyDuty();renderHistory();renderSettings();
   showTab('calendar');
 };
 
-window.logout = function(){
-  currentUser=''; isAdmin=false;
+window.logout=function(){
+  currentUser='';isAdmin=false;
   document.getElementById('loginScreen').style.display='flex';
   document.getElementById('mainScreen').style.display='none';
   document.getElementById('userSelect').value='';
@@ -1411,7 +1238,7 @@ window.logout = function(){
   document.getElementById('adminPasswordDiv').style.display='none';
 };
 
-window.showTab = function(name){
+window.showTab=function(name){
   const tabs=['calendar','myduty','wanted','apply','exchange','history','settings'];
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===name));
   document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
@@ -1425,12 +1252,9 @@ window.showTab = function(name){
   if(name==='settings')renderSettings();
 };
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// PWA
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault(); deferredPrompt=e;
+  e.preventDefault();deferredPrompt=e;
   if(!window.matchMedia('(display-mode: standalone)').matches&&!localStorage.getItem('pwa-dismissed')){
     document.getElementById('installBanner').classList.add('show');
   }
@@ -1439,7 +1263,7 @@ document.getElementById('installBtn').addEventListener('click',()=>{
   if(!deferredPrompt){alert('크롬 브라우저에서 시도해주세요.');return;}
   deferredPrompt.prompt();
   deferredPrompt.userChoice.then(r=>{
-    if(r.outcome==='accepted') document.getElementById('installBanner').classList.remove('show');
+    if(r.outcome==='accepted')document.getElementById('installBanner').classList.remove('show');
     deferredPrompt=null;
   });
 });
@@ -1448,12 +1272,9 @@ document.getElementById('installClose').addEventListener('click',()=>{
   localStorage.setItem('pwa-dismissed','true');
 });
 window.addEventListener('offline',()=>document.getElementById('offlineBanner').classList.add('show'));
-window.addEventListener('online', ()=>document.getElementById('offlineBanner').classList.remove('show'));
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+window.addEventListener('online',()=>document.getElementById('offlineBanner').classList.remove('show'));
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 초기화
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 document.getElementById('userSelect').addEventListener('change',function(){
   const pd=document.getElementById('adminPasswordDiv');
   if(this.value===ADMIN_USER){pd.style.display='block';document.getElementById('adminPassword').focus();}
