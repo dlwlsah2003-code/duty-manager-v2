@@ -26,13 +26,10 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 .header-right { display: flex; align-items: center; gap: 12px; }
 .user-badge { background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 600; }
 .logout-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 14px; }
-
-/* ── 탭 (모바일 최적화) ── */
 .tabs { display: flex; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }
 .tab { flex: 0 0 auto; min-width: 48px; padding: 12px 8px; text-align: center; cursor: pointer; font-size: 10px; font-weight: 600; color: #888; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
 .tab.active { color: #667eea; border-bottom-color: #667eea; }
-
 .content { padding: 20px; max-width: 900px; margin: 0 auto; }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
@@ -318,6 +315,7 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
           <p><strong>저장 방식:</strong> Firebase 실시간 DB</p>
           <p><strong>연결 상태:</strong> <span id="fbConnStatus">확인 중...</span></p>
           <p><strong>총 멤버:</strong> <span id="totalMembers">-</span>명</p>
+          <p><strong>버전:</strong> v3.0.0</p>
         </div>
       </div>
       <div class="settings-box" id="adminNoticeSection" style="display:none;">
@@ -347,11 +345,9 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
           <p><strong>현재 시작 담당자:</strong> <span id="curStartPerson">-</span></p>
         </div>
         <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">시작 날짜</label>
-        <input type="date" id="newStartDate"
-          style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:10px;">
+        <input type="date" id="newStartDate" style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:10px;">
         <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">시작 담당자</label>
-        <select id="newStartPerson"
-          style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:12px;"></select>
+        <select id="newStartPerson" style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:12px;"></select>
         <button class="action-btn btn-warning" onclick="updateDutyRotation()">✅ 순번 변경 적용</button>
       </div>
       <div class="settings-box" id="adminHolidaySection" style="display:none;">
@@ -359,26 +355,20 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
         <div class="settings-desc">휴일 지정 시 해당 날짜 당직이 없어지고<br>
           <strong>이후 순번이 자동으로 재계산됩니다!</strong></div>
         <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
-          <input type="date" id="newHolidayDate"
-            style="flex:1;min-width:130px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
-          <input type="text" id="newHolidayName" placeholder="휴일 이름"
-            style="flex:1;min-width:100px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
+          <input type="date" id="newHolidayDate" style="flex:1;min-width:130px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
+          <input type="text" id="newHolidayName" placeholder="휴일 이름" style="flex:1;min-width:100px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
           <button class="action-btn btn-primary" onclick="addHoliday()">➕ 추가</button>
         </div>
-        <div id="holidayListContainer"
-          style="max-height:280px;overflow-y:auto;border:2px solid #e0e0e0;border-radius:8px;padding:8px;"></div>
+        <div id="holidayListContainer" style="max-height:280px;overflow-y:auto;border:2px solid #e0e0e0;border-radius:8px;padding:8px;"></div>
       </div>
       <div class="settings-box" id="adminSpecialSection" style="display:none;">
         <div class="settings-title">📌 관리자 - 특별배정</div>
         <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
-          <input type="date" id="specialDate"
-            style="flex:1;min-width:130px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
-          <select id="specialPerson"
-            style="flex:1;min-width:100px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;"></select>
+          <input type="date" id="specialDate" style="flex:1;min-width:130px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
+          <select id="specialPerson" style="flex:1;min-width:100px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;"></select>
           <button class="action-btn btn-primary" onclick="addSpecialSchedule()">➕ 추가</button>
         </div>
-        <div id="specialScheduleList"
-          style="max-height:250px;overflow-y:auto;border:2px solid #e0e0e0;border-radius:8px;padding:8px;"></div>
+        <div id="specialScheduleList" style="max-height:250px;overflow-y:auto;border:2px solid #e0e0e0;border-radius:8px;padding:8px;"></div>
       </div>
       <div class="settings-box" id="adminApprovalSection" style="display:none;">
         <div class="settings-title">✅ 관리자 - 교환 최종 승인</div>
@@ -513,7 +503,6 @@ function initFirebaseListeners(){
     document.getElementById('fbStatusBanner').textContent='❌ Firebase 연결 실패';
     document.getElementById('fbConnStatus').textContent='❌ 연결 실패';
   });
-
   onValue(ref(db,'settings'),snap=>{
     const s=snap.val()||{};
     MEMBERS=(s.members&&Array.isArray(s.members)&&s.members.length>0)?s.members:[...DEFAULT_MEMBERS];
@@ -527,12 +516,10 @@ function initFirebaseListeners(){
     const tmEl=document.getElementById('totalMembers');
     if(tmEl)tmEl.textContent=MEMBERS.length;
   });
-
   onValue(ref(db,'wanted'),snap=>{
     allWanted=snap.val()||{};
     if(currentUser)renderWantedList();
   });
-
   onValue(ref(db,'notice'),snap=>{
     const notice=snap.val()||'';
     ['noticeBannerCal','noticeBannerDuty','noticeBannerWanted'].forEach(id=>{
@@ -544,7 +531,6 @@ function initFirebaseListeners(){
     const ni=document.getElementById('noticeInput');
     if(ni)ni.value=notice;
   });
-
   onValue(ref(db,'history'),()=>{if(currentUser)renderHistory();});
 }
 
@@ -580,7 +566,7 @@ function getDutyPerson(date){
       if(count>5000)break;
     }
     return MEMBERS[(DUTY_START_INDEX+count)%MEMBERS.length];
-  } else {
+  }else{
     let prevDays=[],c2=new Date(DUTY_START_DATE);
     c2.setDate(c2.getDate()-1);
     for(let i=0;i<500;i++){
@@ -609,7 +595,6 @@ function getMyDutyDates(user){
   }
   return result;
 }
-
 function populateMemberSelects(){
   const userSel=document.getElementById('userSelect');
   const curVal=userSel.value;
@@ -621,7 +606,6 @@ function populateMemberSelects(){
     if(el){el.innerHTML='';MEMBERS.forEach(m=>{el.innerHTML+=`<option>${m}</option>`;});}
   });
 }
-
 function initApplyForm(){
   document.getElementById('fmRequester').innerHTML=`<option>${currentUser}</option>`;
   const dn=['일','월','화','수','목','금','토'];
@@ -640,7 +624,6 @@ function initApplyForm(){
     tgtDates.forEach(d=>{tgtDateSel.innerHTML+=`<option value="${d}">${d} (${dn[new Date(d).getDay()]})</option>`;});
   };
 }
-
 window.submitExchangeRequest=async function(){
   const myDate=document.getElementById('fmMyDate').value;
   const target=document.getElementById('fmTarget').value;
@@ -664,7 +647,6 @@ window.submitExchangeRequest=async function(){
   }catch(e){alert('❌ 오류: '+e.message);}
   btn.disabled=false;btn.textContent='📤 교환 신청 등록';
 };
-
 window.openWantedModal=function(preDate=''){
   const dn=['일','월','화','수','목','금','토'];
   const myDates=getMyDutyDates(currentUser);
@@ -676,7 +658,6 @@ window.openWantedModal=function(preDate=''){
   document.getElementById('wantedModal').classList.add('show');
 };
 window.closeWantedModal=function(){document.getElementById('wantedModal').classList.remove('show');};
-
 window.submitWanted=async function(){
   const myDate=document.getElementById('wantedMyDate').value;
   const reason=document.getElementById('wantedReason').value.trim();
@@ -691,7 +672,6 @@ window.submitWanted=async function(){
     alert('✅ 게시되었습니다!');
   }catch(e){alert('❌ 오류: '+e.message);}
 };
-
 function renderWantedList(){
   const el=document.getElementById('wantedList');
   const items=Object.values(allWanted).filter(w=>w.status==='active');
@@ -718,7 +698,6 @@ function renderWantedList(){
     el.appendChild(div);
   });
 }
-
 window.openWantedAcceptModal=function(id){
   const w=allWanted[id];
   if(!w)return;
@@ -733,7 +712,6 @@ window.openWantedAcceptModal=function(id){
   document.getElementById('wantedAcceptModal').classList.add('show');
 };
 window.closeWantedAcceptModal=function(){document.getElementById('wantedAcceptModal').classList.remove('show');wantedAccData=null;};
-
 window.confirmWantedAccept=async function(){
   const myDate=document.getElementById('wantedAcceptMyDate').value;
   if(!myDate){alert('내 당직 날짜를 선택해주세요!');return;}
@@ -748,15 +726,12 @@ window.confirmWantedAccept=async function(){
     alert('✅ 교환 신청 완료!\n교환현황 탭에서 확인하세요.');
   }catch(e){alert('❌ 오류: '+e.message);}
 };
-
 window.deleteWanted=async function(id){
   if(!confirm('게시글을 삭제하시겠습니까?'))return;
   await remove(ref(db,`wanted/${id}`));
 };
-
 const STATUS_LABEL={'대기중':'⏳ 대기중','수락완료':'🤝 수락완료','승인완료':'✅ 승인완료','반려':'❌ 반려'};
 const STATUS_CLS={'대기중':'status-pending','수락완료':'status-accepted','승인완료':'status-accepted','반려':'status-rejected'};
-
 function renderMyRequests(){
   const rows=Object.values(allRows).filter(r=>r.requester===currentUser);
   const el=document.getElementById('myRequests');
@@ -777,7 +752,6 @@ function renderMyRequests(){
     el.appendChild(div);
   });
 }
-
 function renderExchangeTab(){
   const rows=Object.values(allRows);
   const incoming=rows.filter(r=>r.target===currentUser&&r.status==='대기중');
@@ -823,7 +797,6 @@ function renderExchangeTab(){
   }
   if(isAdmin)renderAdminApproval();
 }
-
 function renderAdminApproval(){
   const pending=Object.values(allRows).filter(r=>r.status==='수락완료');
   const el=document.getElementById('adminApprovalList');
@@ -847,7 +820,6 @@ function renderAdminApproval(){
     el.appendChild(div);
   });
 }
-
 window.openAcceptModal=function(id){
   const row=allRows[id];
   if(!row)return;
@@ -869,7 +841,6 @@ window.openAcceptModal=function(id){
   document.getElementById('acceptModal').classList.add('show');
 };
 window.closeAcceptModal=function(){document.getElementById('acceptModal').classList.remove('show');accData=null;};
-
 window.confirmAccept=async function(){
   const myDate=document.getElementById('accMyDate').value;
   if(!myDate){alert('내 당직 날짜를 선택해주세요!');return;}
@@ -880,32 +851,27 @@ window.confirmAccept=async function(){
   closeAcceptModal();
   alert('✅ 수락 완료! 관리자 최종 승인을 기다려주세요.');
 };
-
 window.rejectRequest=async function(id){
   if(!confirm('거절하시겠습니까?'))return;
   await update(ref(db,`requests/${id}`),{status:'반려'});
   await addHistory({type:'교환거절',from:currentUser,to:'',date:'',reason:'거절'});
 };
-
 window.cancelRequest=async function(id){
   if(!confirm('교환 신청을 취소하시겠습니까?'))return;
   await remove(ref(db,`requests/${id}`));
   await addHistory({type:'교환취소',from:currentUser,to:'',date:'',reason:'신청 취소'});
 };
-
 window.adminApprove=async function(id){
   if(!confirm('최종 승인하시겠습니까? 당직표에 반영됩니다.'))return;
   await update(ref(db,`requests/${id}`),{status:'승인완료'});
   await addHistory({type:'관리자승인',from:currentUser,to:'',date:'',reason:`최종 승인: ${id}`});
   alert('✅ 최종 승인 완료!');
 };
-
 window.adminReject=async function(id){
   if(!confirm('반려하시겠습니까?'))return;
   await update(ref(db,`requests/${id}`),{status:'반려'});
   await addHistory({type:'관리자반려',from:currentUser,to:'',date:'',reason:`반려: ${id}`});
 };
-
 window.addMember=async function(){
   const name=document.getElementById('newMemberName').value.trim();
   if(!name){alert('이름을 입력해주세요!');return;}
@@ -916,7 +882,6 @@ window.addMember=async function(){
   document.getElementById('newMemberName').value='';
   alert(`✅ ${name}님이 추가되었습니다!`);
 };
-
 window.deleteMember=async function(name){
   if(name===ADMIN_USER){alert('관리자는 삭제할 수 없습니다!');return;}
   if(!confirm(`${name}님을 삭제하시겠습니까?\n⚠️ 당직 순번에서도 제거됩니다!`))return;
@@ -928,28 +893,23 @@ window.deleteMember=async function(name){
   await addHistory({type:'멤버삭제',from:currentUser,to:name,date:'',reason:`멤버 삭제: ${name}`});
   alert(`✅ ${name}님이 삭제되었습니다!`);
 };
-
 window.moveMemberUp=async function(idx){
   if(idx===0)return;
   const newMembers=[...MEMBERS];
   [newMembers[idx-1],newMembers[idx]]=[newMembers[idx],newMembers[idx-1]];
   await update(ref(db,'settings'),{members:newMembers,dutyStartPerson:MEMBERS[DUTY_START_INDEX]});
 };
-
 window.moveMemberDown=async function(idx){
   if(idx===MEMBERS.length-1)return;
   const newMembers=[...MEMBERS];
   [newMembers[idx],newMembers[idx+1]]=[newMembers[idx+1],newMembers[idx]];
   await update(ref(db,'settings'),{members:newMembers,dutyStartPerson:MEMBERS[DUTY_START_INDEX]});
 };
-
 function renderMemberList(){
   const el=document.getElementById('memberList');
-  if(!el)return;
-  el.innerHTML='';
+  if(!el)return;el.innerHTML='';
   MEMBERS.forEach((name,idx)=>{
-    const div=document.createElement('div');
-    div.className='member-item';
+    const div=document.createElement('div');div.className='member-item';
     div.innerHTML=`
       <span class="member-order">${idx+1}번째</span>
       <span class="member-name">${name}${name===ADMIN_USER?' 👑':''}</span>
@@ -962,14 +922,12 @@ function renderMemberList(){
     el.appendChild(div);
   });
 }
-
 window.changeMonth=function(dir){
   currentMonth+=dir;
   if(currentMonth>11){currentMonth=0;currentYear++;}
   if(currentMonth<0){currentMonth=11;currentYear--;}
   renderCalendar();
 };
-
 function renderCalendar(){
   const mn=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
   document.getElementById('calendarTitle').textContent=`${currentYear}년 ${mn[currentMonth]}`;
@@ -1007,7 +965,6 @@ function renderCalendar(){
   }
   renderDutyOrder();
 }
-
 function renderDutyOrder(){
   const c=document.getElementById('dutyOrderList');if(!c)return;c.innerHTML='';
   MEMBERS.forEach((name,i)=>{
@@ -1017,7 +974,6 @@ function renderDutyOrder(){
     if(i<MEMBERS.length-1){const a=document.createElement('div');a.className='order-arrow';a.textContent='→';c.appendChild(a);}
   });
 }
-
 function renderMyDuty(){
   const list=document.getElementById('myDutyList');list.innerHTML='';
   const dn=['일','월','화','수','목','금','토'];
@@ -1055,12 +1011,10 @@ function renderMyDuty(){
     list.appendChild(card);
   });
 }
-
 function renderDutyStats(){
   const el=document.getElementById('dutyStats');
   if(!el||MEMBERS.length===0)return;
-  const stats={};
-  MEMBERS.forEach(m=>{stats[m]=0;});
+  const stats={};MEMBERS.forEach(m=>{stats[m]=0;});
   const now=new Date();
   const year=now.getFullYear()<2026?2026:now.getFullYear();
   for(let mo=0;mo<12;mo++){
@@ -1086,12 +1040,10 @@ function renderDutyStats(){
     el.appendChild(div);
   });
 }
-
 async function addHistory(item){
   item.changedAt=new Date().toLocaleString('ko-KR');
   await push(ref(db,'history'),item);
 }
-
 function renderHistory(){
   const list=document.getElementById('historyList');if(!list)return;
   get(ref(db,'history')).then(snap=>{
@@ -1109,7 +1061,6 @@ function renderHistory(){
     });
   });
 }
-
 window.saveNotice=async function(){
   const notice=document.getElementById('noticeInput').value.trim();
   if(!notice){alert('공지 내용을 입력해주세요!');return;}
@@ -1158,7 +1109,6 @@ window.deleteHoliday=async function(date){
   await remove(ref(db,`settings/holidays/${date}`));
   await addHistory({type:'공휴일삭제',from:currentUser,to:'',date,reason:`공휴일 삭제: ${date}`});
 };
-
 function renderSettings(){
   document.getElementById('settingsUserName').textContent=currentUser;
   document.getElementById('totalMembers').textContent=MEMBERS.length;
@@ -1174,7 +1124,6 @@ function renderSettings(){
   }
   renderDutyStats();
 }
-
 function renderHolidayList(){
   const c=document.getElementById('holidayListContainer');if(!c)return;c.innerHTML='';
   Object.keys(HOLIDAYS).sort().forEach(date=>{
@@ -1183,7 +1132,6 @@ function renderHolidayList(){
     c.appendChild(item);
   });
 }
-
 function renderSpecialList(){
   const c=document.getElementById('specialScheduleList');if(!c)return;c.innerHTML='';
   const dn=['일','월','화','수','목','금','토'];
@@ -1196,7 +1144,6 @@ function renderSpecialList(){
     c.appendChild(item);
   });
 }
-
 window.resetAllData=async function(){
   if(!isAdmin){alert('관리자만 초기화 가능합니다!');return;}
   if(!confirm('⚠️ 교환/이력/구합니다 데이터를 초기화합니까?\n(멤버/설정은 유지됩니다)'))return;
@@ -1206,7 +1153,6 @@ window.resetAllData=async function(){
   await remove(ref(db,'wanted'));
   alert('✅ 초기화 완료');
 };
-
 window.login=function(){
   const sel=document.getElementById('userSelect').value;
   if(!sel){alert('이름을 선택해주세요!');return;}
@@ -1228,7 +1174,6 @@ window.login=function(){
   renderCalendar();renderMyDuty();renderHistory();renderSettings();
   showTab('calendar');
 };
-
 window.logout=function(){
   currentUser='';isAdmin=false;
   document.getElementById('loginScreen').style.display='flex';
@@ -1237,7 +1182,6 @@ window.logout=function(){
   document.getElementById('adminPassword').value='';
   document.getElementById('adminPasswordDiv').style.display='none';
 };
-
 window.showTab=function(name){
   const tabs=['calendar','myduty','wanted','apply','exchange','history','settings'];
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===name));
@@ -1251,7 +1195,6 @@ window.showTab=function(name){
   if(name==='wanted')renderWantedList();
   if(name==='settings')renderSettings();
 };
-
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
   e.preventDefault();deferredPrompt=e;
@@ -1273,14 +1216,29 @@ document.getElementById('installClose').addEventListener('click',()=>{
 });
 window.addEventListener('offline',()=>document.getElementById('offlineBanner').classList.add('show'));
 window.addEventListener('online',()=>document.getElementById('offlineBanner').classList.remove('show'));
-if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+
+// ── Service Worker 등록 + 업데이트 감지 ──
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').then(reg=>{
+    reg.addEventListener('updatefound',()=>{
+      const newWorker=reg.installing;
+      newWorker.addEventListener('statechange',()=>{
+        if(newWorker.state==='installed'&&navigator.serviceWorker.controller){
+          if(confirm('🔄 새 버전이 있습니다! 지금 업데이트하시겠습니까?')){
+            newWorker.postMessage({type:'SKIP_WAITING'});
+            window.location.reload();
+          }
+        }
+      });
+    });
+  }).catch(()=>{});
+}
 
 document.getElementById('userSelect').addEventListener('change',function(){
   const pd=document.getElementById('adminPasswordDiv');
   if(this.value===ADMIN_USER){pd.style.display='block';document.getElementById('adminPassword').focus();}
   else{pd.style.display='none';document.getElementById('adminPassword').value='';}
 });
-
 populateMemberSelects();
 initFirebaseListeners();
 
