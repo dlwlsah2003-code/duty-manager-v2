@@ -12,20 +12,21 @@
 <title>화성차체3부 당직 관리 v3.2</title>
 <style>
 :root {
-  --primary:#6366f1; --primary-d:#4f46e5; --primary-l:#e0e7ff;
-  --rose:#f43f5e; --rose-l:#fff1f2;
-  --emerald:#10b981; --emerald-l:#d1fae5;
-  --amber:#f59e0b; --amber-l:#fef3c7;
+  --primary:#6366f1;--primary-d:#4f46e5;--primary-l:#e0e7ff;
+  --rose:#f43f5e;--rose-l:#fff1f2;
+  --emerald:#10b981;--emerald-l:#d1fae5;
+  --amber:#f59e0b;--amber-l:#fef3c7;
   --violet:#8b5cf6;
-  --bg:#f1f5f9; --surface:#ffffff;
-  --t1:#0f172a; --t2:#475569; --t3:#94a3b8;
+  --bg:#f1f5f9;--surface:#fff;
+  --t1:#0f172a;--t2:#475569;--t3:#94a3b8;
   --border:#e2e8f0;
-  --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:20px;
+  --r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:20px;
   --sh-xs:0 1px 2px rgba(0,0,0,.05);
   --sh-sm:0 2px 8px rgba(0,0,0,.07);
   --sh-md:0 4px 16px rgba(0,0,0,.10);
   --sh-lg:0 16px 40px rgba(0,0,0,.14);
-  --nav-h:68px; --hd-h:56px;
+  --nav-h:68px;--hd-h:56px;
+  --safe-t:env(safe-area-inset-top,0px);
   --safe-b:env(safe-area-inset-bottom,0px);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -43,38 +44,42 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sa
 .btn-login{width:100%;padding:15px;background:linear-gradient(135deg,#6366f1,#818cf8);color:#fff;border:none;border-radius:var(--r-md);font-size:16px;font-weight:700;cursor:pointer;margin-top:6px;transition:opacity .2s,transform .1s;font-family:inherit}
 .btn-login:active{opacity:.85;transform:scale(.99)}
 
-/* ── 앱 헤더 ── */
+/* ── 헤더 (아이폰 safe area 적용) ── */
 .main-screen{display:none}
-.app-hd{position:fixed;top:0;left:0;right:0;height:var(--hd-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 18px;z-index:200;box-shadow:var(--sh-xs)}
+.app-hd{position:fixed;top:0;left:0;right:0;height:calc(var(--hd-h) + var(--safe-t));padding-top:var(--safe-t);padding-left:18px;padding-right:18px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;z-index:200;box-shadow:var(--sh-xs)}
 .hd-left{display:flex;align-items:center;gap:10px}
 .hd-logo{font-size:20px}
 .hd-title{font-size:16px;font-weight:800;color:var(--t1)}
 .hd-right{display:flex;align-items:center;gap:8px}
 .user-chip{display:flex;align-items:center;gap:7px;background:var(--primary-l);color:var(--primary);padding:6px 12px;border-radius:20px;font-size:13px;font-weight:700}
 .avatar{width:22px;height:22px;background:var(--primary);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
-.btn-out{background:none;border:1.5px solid var(--border);color:var(--t3);cursor:pointer;font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;transition:background .15s;font-family:inherit}
-.btn-out:hover{background:var(--bg)}
+.btn-out{background:none;border:1.5px solid var(--border);color:var(--t3);cursor:pointer;font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;font-family:inherit}
 
 /* ── 페이지 래퍼 ── */
-.page-wrap{padding-top:calc(var(--hd-h)+10px);padding-bottom:calc(var(--nav-h)+var(--safe-b)+16px);min-height:100vh}
+.page-wrap{padding-top:calc(var(--hd-h) + var(--safe-t) + 10px);padding-bottom:calc(var(--nav-h) + var(--safe-b) + 16px);min-height:100vh}
 .page{display:none}
 .page.active{display:block}
 .p-inner{max-width:600px;margin:0 auto;padding:0 16px}
 
 /* ── 하단 네비 ── */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h)+var(--safe-b));padding-bottom:var(--safe-b);background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:200;box-shadow:0 -4px 20px rgba(0,0,0,.07)}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--safe-b));padding-bottom:var(--safe-b);background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:200;box-shadow:0 -4px 20px rgba(0,0,0,.07)}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--t3);font-size:10px;font-weight:700;padding:8px 4px;transition:color .2s;position:relative;user-select:none}
 .nav-item.active{color:var(--primary)}
 .nav-icon{font-size:22px;line-height:1}
 .nav-badge{position:absolute;top:6px;right:calc(50% - 18px);background:var(--rose);color:#fff;border-radius:10px;padding:1px 5px;font-size:10px;font-weight:800;min-width:16px;text-align:center;line-height:14px;border:1.5px solid #fff}
 
-/* ── 섹션 헤더 ── */
+/* ── 공통 ── */
 .s-hd{font-size:20px;font-weight:800;color:var(--t1);margin-bottom:16px;margin-top:6px}
 .s-hd-sm{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;margin:20px 0 8px}
-
-/* ── 공지 배너 ── */
 .notice-banner{display:none;align-items:center;gap:10px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;padding:12px 16px;border-radius:var(--r-md);font-size:13px;font-weight:600;margin-bottom:12px}
 .notice-banner.show{display:flex}
+.card{background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);box-shadow:var(--sh-xs);margin-bottom:12px;overflow:hidden}
+.card-body{padding:16px 18px}
+.card-sep{border-top:1px solid var(--border)}
+.empty-state{text-align:center;padding:44px 24px;color:var(--t3)}
+.empty-icon{font-size:48px;margin-bottom:12px;opacity:.45}
+.empty-text{font-size:15px;font-weight:700;color:var(--t2);margin-bottom:4px}
+.empty-sub{font-size:13px}
 
 /* ── 캘린더 ── */
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:0 2px}
@@ -84,7 +89,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sa
 .cal-grid{background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);box-shadow:var(--sh-sm);overflow:hidden}
 .cal-hdrs{display:grid;grid-template-columns:repeat(7,1fr);background:#f8fafc;border-bottom:1px solid var(--border)}
 .cal-hdr{padding:10px 4px;text-align:center;font-size:12px;font-weight:700;color:var(--t3)}
-.cal-hdr.sun{color:var(--rose)} .cal-hdr.sat{color:var(--primary)}
+.cal-hdr.sun{color:var(--rose)}.cal-hdr.sat{color:var(--primary)}
 .cal-days{display:grid;grid-template-columns:repeat(7,1fr)}
 .cal-cell{min-height:72px;padding:6px 5px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
 .cal-cell:nth-child(7n){border-right:none}
@@ -96,22 +101,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sa
 .cal-cell.holi-cell{background:#fff5f5}
 .cal-num{font-size:13px;font-weight:700;color:var(--t2);width:24px;height:24px;display:flex;align-items:center;justify-content:center;margin-bottom:3px}
 .cal-cell.today .cal-num{background:var(--primary);color:#fff;border-radius:50%}
-.cal-cell.sunday .cal-num{color:var(--rose)} .cal-cell.saturday .cal-num{color:var(--primary)}
+.cal-cell.sunday .cal-num{color:var(--rose)}.cal-cell.saturday .cal-num{color:var(--primary)}
 .cal-cell.today.sunday .cal-num,.cal-cell.today.saturday .cal-num{color:#fff}
 .holi-lbl{font-size:9px;color:var(--rose);font-weight:700;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .duty-chip{font-size:10px;padding:2px 6px;border-radius:6px;display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;color:#fff}
-.chip-normal{background:var(--primary)} .chip-mine{background:var(--rose)} .chip-special{background:var(--violet)} .chip-ex{background:var(--emerald)}
+.chip-normal{background:var(--primary)}.chip-mine{background:var(--rose)}.chip-special{background:var(--violet)}.chip-ex{background:var(--emerald)}
 .order-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:10px}
 .order-chip{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;color:#fff}
 .order-arr{color:var(--t3);font-size:12px}
 .legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
 .leg-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t2)}
 .leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
-
-/* ── 카드 공통 ── */
-.card{background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);box-shadow:var(--sh-xs);margin-bottom:12px;overflow:hidden}
-.card-body{padding:16px 18px}
-.card-sep{border-top:1px solid var(--border)}
 
 /* ── 내당직 카드 ── */
 .duty-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:10px;box-shadow:var(--sh-xs);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
@@ -182,7 +182,7 @@ textarea.f-input{resize:none}
 .h-detail{font-size:12px;color:var(--t2);line-height:1.5}
 .h-time{font-size:11px;color:var(--t3);margin-top:4px}
 
-/* ── 설정 섹션 ── */
+/* ── 설정 ── */
 .s-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:14px;box-shadow:var(--sh-xs)}
 .s-sec-title{font-size:11px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;padding:12px 16px 8px;border-bottom:1px solid var(--border)}
 .s-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);gap:12px}
@@ -191,7 +191,7 @@ textarea.f-input{resize:none}
 .s-row-val{font-size:13px;color:var(--t2)}
 .info-box{background:#f8fafc;border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;margin-bottom:12px}
 .info-row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0}
-.info-label{color:var(--t2);font-weight:600} .info-val{color:var(--t1);font-weight:700}
+.info-label{color:var(--t2);font-weight:600}.info-val{color:var(--t1);font-weight:700}
 
 /* ── 멤버 관리 ── */
 .member-row{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);gap:10px}
@@ -205,8 +205,6 @@ textarea.f-input{resize:none}
 .ib-ghost:hover:not(:disabled){background:var(--border)}
 .ib-danger{background:#fee2e2;color:var(--rose)}
 .ib-danger:hover:not(:disabled){background:#fecaca}
-
-/* ── 리스트 아이템 ── */
 .list-row{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);gap:10px}
 .list-row:last-child{border-bottom:none}
 .list-row-main{font-size:13px;font-weight:700;color:var(--t1)}
@@ -219,12 +217,6 @@ textarea.f-input{resize:none}
 .stat-fill{height:100%;border-radius:6px;background:var(--primary);transition:width .5s}
 .stat-fill.mine{background:var(--rose)}
 
-/* ── 빈 상태 ── */
-.empty-state{text-align:center;padding:44px 24px;color:var(--t3)}
-.empty-icon{font-size:48px;margin-bottom:12px;opacity:.45}
-.empty-text{font-size:15px;font-weight:700;color:var(--t2);margin-bottom:4px}
-.empty-sub{font-size:13px}
-
 /* ── FB 상태 ── */
 .fb-bar{padding:8px 14px;border-radius:var(--r-sm);font-size:13px;font-weight:700;margin-bottom:14px}
 .fb-bar.ok{background:var(--emerald-l);color:#065f46}
@@ -236,9 +228,9 @@ textarea.f-input{resize:none}
 .notif-bar-text{font-size:13px;color:#065f46;font-weight:700}
 
 /* ── 오프라인/설치 ── */
-.offline-bar{display:none;position:fixed;top:0;left:0;right:0;background:var(--rose);color:#fff;padding:10px;text-align:center;font-size:13px;font-weight:700;z-index:999}
+.offline-bar{display:none;position:fixed;top:0;left:0;right:0;background:var(--rose);color:#fff;padding:calc(10px + var(--safe-t)) 10px 10px;text-align:center;font-size:13px;font-weight:700;z-index:999}
 .offline-bar.show{display:block}
-.install-bar{display:none;position:fixed;bottom:calc(var(--nav-h)+var(--safe-b));left:0;right:0;background:linear-gradient(135deg,#1e1b4b,#312e81);color:#fff;padding:14px 18px;z-index:150;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.install-bar{display:none;position:fixed;bottom:calc(var(--nav-h) + var(--safe-b));left:0;right:0;background:linear-gradient(135deg,#1e1b4b,#312e81);color:#fff;padding:14px 18px;z-index:150;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
 .install-bar.show{display:flex}
 .install-bar-title{font-size:14px;font-weight:700}
 .install-bar-sub{font-size:12px;opacity:.7}
@@ -258,10 +250,9 @@ textarea.f-input{resize:none}
 .modal-info{background:#f8fafc;border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;font-size:13px;color:var(--t2);margin-top:10px;display:none;line-height:1.6}
 
 /* ── 토스트 ── */
-#toastEl{position:fixed;bottom:calc(var(--nav-h)+var(--safe-b)+16px);left:50%;transform:translateX(-50%) translateY(12px);background:var(--t1);color:#fff;padding:12px 20px;border-radius:var(--r-md);font-size:13px;font-weight:600;z-index:1000;opacity:0;transition:opacity .25s,transform .25s;white-space:nowrap;max-width:90vw;text-align:center;pointer-events:none;box-shadow:var(--sh-md)}
+#toastEl{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 16px);left:50%;transform:translateX(-50%) translateY(12px);background:var(--t1);color:#fff;padding:12px 20px;border-radius:var(--r-md);font-size:13px;font-weight:600;z-index:1000;opacity:0;transition:opacity .25s,transform .25s;white-space:nowrap;max-width:90vw;text-align:center;pointer-events:none;box-shadow:var(--sh-md)}
 #toastEl.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ── 반응형 ── */
 @media(min-width:600px){
   .modal-overlay{align-items:center}
   .modal-sheet{border-radius:var(--r-xl);padding:28px;max-width:460px;margin:24px}
@@ -290,7 +281,6 @@ textarea.f-input{resize:none}
   </div>
 </div>
 
-<!-- ── 로그인 ── -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
     <div class="login-logo">🗓️</div>
@@ -308,9 +298,7 @@ textarea.f-input{resize:none}
   </div>
 </div>
 
-<!-- ── 메인 ── -->
 <div class="main-screen" id="mainScreen">
-
   <header class="app-hd">
     <div class="hd-left">
       <span class="hd-logo">🗓️</span>
@@ -372,23 +360,19 @@ textarea.f-input{resize:none}
       </div>
     </div>
 
-    <!-- 교환 (통합) -->
+    <!-- 교환 -->
     <div class="page" id="page-exchange">
       <div class="p-inner">
         <div id="noticeBannerWanted" class="notice-banner"></div>
         <div class="seg-wrap" style="margin-top:4px">
           <button class="seg-btn active" id="seg-board" onclick="showExchangeSub('board')">🙋 게시판</button>
           <button class="seg-btn" id="seg-apply" onclick="showExchangeSub('apply')">📝 신청</button>
-          <button class="seg-btn" id="seg-status" onclick="showExchangeSub('status')">🔄 현황</button>
+          <button class="seg-btn" id="seg-status" onclick="showExchangeSub('status')">📥 교환승인</button>
         </div>
-
-        <!-- 게시판 -->
         <div id="exsub-board">
           <button class="btn btn-ghost-p btn-full" style="margin-bottom:14px" onclick="openWantedModal()">🙋 당직 교환 구합니다!! 게시하기</button>
           <div id="wantedList"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">게시된 글이 없습니다</div><div class="empty-sub">내 당직에서도 게시할 수 있어요</div></div></div>
         </div>
-
-        <!-- 신청 -->
         <div id="exsub-apply" style="display:none">
           <div class="fb-bar loading" id="fbStatusBanner">⏳ Firebase 연결 중...</div>
           <div class="form-card">
@@ -410,8 +394,6 @@ textarea.f-input{resize:none}
           <div class="s-hd-sm">내가 신청한 요청</div>
           <div id="myRequests"><div class="empty-state" style="padding:32px 24px"><div class="empty-icon">📤</div><div class="empty-text">신청한 교환이 없습니다</div></div></div>
         </div>
-
-        <!-- 현황 -->
         <div id="exsub-status" style="display:none">
           <div class="s-hd-sm" style="margin-top:4px">나에게 온 요청</div>
           <div id="incomingRequests"><div class="empty-state" style="padding:32px 24px"><div class="empty-icon">📥</div><div class="empty-text">수락 가능한 요청이 없습니다</div></div></div>
@@ -432,15 +414,10 @@ textarea.f-input{resize:none}
     <!-- 설정 (관리자) -->
     <div class="page" id="page-settings">
       <div class="p-inner">
-
-        <!-- 알림 -->
         <div class="s-section">
           <div class="s-sec-title">🔔 푸시 알림</div>
           <div class="s-row">
-            <div>
-              <div class="s-row-label">알림 상태</div>
-              <div class="s-row-val" id="notifStatus">확인 중...</div>
-            </div>
+            <div><div class="s-row-label">알림 상태</div><div class="s-row-val" id="notifStatus">확인 중...</div></div>
             <div style="display:flex;gap:6px">
               <button class="btn btn-primary btn-sm" id="notifEnableBtn" onclick="requestNotifPermission()" style="display:none">허용</button>
               <button class="btn btn-ghost btn-sm" id="notifTestBtn" onclick="sendTestNotif()" style="display:none">테스트</button>
@@ -448,8 +425,6 @@ textarea.f-input{resize:none}
           </div>
           <div id="notifGuide" style="display:none;padding:0 16px 12px;font-size:12px;color:var(--t3);line-height:1.7">⚠️ 주소창 자물쇠 아이콘 → 알림 → 허용으로 변경하세요.</div>
         </div>
-
-        <!-- 시스템 정보 -->
         <div class="s-section">
           <div class="s-sec-title">📊 시스템 정보</div>
           <div class="s-row"><span class="s-row-label">사용자</span><span class="s-row-val"><span id="settingsUserName"></span><span id="adminBadge" style="display:none;background:var(--rose);color:#fff;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:800;margin-left:6px">관리자</span></span></div>
@@ -457,14 +432,10 @@ textarea.f-input{resize:none}
           <div class="s-row"><span class="s-row-label">총 멤버</span><span class="s-row-val"><span id="totalMembers">-</span>명</span></div>
           <div class="s-row"><span class="s-row-label">버전</span><span class="s-row-val">v3.2.0</span></div>
         </div>
-
-        <!-- 관리자 - 최종 승인 -->
         <div class="s-section" id="adminApprovalSection" style="display:none">
           <div class="s-sec-title">✅ 교환 최종 승인</div>
           <div id="adminApprovalList"><div class="empty-state" style="padding:24px"><div class="empty-text">승인 대기 없음</div></div></div>
         </div>
-
-        <!-- 관리자 - 공지 -->
         <div class="s-section" id="adminNoticeSection" style="display:none">
           <div class="s-sec-title">📢 공지사항</div>
           <div style="padding:12px 16px">
@@ -475,8 +446,6 @@ textarea.f-input{resize:none}
             </div>
           </div>
         </div>
-
-        <!-- 관리자 - 멤버 -->
         <div class="s-section" id="adminMemberSection" style="display:none">
           <div class="s-sec-title">👥 멤버 관리</div>
           <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
@@ -488,8 +457,6 @@ textarea.f-input{resize:none}
           </div>
           <div id="memberList" style="max-height:320px;overflow-y:auto"></div>
         </div>
-
-        <!-- 관리자 - 당직 시작 -->
         <div class="s-section" id="adminRotationSection" style="display:none">
           <div class="s-sec-title">⚙️ 당직 시작 설정</div>
           <div style="padding:12px 16px">
@@ -502,8 +469,6 @@ textarea.f-input{resize:none}
             <button class="btn btn-warning" onclick="updateDutyRotation()">순번 변경 적용</button>
           </div>
         </div>
-
-        <!-- 관리자 - 휴일 -->
         <div class="s-section" id="adminHolidaySection" style="display:none">
           <div class="s-sec-title">🎉 휴일 관리</div>
           <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
@@ -515,8 +480,6 @@ textarea.f-input{resize:none}
           </div>
           <div id="holidayListContainer" style="max-height:260px;overflow-y:auto"></div>
         </div>
-
-        <!-- 관리자 - 특별배정 -->
         <div class="s-section" id="adminSpecialSection" style="display:none">
           <div class="s-sec-title">📌 특별배정</div>
           <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
@@ -528,14 +491,10 @@ textarea.f-input{resize:none}
           </div>
           <div id="specialScheduleList" style="max-height:240px;overflow-y:auto"></div>
         </div>
-
-        <!-- 통계 -->
         <div class="s-section">
           <div class="s-sec-title">📊 당직 통계 (연간)</div>
           <div style="padding:12px 16px" id="dutyStats"></div>
         </div>
-
-        <!-- 초기화 -->
         <div class="s-section">
           <div class="s-sec-title">🔄 데이터 초기화</div>
           <div class="s-row">
@@ -543,32 +502,19 @@ textarea.f-input{resize:none}
             <button class="btn btn-danger btn-sm" onclick="resetAllData()">초기화</button>
           </div>
         </div>
-
       </div>
     </div>
 
-  </div><!-- /page-wrap -->
+  </div>
 
-  <!-- 하단 네비 -->
   <nav class="bottom-nav">
-    <div class="nav-item active" id="nav-calendar" onclick="showPage('calendar')">
-      <span class="nav-icon">📅</span><span>캘린더</span>
-    </div>
-    <div class="nav-item" id="nav-myduty" onclick="showPage('myduty')">
-      <span class="nav-icon">👤</span><span>내당직</span>
-    </div>
-    <div class="nav-item" id="nav-exchange" onclick="showPage('exchange')">
-      <span class="nav-icon">🔄</span><span>교환</span>
-    </div>
-    <div class="nav-item" id="nav-history" onclick="showPage('history')">
-      <span class="nav-icon">📋</span><span>이력</span>
-    </div>
-    <div class="nav-item" id="nav-settings" onclick="showPage('settings')" style="display:none">
-      <span class="nav-icon">⚙️</span><span>설정</span>
-    </div>
+    <div class="nav-item active" id="nav-calendar" onclick="showPage('calendar')"><span class="nav-icon">📅</span><span>캘린더</span></div>
+    <div class="nav-item" id="nav-myduty" onclick="showPage('myduty')"><span class="nav-icon">👤</span><span>내당직</span></div>
+    <div class="nav-item" id="nav-exchange" onclick="showPage('exchange')"><span class="nav-icon">🔄</span><span>교환</span></div>
+    <div class="nav-item" id="nav-history" onclick="showPage('history')"><span class="nav-icon">📋</span><span>이력</span></div>
+    <div class="nav-item" id="nav-settings" onclick="showPage('settings')" style="display:none"><span class="nav-icon">⚙️</span><span>설정</span></div>
   </nav>
-
-</div><!-- /main-screen -->
+</div>
 
 <!-- 모달: 교환 수락 -->
 <div class="modal-overlay" id="acceptModal">
@@ -586,7 +532,7 @@ textarea.f-input{resize:none}
   </div>
 </div>
 
-<!-- 모달: 구합니다 게시 -->
+<!-- 모달: 구합니다 -->
 <div class="modal-overlay" id="wantedModal">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -635,12 +581,11 @@ const firebaseConfig = {
   appId: "1:1077728967909:web:61580080b97c372605680c"
 };
 const app = initializeApp(firebaseConfig);
-const db  = getDatabase(app);
-
+const db = getDatabase(app);
 const VAPID_KEY = 'YOUR_VAPID_KEY_HERE';
 let messaging = null;
 
-const ADMIN_USER     = '이진모';
+const ADMIN_USER = '이진모';
 const ADMIN_PASSWORD = 'admin1234';
 const DEFAULT_MEMBERS = ['류재근','정희주','정세정','이진모','권영재','김병오','안제만','인원교','고현우','정민규','권석일'];
 const DEFAULT_HOLIDAYS = {
@@ -677,58 +622,63 @@ let currentPage='calendar';
 let currentExchangeSub='board';
 
 // ── 유틸 ──
-function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function parseDateLocal(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
+function safeName(u){return(u||'').replace(/[.#$[\]]/g,'_')}
 function showToast(msg,dur=3000){
   let t=document.getElementById('toastEl');
   if(!t){t=document.createElement('div');t.id='toastEl';document.body.appendChild(t);}
   t.textContent=msg;t.classList.add('show');
   clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),dur);
 }
-function formatDateTime(iso){
+function fmtDt(iso){
   if(!iso)return'';
   try{return new Date(iso).toLocaleString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}
   catch{return iso;}
 }
-const NOTIF_KEY='duty-notif-last-'+location.hostname;
-function getLastNotifCheck(){return parseInt(localStorage.getItem(NOTIF_KEY)||'0')}
-function setLastNotifCheck(){localStorage.setItem(NOTIF_KEY,Date.now().toString())}
+const NOTIF_KEY='duty-notif-'+location.hostname;
+function getLastNotif(){return parseInt(localStorage.getItem(NOTIF_KEY)||'0')}
+function setLastNotif(){localStorage.setItem(NOTIF_KEY,Date.now().toString())}
+function postSW(msg){
+  if(!('serviceWorker' in navigator))return;
+  navigator.serviceWorker.ready.then(r=>{if(r.active)r.active.postMessage(msg);});
+}
 
 // ── 알림 ──
 function canNotify(){return('Notification'in window)&&Notification.permission==='granted'}
-function showBrowserNotif(title,body,tag='duty'){
+function showNotif(title,body,tag='duty'){
   if(!canNotify())return;
   const opts={body,icon:'./launchericon-192x192.png',badge:'./launchericon-192x192.png',tag,requireInteraction:true,vibrate:[200,100,200]};
-  if(navigator.serviceWorker&&navigator.serviceWorker.controller)
-    navigator.serviceWorker.ready.then(r=>r.showNotification(title,opts));
-  else new Notification(title,opts);
+  navigator.serviceWorker&&navigator.serviceWorker.controller
+    ?navigator.serviceWorker.ready.then(r=>r.showNotification(title,opts))
+    :new Notification(title,opts);
+}
+async function pushNotif(target,title,body){
+  try{
+    const nr=push(ref(db,`notifications/${safeName(target)}`));
+    await set(nr,{title,body,shown:false,createdAt:new Date().toISOString()});
+  }catch(e){console.warn('알림 큐 오류:',e);}
 }
 function showNotifBanner(){
   if(!('Notification'in window)||Notification.permission!=='default')return;
   if(document.getElementById('notifAskBanner'))return;
   const b=document.createElement('div');b.id='notifAskBanner';
-  Object.assign(b.style,{position:'fixed',top:'calc(var(--hd-h) + 8px)',left:'16px',right:'16px',zIndex:'190'});
-  b.innerHTML=`<div class="notif-bar"><span class="notif-bar-text">🔔 교환 요청 알림을 받으시겠어요?</span><div style="display:flex;gap:6px;flex-shrink:0"><button class="btn btn-success btn-sm" onclick="acceptNotifFromBanner()">허용</button><button style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:20px;line-height:1;padding:0 4px" onclick="dismissNotifBanner()">×</button></div></div>`;
+  Object.assign(b.style,{position:'fixed',top:'calc(var(--hd-h) + var(--safe-t) + 8px)',left:'16px',right:'16px',zIndex:'190'});
+  b.innerHTML=`<div class="notif-bar"><span class="notif-bar-text">🔔 교환 요청 알림을 받으시겠어요?</span><div style="display:flex;gap:6px;flex-shrink:0"><button class="btn btn-success btn-sm" onclick="acceptNotifFromBanner()">허용</button><button style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:22px;padding:0 4px;line-height:1" onclick="dismissNotifBanner()">×</button></div></div>`;
   document.body.appendChild(b);
 }
-function dismissNotifBanner(){
-  const b=document.getElementById('notifAskBanner');if(b)b.remove();
-  localStorage.setItem('notif-asked','true');
-}
+function dismissNotifBanner(){const b=document.getElementById('notifAskBanner');if(b)b.remove();localStorage.setItem('notif-asked','true');}
 window.acceptNotifFromBanner=async function(){dismissNotifBanner();await requestNotifPermission();};
 window.requestNotifPermission=async function(){
   if(!('Notification'in window)){alert('이 브라우저는 알림을 지원하지 않습니다.');return;}
   const p=await Notification.requestPermission();
   updateNotifUI();
-  if(p==='granted'){showBrowserNotif('✅ 알림 허용됨','당직 교환 요청 시 알림을 받습니다!','test');saveFcmToken();}
+  if(p==='granted'){showNotif('✅ 알림 허용됨','당직 교환 요청 시 알림을 받습니다!','test');saveFcmToken();postSW({type:'SET_USER',username:currentUser});}
   else alert('알림 권한이 거부되었습니다.\n브라우저 설정에서 직접 허용해 주세요.');
 };
-window.sendTestNotif=function(){showBrowserNotif('🔔 테스트 알림','당직 관리 시스템 알림이 정상 동작합니다!','test')};
+window.sendTestNotif=function(){showNotif('🔔 테스트 알림','당직 관리 시스템 알림이 정상 동작합니다!','test')};
 function updateNotifUI(){
-  const st=document.getElementById('notifStatus');
-  const en=document.getElementById('notifEnableBtn');
-  const te=document.getElementById('notifTestBtn');
-  const gu=document.getElementById('notifGuide');
+  const st=document.getElementById('notifStatus'),en=document.getElementById('notifEnableBtn'),te=document.getElementById('notifTestBtn'),gu=document.getElementById('notifGuide');
   if(!st)return;
   if(!('Notification'in window)){st.textContent='❌ 미지원 브라우저';return;}
   const p=Notification.permission;
@@ -742,33 +692,33 @@ async function saveFcmToken(){
     messaging=getMessaging(app);
     const sw=await navigator.serviceWorker.ready;
     const token=await getToken(messaging,{vapidKey:VAPID_KEY,serviceWorkerRegistration:sw});
-    if(token&&currentUser)await set(ref(db,`fcmTokens/${currentUser.replace(/[.#$[\]]/g,'_')}`),{token,updatedAt:new Date().toISOString()});
-    onMessage(messaging,p=>{const{title,body}=p.notification||{};if(title)showBrowserNotif(title,body||'');});
+    if(token&&currentUser)await set(ref(db,`fcmTokens/${safeName(currentUser)}`),{token,updatedAt:new Date().toISOString()});
+    onMessage(messaging,p=>{const{title,body}=p.notification||{};if(title)showNotif(title,body||'');});
   }catch(e){console.warn('FCM 오류:',e);}
 }
 
-// ── 알림 감지 ──
+// ── 포그라운드 알림 감지 ──
 function checkIncomingNotif(newRows){
   if(!currentUser)return;
-  const lastCheck=getLastNotifCheck();
+  const lastCheck=getLastNotif();
   Object.entries(newRows).forEach(([key,r])=>{
     const prev=prevRequestSnapshot[key];
     if(!prev){
       const created=r.createdAt?new Date(r.createdAt).getTime():0;
       if(created>lastCheck&&r.target===currentUser&&r.status==='대기중')
-        showBrowserNotif('📥 당직 교환 요청 도착!',`${escapeHtml(r.requester)}님이 ${r.myDate} 당직 교환을 요청했습니다.`,`req-${key}`);
+        showNotif('📥 당직 교환 요청 도착!',`${esc(r.requester)}님이 ${r.myDate} 당직 교환을 요청했습니다.`,`req-${key}`);
     } else if(prev.status!==r.status){
       if(r.requester===currentUser){
-        if(r.status==='수락완료') showBrowserNotif('✅ 교환 요청 수락됨!',`${escapeHtml(r.target)}님이 수락했습니다. 관리자 승인 대기 중.`,`acc-${key}`);
-        if(r.status==='승인완료') showBrowserNotif('🎉 교환 최종 승인!',`${r.myDate} 당직 교환이 최종 승인되었습니다!`,`appr-${key}`);
-        if(r.status==='반려') showBrowserNotif('❌ 교환 반려',`${r.myDate} 당직 교환 요청이 반려되었습니다.`,`rej-${key}`);
+        if(r.status==='수락완료') showNotif('✅ 교환 요청 수락됨!',`${esc(r.target)}님이 수락했습니다. 관리자 승인 대기 중.`,`acc-${key}`);
+        if(r.status==='승인완료') showNotif('🎉 교환 최종 승인!',`${r.myDate} 당직 교환이 최종 승인되었습니다!`,`appr-${key}`);
+        if(r.status==='반려') showNotif('❌ 교환 반려',`${r.myDate} 당직 교환 요청이 반려되었습니다.`,`rej-${key}`);
       }
       if(r.target===currentUser&&r.status==='대기중')
-        showBrowserNotif('📥 당직 교환 요청 도착!',`${escapeHtml(r.requester)}님이 ${r.myDate} 당직 교환을 요청했습니다.`,`req-${key}`);
+        showNotif('📥 당직 교환 요청 도착!',`${esc(r.requester)}님이 ${r.myDate} 당직 교환을 요청했습니다.`,`req-${key}`);
     }
   });
   prevRequestSnapshot={...newRows};
-  setLastNotifCheck();
+  setLastNotif();
 }
 
 // ── Firebase 리스너 ──
@@ -778,12 +728,10 @@ function initFirebaseListeners(){
     checkIncomingNotif(rows);
     allRows=rows;
     if(currentUser){renderMyRequests();renderExchangeTab();renderCalendar();renderMyDuty();}
-    const fb=document.getElementById('fbStatusBanner');
-    if(fb){fb.className='fb-bar ok';fb.textContent='✅ Firebase 실시간 연결됨';}
+    const fb=document.getElementById('fbStatusBanner');if(fb){fb.className='fb-bar ok';fb.textContent='✅ Firebase 실시간 연결됨';}
     const fc=document.getElementById('fbConnStatus');if(fc)fc.textContent='✅ 연결됨';
   },()=>{
-    const fb=document.getElementById('fbStatusBanner');
-    if(fb){fb.className='fb-bar err';fb.textContent='❌ Firebase 연결 실패';}
+    const fb=document.getElementById('fbStatusBanner');if(fb){fb.className='fb-bar err';fb.textContent='❌ Firebase 연결 실패';}
     const fc=document.getElementById('fbConnStatus');if(fc)fc.textContent='❌ 연결 실패';
   });
   onValue(ref(db,'settings'),snap=>{
@@ -795,6 +743,7 @@ function initFirebaseListeners(){
     SPECIAL_SCHEDULE={...DEFAULT_SPECIAL};if(s.special)Object.assign(SPECIAL_SCHEDULE,s.special);
     if(currentUser){renderCalendar();renderMyDuty();populateMemberSelects();if(isAdmin)renderSettings();}
     const tm=document.getElementById('totalMembers');if(tm)tm.textContent=MEMBERS.length;
+    populateMemberSelects();
   });
   onValue(ref(db,'wanted'),snap=>{allWanted=snap.val()||{};if(currentUser)renderWantedList();});
   onValue(ref(db,'notice'),snap=>{
@@ -805,68 +754,52 @@ function initFirebaseListeners(){
     });
     const ni=document.getElementById('noticeInput');if(ni)ni.value=n;
   });
-  onValue(ref(db,'history'),()=>{if(currentUser)renderHistory();});
+  onValue(ref(db,'history'),()=>{if(currentUser&&currentPage==='history')renderHistory();});
 }
 
-// ── 날짜/당직 계산 ──
+// ── 당직 계산 ──
 function dateToStr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function isDutyDay(d){const s=dateToStr(d),w=d.getDay();return w===0||w===6||!!HOLIDAYS[s]||!!SPECIAL_SCHEDULE[s]}
 function getExchangedDuties(){
-  const r={};
-  Object.values(allRows).forEach(row=>{if(row.status==='승인완료'){r[row.myDate]=row.target;r[row.targetDate]=row.requester;}});
-  return r;
+  const r={};Object.values(allRows).forEach(row=>{if(row.status==='승인완료'){r[row.myDate]=row.target;r[row.targetDate]=row.requester;}});return r;
 }
 function getDutyPerson(date){
   if(!MEMBERS.length)return null;
   const s=dateToStr(date),exd=getExchangedDuties();
-  if(exd[s])return exd[s];
-  if(SPECIAL_SCHEDULE[s])return SPECIAL_SCHEDULE[s];
-  if(!isDutyDay(date))return null;
+  if(exd[s])return exd[s];if(SPECIAL_SCHEDULE[s])return SPECIAL_SCHEDULE[s];if(!isDutyDay(date))return null;
   let count=0;const cur=new Date(DUTY_START_DATE);
   if(new Date(date)>=DUTY_START_DATE){
-    while(dateToStr(cur)!==s){
-      const cs=dateToStr(cur);
-      if(!SPECIAL_SCHEDULE[cs]&&(cur.getDay()===0||cur.getDay()===6||HOLIDAYS[cs]))count++;
-      cur.setDate(cur.getDate()+1);if(count>5000)break;
-    }
+    while(dateToStr(cur)!==s){const cs=dateToStr(cur);if(!SPECIAL_SCHEDULE[cs]&&(cur.getDay()===0||cur.getDay()===6||HOLIDAYS[cs]))count++;cur.setDate(cur.getDate()+1);if(count>5000)break;}
     return MEMBERS[(DUTY_START_INDEX+count)%MEMBERS.length];
-  } else {
+  }else{
     let prev=[],c2=new Date(DUTY_START_DATE);c2.setDate(c2.getDate()-1);
-    for(let i=0;i<500;i++){
-      const cs=dateToStr(c2);
-      if(!SPECIAL_SCHEDULE[cs]&&(c2.getDay()===0||c2.getDay()===6||HOLIDAYS[cs]))prev.unshift(cs);
-      c2.setDate(c2.getDate()-1);
-    }
-    const idx=prev.indexOf(s);
-    if(idx>=0){const mi=((DUTY_START_INDEX-(prev.length-idx))%MEMBERS.length+MEMBERS.length)%MEMBERS.length;return MEMBERS[mi];}
-    return null;
+    for(let i=0;i<500;i++){const cs=dateToStr(c2);if(!SPECIAL_SCHEDULE[cs]&&(c2.getDay()===0||c2.getDay()===6||HOLIDAYS[cs]))prev.unshift(cs);c2.setDate(c2.getDate()-1);}
+    const idx=prev.indexOf(s);if(idx>=0){const mi=((DUTY_START_INDEX-(prev.length-idx))%MEMBERS.length+MEMBERS.length)%MEMBERS.length;return MEMBERS[mi];}return null;
   }
 }
 function getMyDutyDates(user){
-  const res=[];const now=new Date();const year=now.getFullYear()<2026?2026:now.getFullYear();
-  for(let m=0;m<12;m++){const days=new Date(year,m+1,0).getDate();
-    for(let d=1;d<=days;d++){const dt=new Date(year,m,d);if(isDutyDay(dt)&&getDutyPerson(dt)===user)res.push(dateToStr(dt));}}
+  const res=[],now=new Date(),year=now.getFullYear()<2026?2026:now.getFullYear();
+  for(let m=0;m<12;m++){const days=new Date(year,m+1,0).getDate();for(let d=1;d<=days;d++){const dt=new Date(year,m,d);if(isDutyDay(dt)&&getDutyPerson(dt)===user)res.push(dateToStr(dt));}}
   return res;
 }
 
 // ── 멤버 셀렉트 ──
 function populateMemberSelects(){
-  const us=document.getElementById('userSelect');const cv=us.value;
+  const us=document.getElementById('userSelect');if(!us)return;
+  const cv=us.value;
   us.innerHTML='<option value="">이름을 선택하세요</option>';
   MEMBERS.forEach(m=>{us.innerHTML+=`<option value="${m}">${m}</option>`;});
   if(cv)us.value=cv;
-  ['specialPerson','newStartPerson'].forEach(id=>{
-    const el=document.getElementById(id);if(el){el.innerHTML='';MEMBERS.forEach(m=>{el.innerHTML+=`<option>${m}</option>`;});}
-  });
+  ['specialPerson','newStartPerson'].forEach(id=>{const el=document.getElementById(id);if(el){el.innerHTML='';MEMBERS.forEach(m=>{el.innerHTML+=`<option>${m}</option>`;});}});
 }
 
 // ── 폼 초기화 ──
 function initApplyForm(){
   document.getElementById('fmRequester').innerHTML=`<option>${currentUser}</option>`;
   const dn=['일','월','화','수','목','금','토'];
-  const myDates=getMyDutyDates(currentUser);
+  const dates=getMyDutyDates(currentUser);
   const ms=document.getElementById('fmMyDate');ms.innerHTML='<option value="">선택하세요</option>';
-  myDates.forEach(d=>{ms.innerHTML+=`<option value="${d}">${d} (${dn[parseDateLocal(d).getDay()]})</option>`;});
+  dates.forEach(d=>{ms.innerHTML+=`<option value="${d}">${d} (${dn[parseDateLocal(d).getDay()]})</option>`;});
   const ts=document.getElementById('fmTarget');ts.innerHTML='<option value="">선택하세요</option>';
   MEMBERS.filter(m=>m!==currentUser).forEach(m=>{ts.innerHTML+=`<option value="${m}">${m}</option>`;});
   ts.onchange=function(){
@@ -879,19 +812,17 @@ function initApplyForm(){
 
 // ── 교환 신청 ──
 window.submitExchangeRequest=async function(){
-  const myDate=document.getElementById('fmMyDate').value;
-  const target=document.getElementById('fmTarget').value;
-  const targetDate=document.getElementById('fmTargetDate').value;
-  const reason=document.getElementById('fmReason').value.trim();
+  const myDate=document.getElementById('fmMyDate').value,target=document.getElementById('fmTarget').value,
+        targetDate=document.getElementById('fmTargetDate').value,reason=document.getElementById('fmReason').value.trim();
   if(!myDate||!target||!targetDate||!reason){alert('모든 항목을 입력해주세요!');return;}
-  const dup=Object.values(allRows).find(r=>r.requester===currentUser&&r.myDate===myDate&&r.status!=='반려');
-  if(dup){alert('이미 해당 날짜로 신청한 교환이 있습니다!');return;}
+  if(Object.values(allRows).find(r=>r.requester===currentUser&&r.myDate===myDate&&r.status!=='반려')){alert('이미 해당 날짜로 신청한 교환이 있습니다!');return;}
   if(!confirm(`교환 신청:\n${currentUser} (${myDate}) ↔ ${target} (${targetDate})\n사유: ${reason}`))return;
   const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='등록 중...';
   try{
     const nr=push(ref(db,'requests'));
     await set(nr,{id:nr.key,requester:currentUser,myDate,target,targetDate,reason,status:'대기중',createdAt:new Date().toISOString()});
     await addHistory({type:'교환신청',from:currentUser,to:target,date:myDate,reason});
+    await pushNotif(target,'📥 당직 교환 요청 도착!',`${currentUser}님이 ${myDate} 당직 교환을 요청했습니다.`);
     document.getElementById('fmMyDate').value='';document.getElementById('fmTarget').value='';
     document.getElementById('fmTargetDate').innerHTML='<option>대상자를 먼저 선택하세요</option>';
     document.getElementById('fmReason').value='';
@@ -911,8 +842,7 @@ window.openWantedModal=function(preDate=''){
 };
 window.closeWantedModal=function(){document.getElementById('wantedModal').classList.remove('show')};
 window.submitWanted=async function(){
-  const myDate=document.getElementById('wantedMyDate').value;
-  const reason=document.getElementById('wantedReason').value.trim();
+  const myDate=document.getElementById('wantedMyDate').value,reason=document.getElementById('wantedReason').value.trim();
   if(!myDate||!reason){alert('날짜와 사유를 입력해주세요!');return;}
   if(Object.values(allWanted).find(w=>w.requester===currentUser&&w.myDate===myDate&&w.status==='active')){alert('이미 해당 날짜로 게시된 글이 있습니다!');return;}
   try{
@@ -927,22 +857,10 @@ function renderWantedList(){
   const items=Object.values(allWanted).filter(w=>w.status==='active');
   if(!items.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">게시된 글이 없습니다</div><div class="empty-sub">내 당직에서도 게시할 수 있어요</div></div>';return;}
   el.innerHTML='';
-  items.sort((a,b)=>new Date(a.myDate)-new Date(b.myDate)).forEach(w=>{
+  items.sort((a,b)=>parseDateLocal(a.myDate)-parseDateLocal(b.myDate)).forEach(w=>{
     const isMe=w.requester===currentUser;
     const div=document.createElement('div');div.className=`board-card${isMe?' my-post':''}`;
-    div.innerHTML=`
-      <div class="board-top">
-        <div style="flex:1">
-          <div class="board-name">${isMe?'내가 게시한 글 ✏️':escapeHtml(w.requester)+'님'}</div>
-          <span class="board-date-chip">📅 ${w.myDate}</span>
-          <div class="board-reason">사유: ${escapeHtml(w.reason)}</div>
-          <div class="board-time">${formatDateTime(w.createdAt)}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0">
-          ${!isMe?`<button class="btn btn-primary btn-sm" onclick="openWantedAcceptModal('${w.id}')">✋ 제안</button>`:''}
-          ${isMe?`<button class="btn btn-ghost btn-sm" onclick="deleteWanted('${w.id}')">삭제</button>`:''}
-        </div>
-      </div>`;
+    div.innerHTML=`<div class="board-top"><div style="flex:1"><div class="board-name">${isMe?'내가 게시한 글 ✏️':esc(w.requester)+'님'}</div><span class="board-date-chip">📅 ${w.myDate}</span><div class="board-reason">사유: ${esc(w.reason)}</div><div class="board-time">${fmtDt(w.createdAt)}</div></div><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0">${!isMe?`<button class="btn btn-primary btn-sm" onclick="openWantedAcceptModal('${w.id}')">✋ 제안</button>`:``}${isMe?`<button class="btn btn-ghost btn-sm" onclick="deleteWanted('${w.id}')">삭제</button>`:``}</div></div>`;
     el.appendChild(div);
   });
 }
@@ -968,15 +886,17 @@ window.confirmWantedAccept=async function(){
     await set(nr,{id:nr.key,requester:currentUser,myDate,target:wantedAccData.requester,targetDate:wantedAccData.myDate,reason:'🙋 구합니다 게시판을 통한 교환 신청',status:'대기중',createdAt:new Date().toISOString()});
     await update(ref(db,`wanted/${wantedAccData.id}`),{status:'matched'});
     await addHistory({type:'교환제안',from:currentUser,to:wantedAccData.requester,date:myDate,reason:'구합니다 게시판 통해 제안'});
+    await pushNotif(wantedAccData.requester,'📥 당직 교환 제안 도착!',`${currentUser}님이 ${wantedAccData.myDate} 당직 교환을 제안했습니다.`);
     closeWantedAcceptModal();showToast('✅ 교환 신청 완료!');
   }catch(e){alert('❌ 오류: '+e.message);}
 };
 window.deleteWanted=async function(id){if(!confirm('게시글을 삭제하시겠습니까?'))return;await remove(ref(db,`wanted/${id}`));};
 
-// ── 상태 라벨/클래스 ──
+// ── 상태 상수 ──
 const SL={'대기중':'⏳ 대기중','수락완료':'🤝 수락완료','승인완료':'✅ 승인완료','반려':'❌ 반려'};
 const SC={대기중:'pending',수락완료:'accepted',승인완료:'approved',반려:'rejected'};
 
+// ── 렌더: 내 요청 ──
 function renderMyRequests(){
   const rows=Object.values(allRows).filter(r=>r.requester===currentUser);
   const el=document.getElementById('myRequests');if(!el)return;
@@ -984,75 +904,45 @@ function renderMyRequests(){
   el.innerHTML='';
   rows.slice().reverse().forEach(r=>{
     const div=document.createElement('div');div.className=`req-card ${SC[r.status]||''}`;
-    div.innerHTML=`
-      <div class="req-top">
-        <span class="req-title">📅 ${r.myDate} ↔ ${r.targetDate}</span>
-        <span class="badge badge-${SC[r.status]||'pending'}">${SL[r.status]||r.status}</span>
-      </div>
-      <div class="req-sub">상대방: <strong>${escapeHtml(r.target)}</strong> · 사유: ${escapeHtml(r.reason)}</div>
-      ${r.status==='대기중'?`<div class="req-actions"><button class="btn btn-danger btn-sm" onclick="cancelRequest('${r.id}')">신청 취소</button></div>`:''}`;
+    div.innerHTML=`<div class="req-top"><span class="req-title">📅 ${r.myDate} ↔ ${r.targetDate}</span><span class="badge badge-${SC[r.status]||'pending'}">${SL[r.status]||r.status}</span></div><div class="req-sub">상대방: <strong>${esc(r.target)}</strong> · 사유: ${esc(r.reason)}</div>${r.status==='대기중'?`<div class="req-actions"><button class="btn btn-danger btn-sm" onclick="cancelRequest('${r.id}')">신청 취소</button></div>`:''}`;
     el.appendChild(div);
   });
 }
+
+// ── 렌더: 교환 탭 ──
 function renderExchangeTab(){
   const rows=Object.values(allRows);
   const incoming=rows.filter(r=>r.target===currentUser&&r.status==='대기중');
   const inEl=document.getElementById('incomingRequests');
   if(inEl){
     if(!incoming.length){inEl.innerHTML='<div class="empty-state" style="padding:32px 24px"><div class="empty-icon">📥</div><div class="empty-text">수락 가능한 요청이 없습니다</div></div>';}
-    else{inEl.innerHTML='';incoming.forEach(r=>{
-      const div=document.createElement('div');div.className='req-card pending';
-      div.innerHTML=`
-        <div class="req-top">
-          <span class="req-title">${escapeHtml(r.requester)} → 나</span>
-          <span class="badge badge-pending">⏳ 대기중</span>
-        </div>
-        <div class="req-sub">날짜: ${r.myDate} ↔ ${r.targetDate} · 사유: ${escapeHtml(r.reason)}</div>
-        <div class="req-actions">
-          <button class="btn btn-success btn-sm" onclick="openAcceptModal('${r.id}')">✅ 수락</button>
-          <button class="btn btn-danger btn-sm" onclick="rejectRequest('${r.id}')">❌ 거절</button>
-        </div>`;
-      inEl.appendChild(div);
-    });}
+    else{inEl.innerHTML='';incoming.forEach(r=>{const div=document.createElement('div');div.className='req-card pending';div.innerHTML=`<div class="req-top"><span class="req-title">${esc(r.requester)} → 나</span><span class="badge badge-pending">⏳ 대기중</span></div><div class="req-sub">날짜: ${r.myDate} ↔ ${r.targetDate} · 사유: ${esc(r.reason)}</div><div class="req-actions"><button class="btn btn-success btn-sm" onclick="openAcceptModal('${r.id}')">✅ 수락</button><button class="btn btn-danger btn-sm" onclick="rejectRequest('${r.id}')">❌ 거절</button></div>`;inEl.appendChild(div);});}
   }
   const allEl=document.getElementById('allRequests');
   if(allEl){
-    if(!rows.length){allEl.innerHTML='<div class="empty-state" style="padding:32px 24px"><div class="empty-icon">📋</div><div class="empty-text">교환 신청 내역이 없습니다</div></div>';return;}
-    allEl.innerHTML='';rows.slice().reverse().forEach(r=>{
-      const div=document.createElement('div');div.className=`req-card ${SC[r.status]||''}`;
-      div.innerHTML=`
-        <div class="req-top">
-          <span class="req-title">${escapeHtml(r.requester)} (${r.myDate}) ↔ ${escapeHtml(r.target)} (${r.targetDate})</span>
-          <span class="badge badge-${SC[r.status]||'pending'}">${SL[r.status]||r.status}</span>
-        </div>
-        <div class="req-sub">사유: ${escapeHtml(r.reason)}</div>`;
-      allEl.appendChild(div);
-    });
+    if(!rows.length){allEl.innerHTML='<div class="empty-state" style="padding:32px 24px"><div class="empty-icon">📋</div><div class="empty-text">교환 신청 내역이 없습니다</div></div>';}
+    else{allEl.innerHTML='';rows.slice().reverse().forEach(r=>{const div=document.createElement('div');div.className=`req-card ${SC[r.status]||''}`;div.innerHTML=`<div class="req-top"><span class="req-title">${esc(r.requester)} (${r.myDate}) ↔ ${esc(r.target)} (${r.targetDate})</span><span class="badge badge-${SC[r.status]||'pending'}">${SL[r.status]||r.status}</span></div><div class="req-sub">사유: ${esc(r.reason)}</div>`;allEl.appendChild(div);});}
   }
   if(isAdmin)renderAdminApproval();
-  updateTabBadges();
+  updateNavBadge();
 }
+
+// ── 렌더: 관리자 승인 ──
 function renderAdminApproval(){
   const pending=Object.values(allRows).filter(r=>r.status==='수락완료');
   const el=document.getElementById('adminApprovalList');if(!el)return;
   if(!pending.length){el.innerHTML='<div class="empty-state" style="padding:24px"><div class="empty-text">승인 대기 없음</div></div>';return;}
-  el.innerHTML='';pending.forEach(r=>{
+  el.innerHTML='';
+  pending.forEach(r=>{
     const div=document.createElement('div');
-    div.innerHTML=`<div style="padding:14px 16px;border-bottom:1px solid var(--border)">
-      <div style="font-size:15px;font-weight:700;color:var(--t1);margin-bottom:4px">${escapeHtml(r.requester)} (${r.myDate}) ↔ ${escapeHtml(r.target)} (${r.targetDate})</div>
-      <div style="font-size:13px;color:var(--t2);margin-bottom:10px">사유: ${escapeHtml(r.reason)}</div>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-success btn-sm" onclick="adminApprove('${r.id}')">✅ 최종 승인</button>
-        <button class="btn btn-danger btn-sm" onclick="adminReject('${r.id}')">❌ 반려</button>
-      </div></div>`;
+    div.innerHTML=`<div style="padding:14px 16px;border-bottom:1px solid var(--border)"><div style="font-size:15px;font-weight:700;color:var(--t1);margin-bottom:4px">${esc(r.requester)} (${r.myDate}) ↔ ${esc(r.target)} (${r.targetDate})</div><div style="font-size:13px;color:var(--t2);margin-bottom:10px">사유: ${esc(r.reason)}</div><div style="display:flex;gap:6px"><button class="btn btn-success btn-sm" onclick="adminApprove('${r.id}')">✅ 최종 승인</button><button class="btn btn-danger btn-sm" onclick="adminReject('${r.id}')">❌ 반려</button></div></div>`;
     el.appendChild(div);
   });
 }
 
-// ── 수락/거절/취소/승인 ──
+// ── 수락/거절/취소 ──
 window.openAcceptModal=function(id){
-  const row=allRows[id];if(!row)return;
-  accData=row;
+  const row=allRows[id];if(!row)return;accData=row;
   document.getElementById('accRequester').textContent=row.requester;
   document.getElementById('accReqDate').textContent=row.myDate;
   const sum=document.getElementById('accSummary');sum.style.display='none';
@@ -1070,12 +960,16 @@ window.confirmAccept=async function(){
   if(!confirm(`수락하시겠습니까?\n${currentUser}(${myDate}) ↔ ${accData.requester}(${accData.myDate})`))return;
   await update(ref(db,`requests/${accData.id}`),{status:'수락완료',targetDate:myDate});
   await addHistory({type:'교환수락',from:currentUser,to:accData.requester,date:accData.myDate,reason:`${currentUser}(${myDate}) ↔ ${accData.requester}(${accData.myDate})`});
+  await pushNotif(accData.requester,'✅ 교환 요청 수락됨!',`${currentUser}님이 교환 요청을 수락했습니다. 관리자 승인 대기 중.`);
   closeAcceptModal();showToast('✅ 수락 완료! 관리자 승인을 기다려주세요.');
 };
 window.rejectRequest=async function(id){
   if(!confirm('거절하시겠습니까?'))return;
+  const row=allRows[id];
   await update(ref(db,`requests/${id}`),{status:'반려'});
   await addHistory({type:'교환거절',from:currentUser,to:'',date:'',reason:'거절'});
+  // matched 상태 wanted 복구
+  if(row){const mw=Object.entries(allWanted).find(([,w])=>w.requester===row.target&&w.myDate===row.targetDate&&w.status==='matched');if(mw)await update(ref(db,`wanted/${mw[0]}`),{status:'active'});}
 };
 window.cancelRequest=async function(id){
   if(!confirm('교환 신청을 취소하시겠습니까?'))return;
@@ -1084,14 +978,25 @@ window.cancelRequest=async function(id){
 };
 window.adminApprove=async function(id){
   if(!confirm('최종 승인하시겠습니까? 당직표에 반영됩니다.'))return;
+  const row=allRows[id];
   await update(ref(db,`requests/${id}`),{status:'승인완료'});
   await addHistory({type:'관리자승인',from:currentUser,to:'',date:'',reason:`최종 승인: ${id}`});
+  if(row){
+    await pushNotif(row.requester,'🎉 교환 최종 승인!',`${row.myDate} 당직 교환이 최종 승인되었습니다!`);
+    await pushNotif(row.target,'🎉 교환 최종 승인!',`${row.targetDate} 당직 교환이 최종 승인되었습니다!`);
+  }
   showToast('✅ 최종 승인 완료!');
 };
 window.adminReject=async function(id){
   if(!confirm('반려하시겠습니까?'))return;
+  const row=allRows[id];
   await update(ref(db,`requests/${id}`),{status:'반려'});
   await addHistory({type:'관리자반려',from:currentUser,to:'',date:'',reason:`반려: ${id}`});
+  if(row){
+    const mw=Object.entries(allWanted).find(([,w])=>w.requester===row.target&&w.myDate===row.targetDate&&w.status==='matched');
+    if(mw)await update(ref(db,`wanted/${mw[0]}`),{status:'active'});
+    await pushNotif(row.requester,'❌ 교환 반려',`${row.myDate} 당직 교환 요청이 반려되었습니다.`);
+  }
 };
 
 // ── 멤버 관리 ──
@@ -1111,26 +1016,13 @@ window.deleteMember=async function(name){
   await update(ref(db,'settings'),{members:nm,dutyStartPerson:cp===name?nm[0]:cp});
   await addHistory({type:'멤버삭제',from:currentUser,to:name,date:'',reason:`멤버 삭제: ${name}`});
 };
-window.moveMemberUp=async function(idx){
-  if(!idx)return;const nm=[...MEMBERS];[nm[idx-1],nm[idx]]=[nm[idx],nm[idx-1]];
-  await update(ref(db,'settings'),{members:nm,dutyStartPerson:MEMBERS[DUTY_START_INDEX]});
-};
-window.moveMemberDown=async function(idx){
-  if(idx===MEMBERS.length-1)return;const nm=[...MEMBERS];[nm[idx],nm[idx+1]]=[nm[idx+1],nm[idx]];
-  await update(ref(db,'settings'),{members:nm,dutyStartPerson:MEMBERS[DUTY_START_INDEX]});
-};
+window.moveMemberUp=async function(idx){if(!idx)return;const nm=[...MEMBERS];[nm[idx-1],nm[idx]]=[nm[idx],nm[idx-1]];await update(ref(db,'settings'),{members:nm,dutyStartPerson:MEMBERS[DUTY_START_INDEX]});};
+window.moveMemberDown=async function(idx){if(idx===MEMBERS.length-1)return;const nm=[...MEMBERS];[nm[idx],nm[idx+1]]=[nm[idx+1],nm[idx]];await update(ref(db,'settings'),{members:nm,dutyStartPerson:MEMBERS[DUTY_START_INDEX]});};
 function renderMemberList(){
   const el=document.getElementById('memberList');if(!el)return;el.innerHTML='';
   MEMBERS.forEach((name,idx)=>{
     const div=document.createElement('div');div.className='member-row';
-    div.innerHTML=`
-      <div class="m-num">${idx+1}</div>
-      <div class="m-name">${name}${name===ADMIN_USER?' 👑':''}</div>
-      <div class="m-btns">
-        <button class="icon-btn ib-ghost" onclick="moveMemberUp(${idx})" ${!idx?'disabled':''}>▲</button>
-        <button class="icon-btn ib-ghost" onclick="moveMemberDown(${idx})" ${idx===MEMBERS.length-1?'disabled':''}>▼</button>
-        <button class="icon-btn ib-danger" onclick="deleteMember('${name}')" ${name===ADMIN_USER?'disabled':''}>🗑</button>
-      </div>`;
+    div.innerHTML=`<div class="m-num">${idx+1}</div><div class="m-name">${name}${name===ADMIN_USER?' 👑':''}</div><div class="m-btns"><button class="icon-btn ib-ghost" onclick="moveMemberUp(${idx})" ${!idx?'disabled':''}>▲</button><button class="icon-btn ib-ghost" onclick="moveMemberDown(${idx})" ${idx===MEMBERS.length-1?'disabled':''}>▼</button><button class="icon-btn ib-danger" onclick="deleteMember('${name}')" ${name===ADMIN_USER?'disabled':''}>🗑</button></div>`;
     el.appendChild(div);
   });
 }
@@ -1138,40 +1030,29 @@ function renderMemberList(){
 // ── 캘린더 ──
 window.changeMonth=function(dir){
   currentMonth+=dir;
-  if(currentMonth>11){currentMonth=0;currentYear++;}
-  if(currentMonth<0){currentMonth=11;currentYear--;}
+  if(currentMonth>11){currentMonth=0;currentYear++;}if(currentMonth<0){currentMonth=11;currentYear--;}
   renderCalendar();
 };
 function renderCalendar(){
   const mn=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
   document.getElementById('calendarTitle').textContent=`${currentYear}년 ${mn[currentMonth]}`;
-  const first=new Date(currentYear,currentMonth,1).getDay();
-  const dim=new Date(currentYear,currentMonth+1,0).getDate();
-  const today=new Date();const exd=getExchangedDuties();
+  const first=new Date(currentYear,currentMonth,1).getDay(),dim=new Date(currentYear,currentMonth+1,0).getDate();
+  const today=new Date(),exd=getExchangedDuties();
   const grid=document.getElementById('calendarDays');grid.innerHTML='';
   for(let i=0;i<first;i++){const e=document.createElement('div');e.className='cal-cell empty';grid.appendChild(e);}
   for(let d=1;d<=dim;d++){
-    const date=new Date(currentYear,currentMonth,d);const str=dateToStr(date);const dow=date.getDay();
+    const date=new Date(currentYear,currentMonth,d),str=dateToStr(date),dow=date.getDay();
     const cell=document.createElement('div');let cls='cal-cell';
     if(dow===0)cls+=' sunday';if(dow===6)cls+=' saturday';
     if(date.toDateString()===today.toDateString())cls+=' today';
     if(HOLIDAYS[str])cls+=' holi-cell';
-    const duty=isDutyDay(date);const person=duty?getDutyPerson(date):null;
-    const isEx=!!exd[str];const isSp=!!SPECIAL_SCHEDULE[str]&&!isEx;
-    if(duty){
-      if(isEx&&person===currentUser)cls+=' ex-day';
-      else if(person===currentUser)cls+=' my-duty';
-      else cls+=' duty-day';
-    }
+    const duty=isDutyDay(date),person=duty?getDutyPerson(date):null;
+    const isEx=!!exd[str],isSp=!!SPECIAL_SCHEDULE[str]&&!isEx;
+    if(duty){if(isEx&&person===currentUser)cls+=' ex-day';else if(person===currentUser)cls+=' my-duty';else cls+=' duty-day';}
     cell.className=cls;
     const nd=document.createElement('div');nd.className='cal-num';nd.textContent=d;cell.appendChild(nd);
     if(HOLIDAYS[str]){const hd=document.createElement('div');hd.className='holi-lbl';hd.textContent=HOLIDAYS[str];cell.appendChild(hd);}
-    if(person){
-      const pd=document.createElement('div');
-      let cc='duty-chip ';
-      if(isEx)cc+='chip-ex';else if(isSp)cc+='chip-special';else if(person===currentUser)cc+='chip-mine';else cc+='chip-normal';
-      pd.className=cc;pd.textContent=person;cell.appendChild(pd);
-    }
+    if(person){const pd=document.createElement('div');let cc='duty-chip ';if(isEx)cc+='chip-ex';else if(isSp)cc+='chip-special';else if(person===currentUser)cc+='chip-mine';else cc+='chip-normal';pd.className=cc;pd.textContent=person;cell.appendChild(pd);}
     grid.appendChild(cell);
   }
   renderDutyOrder();
@@ -1179,9 +1060,7 @@ function renderCalendar(){
 function renderDutyOrder(){
   const c=document.getElementById('dutyOrderList');if(!c)return;c.innerHTML='';
   MEMBERS.forEach((name,i)=>{
-    const b=document.createElement('div');b.className='order-chip';
-    b.style.background=name===currentUser?'var(--rose)':'var(--primary)';
-    b.textContent=name;c.appendChild(b);
+    const b=document.createElement('div');b.className='order-chip';b.style.background=name===currentUser?'var(--rose)':'var(--primary)';b.textContent=name;c.appendChild(b);
     if(i<MEMBERS.length-1){const a=document.createElement('div');a.className='order-arr';a.textContent='→';c.appendChild(a);}
   });
 }
@@ -1190,17 +1069,15 @@ function renderDutyOrder(){
 function renderMyDuty(){
   const list=document.getElementById('myDutyList');list.innerHTML='';
   const dn=['일','월','화','수','목','금','토'];
-  const myDates=getMyDutyDates(currentUser);const exd=getExchangedDuties();
-  const rows=Object.values(allRows);
-  const wi=Object.values(allWanted).filter(w=>w.requester===currentUser&&w.status==='active');
+  const myDates=getMyDutyDates(currentUser),exd=getExchangedDuties();
+  const rows=Object.values(allRows),wi=Object.values(allWanted).filter(w=>w.requester===currentUser&&w.status==='active');
   if(!myDates.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">🗓️</div><div class="empty-text">담당 당직이 없습니다</div></div>';return;}
   myDates.forEach(str=>{
-    const date=parseDateLocal(str);const dow=date.getDay();
-    const isEx=!!exd[str];const isSp=!!SPECIAL_SCHEDULE[str];
+    const date=parseDateLocal(str),dow=date.getDay();
+    const isEx=!!exd[str],isSp=!!SPECIAL_SCHEDULE[str];
     const reqRow=rows.find(r=>r.requester===currentUser&&r.myDate===str);
     const isWanted=wi.find(w=>w.myDate===str);
-    let type=HOLIDAYS[str]||(dow===0?'일요일':dow===6?'토요일':'');
-    if(isSp&&!type)type='특별배정';
+    let type=HOLIDAYS[str]||(dow===0?'일요일':dow===6?'토요일':'');if(isSp&&!type)type='특별배정';
     let btnTxt='교환 요청',btnCls='btn btn-primary btn-sm',btnDis='';
     if(isEx){btnTxt='🔄 교환완료';btnCls='btn btn-ghost btn-sm';btnDis='disabled';}
     else if(reqRow){
@@ -1209,24 +1086,13 @@ function renderMyDuty(){
       else if(reqRow.status==='승인완료'){btnTxt='✅ 완료';btnCls='btn btn-ghost btn-sm';btnDis='disabled';}
     }
     const card=document.createElement('div');card.className='duty-card';
-    card.innerHTML=`
-      <div>
-        <div class="duty-date">📅 ${str.replace(/^\d{4}-/,'')} (${dn[dow]})</div>
-        ${type?`<div class="duty-meta">${type}</div>`:''}
-        ${isEx?'<div class="duty-sub" style="color:var(--emerald)">🔄 교환완료</div>':''}
-        ${isWanted?'<div class="duty-sub" style="color:var(--rose)">🙋 교환구합니다 게시중</div>':''}
-      </div>
-      <div class="duty-actions">
-        <button class="${btnCls}" ${btnDis} ${!btnDis?`onclick="goToApply('${str}')"`:''}}>${btnTxt}</button>
-        ${!isEx&&!reqRow&&!isWanted?`<button class="btn btn-danger btn-sm" onclick="openWantedModal('${str}')">🙋 구합니다</button>`:''}
-      </div>`;
+    card.innerHTML=`<div><div class="duty-date">📅 ${str.replace(/^\d{4}-/,'')} (${dn[dow]})</div>${type?`<div class="duty-meta">${type}</div>`:''}${isEx?'<div class="duty-sub" style="color:var(--emerald)">🔄 교환완료</div>':''}${isWanted?'<div class="duty-sub" style="color:var(--rose)">🙋 교환구합니다 게시중</div>':''}</div><div class="duty-actions"><button class="${btnCls}" ${btnDis} ${!btnDis?`onclick="goToApply('${str}')"`:''}}>${btnTxt}</button>${!isEx&&!reqRow&&!isWanted?`<button class="btn btn-danger btn-sm" onclick="openWantedModal('${str}')">🙋 구합니다</button>`:''}</div>`;
     list.appendChild(card);
   });
 }
-
-// ── 교환 신청 페이지로 이동 ──
 window.goToApply=function(dateStr=''){
-  showPage('exchange');showExchangeSub('apply');
+  currentExchangeSub='apply';
+  showPage('exchange');
   if(dateStr){setTimeout(()=>{const s=document.getElementById('fmMyDate');if(s)s.value=dateStr;},60);}
 };
 
@@ -1234,14 +1100,12 @@ window.goToApply=function(dateStr=''){
 function renderDutyStats(){
   const el=document.getElementById('dutyStats');if(!el||!MEMBERS.length)return;
   const stats={};MEMBERS.forEach(m=>{stats[m]=0;});
-  const now=new Date();const year=now.getFullYear()<2026?2026:now.getFullYear();
-  for(let mo=0;mo<12;mo++){const days=new Date(year,mo+1,0).getDate();
-    for(let d=1;d<=days;d++){const dt=new Date(year,mo,d);if(isDutyDay(dt)){const p=getDutyPerson(dt);if(p&&stats[p]!==undefined)stats[p]++;}}}
+  const now=new Date(),year=now.getFullYear()<2026?2026:now.getFullYear();
+  for(let mo=0;mo<12;mo++){const days=new Date(year,mo+1,0).getDate();for(let d=1;d<=days;d++){const dt=new Date(year,mo,d);if(isDutyDay(dt)){const p=getDutyPerson(dt);if(p&&stats[p]!==undefined)stats[p]++;}}}
   const max=Math.max(...Object.values(stats),1);el.innerHTML='';
   Object.entries(stats).sort((a,b)=>b[1]-a[1]).forEach(([name,cnt])=>{
     const div=document.createElement('div');div.className='stat-wrap';
-    div.innerHTML=`<div class="stat-hd"><span>${name}${name===currentUser?' (나)':''}</span><span>${cnt}회</span></div>
-      <div class="stat-bg"><div class="stat-fill${name===currentUser?' mine':''}" style="width:${(cnt/max*100).toFixed(0)}%"></div></div>`;
+    div.innerHTML=`<div class="stat-hd"><span>${name}${name===currentUser?' (나)':''}</span><span>${cnt}회</span></div><div class="stat-bg"><div class="stat-fill${name===currentUser?' mine':''}" style="width:${(cnt/max*100).toFixed(0)}%"></div></div>`;
     el.appendChild(div);
   });
 }
@@ -1258,28 +1122,18 @@ function renderHistory(){
     const icons={교환신청:'📝',교환수락:'✅',교환거절:'❌',교환취소:'🚫',관리자승인:'👑',관리자반려:'👑',순번변경:'⚙️',멤버추가:'👤',멤버삭제:'👤',공휴일추가:'🎉',공휴일삭제:'🗑',특별배정추가:'📌',교환구합니다:'🙋',교환제안:'🤝'};
     hist.slice(0,60).forEach(item=>{
       const card=document.createElement('div');card.className='history-card';
-      let detail=item.type==='교환신청'
-        ?`<strong>${escapeHtml(item.from)}</strong>님 → <strong>${escapeHtml(item.to)}</strong>님 (${item.date})<br>사유: ${escapeHtml(item.reason)}`
-        :`<strong>${escapeHtml(item.from)}</strong>님: ${escapeHtml(item.reason)}`;
-      card.innerHTML=`<div class="h-icon">${icons[item.type]||'📌'}</div>
-        <div class="h-body"><div class="h-title">${labels[item.type]||item.type}</div>
-        <div class="h-detail">${detail}</div><div class="h-time">⏰ ${formatDateTime(item.changedAt)}</div></div>`;
+      const detail=item.type==='교환신청'?`<strong>${esc(item.from)}</strong>님 → <strong>${esc(item.to)}</strong>님 (${item.date})<br>사유: ${esc(item.reason)}`:`<strong>${esc(item.from)}</strong>님: ${esc(item.reason)}`;
+      card.innerHTML=`<div class="h-icon">${icons[item.type]||'📌'}</div><div class="h-body"><div class="h-title">${labels[item.type]||item.type}</div><div class="h-detail">${detail}</div><div class="h-time">⏰ ${fmtDt(item.changedAt)}</div></div>`;
       list.appendChild(card);
     });
   });
 }
 
 // ── 설정 ──
-window.saveNotice=async function(){
-  const n=document.getElementById('noticeInput').value.trim();if(!n){alert('공지 내용을 입력해주세요!');return;}
-  await set(ref(db,'notice'),n);showToast('✅ 공지사항이 등록되었습니다!');
-};
-window.clearNotice=async function(){
-  if(!confirm('공지사항을 삭제하시겠습니까?'))return;
-  await remove(ref(db,'notice'));showToast('✅ 공지사항이 삭제되었습니다!');
-};
+window.saveNotice=async function(){const n=document.getElementById('noticeInput').value.trim();if(!n){alert('공지 내용을 입력해주세요!');return;}await set(ref(db,'notice'),n);showToast('✅ 공지사항이 등록되었습니다!');};
+window.clearNotice=async function(){if(!confirm('공지사항을 삭제하시겠습니까?'))return;await remove(ref(db,'notice'));showToast('✅ 공지사항이 삭제되었습니다!');};
 window.updateDutyRotation=async function(){
-  const nd=document.getElementById('newStartDate').value;const np=document.getElementById('newStartPerson').value;
+  const nd=document.getElementById('newStartDate').value,np=document.getElementById('newStartPerson').value;
   if(!nd||!np){alert('날짜와 담당자를 입력해주세요!');return;}
   if(!confirm(`순번 변경: ${nd}부터 ${np} 시작`))return;
   await update(ref(db,'settings'),{dutyStartDate:nd,dutyStartPerson:np});
@@ -1287,17 +1141,15 @@ window.updateDutyRotation=async function(){
   showToast('✅ 순번 변경 완료!');
 };
 window.addSpecialSchedule=async function(){
-  const date=document.getElementById('specialDate').value;const person=document.getElementById('specialPerson').value;
+  const date=document.getElementById('specialDate').value,person=document.getElementById('specialPerson').value;
   if(!date||!person){alert('날짜와 담당자를 입력해주세요!');return;}
   await update(ref(db,'settings/special'),{[date]:person});
   await addHistory({type:'특별배정추가',from:currentUser,to:person,date,reason:`특별배정: ${date} → ${person}`});
   document.getElementById('specialDate').value='';showToast(`✅ 특별배정: ${date} → ${person}`);
 };
-window.deleteSpecialSchedule=async function(date){
-  if(!confirm(`특별배정 삭제: ${date}`))return;await remove(ref(db,`settings/special/${date}`));
-};
+window.deleteSpecialSchedule=async function(date){if(!confirm(`특별배정 삭제: ${date}`))return;await remove(ref(db,`settings/special/${date}`));};
 window.addHoliday=async function(){
-  const date=document.getElementById('newHolidayDate').value;const name=document.getElementById('newHolidayName').value.trim();
+  const date=document.getElementById('newHolidayDate').value,name=document.getElementById('newHolidayName').value.trim();
   if(!date||!name){alert('날짜와 이름을 입력해주세요!');return;}
   if(HOLIDAYS[date]&&!confirm(`이미 ${HOLIDAYS[date]}(으)로 등록된 날짜입니다. 덮어쓰시겠습니까?`))return;
   await update(ref(db,'settings/holidays'),{[date]:name});
@@ -1313,19 +1165,17 @@ function renderHolidayList(){
   const c=document.getElementById('holidayListContainer');if(!c)return;c.innerHTML='';
   Object.keys(HOLIDAYS).sort().forEach(date=>{
     const div=document.createElement('div');div.className='list-row';
-    div.innerHTML=`<div><div class="list-row-main">${date}</div><div class="list-row-sub">${HOLIDAYS[date]}</div></div>
-      <button class="icon-btn ib-danger" onclick="deleteHoliday('${date}')">🗑</button>`;
+    div.innerHTML=`<div><div class="list-row-main">${date}</div><div class="list-row-sub">${HOLIDAYS[date]}</div></div><button class="icon-btn ib-danger" onclick="deleteHoliday('${date}')">🗑</button>`;
     c.appendChild(div);
   });
 }
 function renderSpecialList(){
   const c=document.getElementById('specialScheduleList');if(!c)return;c.innerHTML='';
-  const dn=['일','월','화','수','목','금','토'];const sorted=Object.keys(SPECIAL_SCHEDULE).sort();
+  const dn=['일','월','화','수','목','금','토'],sorted=Object.keys(SPECIAL_SCHEDULE).sort();
   if(!sorted.length){c.innerHTML='<div style="padding:16px;text-align:center;font-size:13px;color:var(--t3)">특별배정이 없습니다</div>';return;}
   sorted.forEach(date=>{
     const div=document.createElement('div');div.className='list-row';
-    div.innerHTML=`<div><div class="list-row-main">${date} <span style="font-size:12px;color:var(--t3)">(${dn[parseDateLocal(date).getDay()]})</span></div><div class="list-row-sub" style="color:var(--primary);font-weight:700">${SPECIAL_SCHEDULE[date]}</div></div>
-      <button class="icon-btn ib-danger" onclick="deleteSpecialSchedule('${date}')">🗑</button>`;
+    div.innerHTML=`<div><div class="list-row-main">${date} <span style="font-size:12px;color:var(--t3)">(${dn[parseDateLocal(date).getDay()]})</span></div><div class="list-row-sub" style="color:var(--primary);font-weight:700">${SPECIAL_SCHEDULE[date]}</div></div><button class="icon-btn ib-danger" onclick="deleteSpecialSchedule('${date}')">🗑</button>`;
     c.appendChild(div);
   });
 }
@@ -1335,18 +1185,9 @@ function renderSettings(){
   const cs=document.getElementById('curStartDate');if(cs)cs.textContent=dateToStr(DUTY_START_DATE);
   const cp=document.getElementById('curStartPerson');if(cp)cp.textContent=MEMBERS[DUTY_START_INDEX]||'-';
   updateNotifUI();
-  if(isAdmin){
-    document.getElementById('adminBadge').style.display='inline-block';
-    ['adminNoticeSection','adminMemberSection','adminRotationSection','adminHolidaySection','adminSpecialSection','adminApprovalSection'].forEach(id=>{
-      const el=document.getElementById(id);if(el)el.style.display='block';
-    });
-    renderMemberList();renderHolidayList();renderSpecialList();renderAdminApproval();
-  } else {
-    document.getElementById('adminBadge').style.display='none';
-    ['adminNoticeSection','adminMemberSection','adminRotationSection','adminHolidaySection','adminSpecialSection','adminApprovalSection'].forEach(id=>{
-      const el=document.getElementById(id);if(el)el.style.display='none';
-    });
-  }
+  const ab=document.getElementById('adminBadge');if(ab)ab.style.display=isAdmin?'inline-block':'none';
+  ['adminNoticeSection','adminMemberSection','adminRotationSection','adminHolidaySection','adminSpecialSection','adminApprovalSection'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=isAdmin?'block':'none';});
+  if(isAdmin){renderMemberList();renderHolidayList();renderSpecialList();renderAdminApproval();}
   renderDutyStats();
 }
 window.resetAllData=async function(){
@@ -1357,15 +1198,13 @@ window.resetAllData=async function(){
   showToast('✅ 초기화 완료');
 };
 
-// ── 탭 뱃지 ──
-function updateTabBadges(){
+// ── 뱃지 ──
+function updateNavBadge(){
   const incoming=Object.values(allRows).filter(r=>r.target===currentUser&&r.status==='대기중');
   const nav=document.getElementById('nav-exchange');if(!nav)return;
   let badge=nav.querySelector('.nav-badge');
-  if(incoming.length){
-    if(!badge){badge=document.createElement('div');badge.className='nav-badge';nav.appendChild(badge);}
-    badge.textContent=incoming.length;
-  } else if(badge) badge.remove();
+  if(incoming.length){if(!badge){badge=document.createElement('div');badge.className='nav-badge';nav.appendChild(badge);}badge.textContent=incoming.length;}
+  else if(badge)badge.remove();
 }
 
 // ── 네비게이션 ──
@@ -1375,13 +1214,18 @@ window.showPage=function(name){
   const pg=document.getElementById(`page-${name}`);if(pg)pg.classList.add('active');
   const nv=document.getElementById(`nav-${name}`);if(nv)nv.classList.add('active');
   currentPage=name;
-  if(name==='calendar')renderCalendar();
-  if(name==='myduty')renderMyDuty();
   if(name==='exchange'){
+    // 현재 서브탭 DOM 동기화
+    ['board','apply','status'].forEach(s=>{
+      const el=document.getElementById(`exsub-${s}`);if(el)el.style.display=s===currentExchangeSub?'':'none';
+      const btn=document.getElementById(`seg-${s}`);if(btn)btn.classList.toggle('active',s===currentExchangeSub);
+    });
     if(currentExchangeSub==='board')renderWantedList();
     if(currentExchangeSub==='apply'){initApplyForm();renderMyRequests();}
     if(currentExchangeSub==='status')renderExchangeTab();
   }
+  if(name==='calendar')renderCalendar();
+  if(name==='myduty')renderMyDuty();
   if(name==='history')renderHistory();
   if(name==='settings')renderSettings();
 };
@@ -1408,6 +1252,8 @@ window.login=function(){
     isAdmin=true;
   }
   currentUser=sel;prevRequestSnapshot={};
+  localStorage.setItem('duty-current-user',currentUser);
+  postSW({type:'SET_USER',username:currentUser});
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('mainScreen').style.display='block';
   document.getElementById('userAvatar').textContent=sel.charAt(0);
@@ -1423,7 +1269,10 @@ window.login=function(){
   showPage('calendar');
 };
 window.logout=function(){
-  currentUser='';isAdmin=false;prevRequestSnapshot={};
+  currentUser='';isAdmin=false;prevRequestSnapshot={};allRows={};allWanted={};
+  localStorage.removeItem('duty-current-user');
+  postSW({type:'CLEAR_USER'});
+  ['myDutyList','wantedList','incomingRequests','allRequests','myRequests','historyList','dutyOrderList','calendarDays'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
   document.getElementById('loginScreen').style.display='flex';
   document.getElementById('mainScreen').style.display='none';
   document.getElementById('userSelect').value='';
@@ -1431,7 +1280,7 @@ window.logout=function(){
   document.getElementById('adminPasswordDiv').style.display='none';
 };
 
-// ── 이벤트 리스너 ──
+// ── 이벤트 ──
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
   e.preventDefault();deferredPrompt=e;
@@ -1440,20 +1289,31 @@ window.addEventListener('beforeinstallprompt',e=>{
 });
 document.getElementById('installBtn').addEventListener('click',()=>{
   if(!deferredPrompt){alert('크롬 브라우저에서 시도해주세요.');return;}
-  deferredPrompt.prompt();
-  deferredPrompt.userChoice.then(r=>{if(r.outcome==='accepted')document.getElementById('installBanner').classList.remove('show');deferredPrompt=null;});
+  deferredPrompt.prompt();deferredPrompt.userChoice.then(r=>{if(r.outcome==='accepted')document.getElementById('installBanner').classList.remove('show');deferredPrompt=null;});
 });
-document.getElementById('installClose').addEventListener('click',()=>{
-  document.getElementById('installBanner').classList.remove('show');localStorage.setItem('pwa-dismissed','true');
-});
+document.getElementById('installClose').addEventListener('click',()=>{document.getElementById('installBanner').classList.remove('show');localStorage.setItem('pwa-dismissed','true');});
 window.addEventListener('offline',()=>document.getElementById('offlineBanner').classList.add('show'));
 window.addEventListener('online',()=>document.getElementById('offlineBanner').classList.remove('show'));
+
+// 모달 백드롭 클릭 닫기
+['acceptModal','wantedModal','wantedAcceptModal'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)el.addEventListener('click',e=>{
+    if(e.target===el){
+      el.classList.remove('show');
+      if(id==='acceptModal')accData=null;
+      if(id==='wantedAcceptModal')wantedAccData=null;
+    }
+  });
+});
+
 document.getElementById('userSelect').addEventListener('change',function(){
   const pd=document.getElementById('adminPasswordDiv');
   if(this.value===ADMIN_USER){pd.style.display='block';document.getElementById('adminPassword').focus();}
   else{pd.style.display='none';document.getElementById('adminPassword').value='';}
 });
-if('serviceWorker'in navigator){
+
+if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js').then(reg=>{
     reg.addEventListener('updatefound',()=>{
       const nw=reg.installing;
@@ -1463,8 +1323,13 @@ if('serviceWorker'in navigator){
         }
       });
     });
+    // 저장된 사용자로 SW 알림 리스너 복원
+    const saved=localStorage.getItem('duty-current-user');
+    if(saved&&reg.active)reg.active.postMessage({type:'SET_USER',username:saved});
   }).catch(()=>{});
 }
+
+// ── 초기화 ──
 populateMemberSelects();
 initFirebaseListeners();
 </script>

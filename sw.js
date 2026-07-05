@@ -1,80 +1,76 @@
-// Service Worker for 화성차체3부 당직 관리 시스템 PWA
-const CACHE_NAME = 'duty-manager-v3.0.0';
-const urlsToCache = [
-  './',
-  './index.html',
-  './manifest.json',
-  './launchericon-192x192.png',
-  './launchericon-512x512.png'
-];
+const CACHE_NAME = 'duty-manager-v3-2';
+const STATIC = ['./', './index.html', './manifest.json', './launchericon-192x192.png'];
+const DB = 'https://duty-manager-3c981-default-rtdb.asia-southeast1.firebasedatabase.app';
 
-self.addEventListener('install', event => {
-  console.log('[Service Worker] 설치 중...');
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('[Service Worker] 캐시 저장 중');
-        return cache.addAll(urlsToCache);
-      })
-      .then(() => self.skipWaiting())
-  );
+let currentUser = '';
+let es = null;
+
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(STATIC)).then(() => self.skipWaiting()));
 });
-
-self.addEventListener('activate', event => {
-  console.log('[Service Worker] 활성화 중...');
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cache => {
-          if (cache !== CACHE_NAME) {
-            console.log('[Service Worker] 이전 캐시 삭제:', cache);
-            return caches.delete(cache);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
-  );
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
-
-self.addEventListener('fetch', event => {
-  // Firebase 요청은 항상 네트워크 사용
-  if (event.request.url.includes('firebaseio.com') ||
-      event.request.url.includes('googleapis.com') ||
-      event.request.url.includes('gstatic.com')) {
-    event.respondWith(fetch(event.request).catch(() => {
-      return new Response(JSON.stringify({ error: 'API 연결 실패', offline: true }),
-        { headers: { 'Content-Type': 'application/json' } });
-    }));
-    return;
+self.addEventListener('fetch', e => {
+  const u = e.request.url;
+  if(u.includes('firebase') || u.includes('gstatic.com') || u.includes('googleapis.com')) return;
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+    if(res && res.status === 200 && res.type !== 'opaque') caches.open(CACHE_NAME).then(c => c.put(e.request, res.clone()));
+    return res;
+  })).catch(() => caches.match('./index.html')));
+});
+self.addEventListener('message', e => {
+  if(!e.data) return;
+  if(e.data.type === 'SKIP_WAITING') { self.skipWaiting(); return; }
+  if(e.data.type === 'SET_USER') { currentUser = e.data.username || ''; currentUser ? startListening() : stopListening(); return; }
+  if(e.data.type === 'CLEAR_USER') { currentUser = ''; stopListening(); }
+});
+function startListening() {
+  stopListening();
+  if(!currentUser) return;
+  const safe = currentUser.replace(/[.#$[\]]/g, '_');
+  try {
+    es = new EventSource(`${DB}/notifications/${safe}.json`);
+    es.addEventListener('put', onFBEvent);
+    es.addEventListener('patch', onFBEvent);
+    es.onerror = () => { stopListening(); setTimeout(() => { if(currentUser) startListening(); }, 15000); };
+  } catch(err) { console.warn('[SW] EventSource 실패:', err); }
+}
+function stopListening() { if(es) { es.close(); es = null; } }
+async function onFBEvent(e) {
+  if(!currentUser) return;
+  let payload; try { payload = JSON.parse(e.data); } catch { return; }
+  if(!payload || !payload.data) return;
+  const safe = currentUser.replace(/[.#$[\]]/g, '_');
+  const data = payload.data;
+  const entries = (typeof data === 'object' && data !== null) ? Object.entries(data) : [];
+  for(const [key, notif] of entries) {
+    if(!notif || notif.shown) continue;
+    await self.registration.showNotification(notif.title || '🗓️ 당직 관리', {
+      body: notif.body || '', icon: './launchericon-192x192.png',
+      badge: './launchericon-192x192.png', tag: key,
+      requireInteraction: true, vibrate: [200, 100, 200], data: { url: './' }
+    });
+    fetch(`${DB}/notifications/${safe}/${key}.json`, {
+      method: 'PATCH', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({shown: true})
+    }).catch(() => {});
   }
-
-  // 일반 리소스는 네트워크 우선, 실패시 캐시
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        if (response && response.status === 200 && response.type === 'basic') {
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, responseToCache);
-          });
-        }
-        return response;
-      })
-      .catch(() => {
-        return caches.match(event.request).then(cachedResponse => {
-          if (cachedResponse) return cachedResponse;
-          if (event.request.mode === 'navigate') {
-            return caches.match('./index.html');
-          }
-        });
-      })
-  );
+}
+self.addEventListener('push', e => {
+  if(!e.data) return;
+  let d; try { d = e.data.json(); } catch { d = {title:'당직 관리', body:e.data.text()}; }
+  e.waitUntil(self.registration.showNotification(d.title || '🗓️ 당직 관리', {
+    body: d.body || '', icon: './launchericon-192x192.png',
+    badge: './launchericon-192x192.png', tag: d.tag || 'duty',
+    requireInteraction: true, vibrate: [200, 100, 200], data: {url: './'}
+  }));
 });
-
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || './';
+  e.waitUntil(clients.matchAll({type:'window', includeUncontrolled:true}).then(cs => {
+    for(const c of cs) { if('focus' in c) return c.focus(); }
+    if(clients.openWindow) return clients.openWindow(url);
+  }));
 });
-
-console.log('[Service Worker] v3.0.0 로드 완료');
