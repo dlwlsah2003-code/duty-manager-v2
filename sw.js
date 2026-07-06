@@ -1,4 +1,4 @@
-const CACHE_NAME = 'duty-manager-v3-2';
+const CACHE_NAME = 'duty-manager-v3-3'; // 버전 올려서 구 캐시 강제 삭제
 const STATIC = ['./', './index.html', './manifest.json', './launchericon-192x192.png'];
 const DB = 'https://duty-manager-3c981-default-rtdb.asia-southeast1.firebasedatabase.app';
 
@@ -13,7 +13,7 @@ self.addEventListener('activate', e => {
 });
 self.addEventListener('fetch', e => {
   const u = e.request.url;
-  if(u.includes('firebase') || u.includes('gstatic.com') || u.includes('googleapis.com')) return;
+  if(u.includes('firebase') || u.includes('gstatic.com') || u.includes('googleapis.com') || u.includes('onesignal.com')) return;
   e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
     if(res && res.status === 200 && res.type !== 'opaque') caches.open(CACHE_NAME).then(c => c.put(e.request, res.clone()));
     return res;
