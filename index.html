@@ -532,11 +532,14 @@ function checkNotif(newRows) {
     } else if(prev.status !== r.status) {
       if(r.requester===currentUser) {
         if(r.status==='수락완료') showBrowserNotif('✅ 교환 요청 수락됨!', esc(r.target)+'님이 수락했습니다. 관리자 승인 대기 중.', 'acc-'+key);
-        if(r.status==='승인완료') showBrowserNotif('🎉 교환 최종 승인!', r.myDate+' 당직 교환이 최종 승인되었습니다!', 'appr-'+key);
+        if(r.status==='승인완료') showBrowserNotif('🎉 교환 최종 승인!', r.myDate+' ↔ '+r.targetDate+' 교환이 최종 승인되었습니다!', 'appr-'+key);
         if(r.status==='반려') showBrowserNotif('❌ 교환 반려', r.myDate+' 당직 교환 요청이 반려되었습니다.', 'rej-'+key);
       }
-      if(r.target===currentUser && r.status==='대기중')
-        showBrowserNotif('📥 당직 교환 요청 도착!', esc(r.requester)+'님이 '+r.myDate+' 당직 교환을 요청했습니다.', 'req-'+key);
+      if(r.target===currentUser) {
+        if(r.status==='대기중') showBrowserNotif('📥 당직 교환 요청 도착!', esc(r.requester)+'님이 '+r.myDate+' 당직 교환을 요청했습니다.', 'req-'+key);
+        if(r.status==='승인완료') showBrowserNotif('🎉 교환 최종 승인!', esc(r.requester)+'님과의 '+r.myDate+' ↔ '+r.targetDate+' 교환이 최종 승인되었습니다!', 'appr-t-'+key);
+        if(r.status==='반려') showBrowserNotif('❌ 교환 반려', esc(r.requester)+'님과의 '+r.myDate+' ↔ '+r.targetDate+' 교환이 반려되었습니다.', 'rej-t-'+key);
+      }
     }
   });
   prevRowsSnap = Object.assign({}, newRows);
