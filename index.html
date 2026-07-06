@@ -306,6 +306,21 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
           <p><strong>버전:</strong> v3.2.0 (캘린더·이력·알림 개선)</p>
         </div>
       </div>
+      <div class="settings-box">
+        <div class="settings-title">🔔 알림 설정 & 테스트</div>
+        <div class="info-box">
+          <p><strong>알림 권한:</strong> <span id="notifPermStatus">확인 중...</span></p>
+          <p><strong>OneSignal:</strong> <span id="osStatus">확인 중...</span></p>
+        </div>
+        <div class="btn-group" style="margin-top:10px;">
+          <button class="action-btn btn-primary" onclick="testNotification()">🔔 알림 테스트</button>
+          <button class="action-btn btn-warning" onclick="requestNotifPermission()">📲 알림 권한 요청</button>
+        </div>
+        <div style="font-size:12px;color:#aaa;margin-top:10px;line-height:1.6;">
+          ※ 알림 테스트: 내 폰에 즉시 테스트 알림을 보냅니다.<br>
+          ※ 처음 사용 시 "알림 권한 요청" 버튼을 먼저 눌러주세요.
+        </div>
+      </div>
       <div class="settings-box" id="adminNoticeSection" style="display:none;">
         <div class="settings-title">📢 관리자 - 공지사항</div>
         <textarea id="noticeInput" placeholder="공지사항을 입력하세요..." style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;height:80px;font-family:inherit;margin-bottom:10px;resize:none;"></textarea>
@@ -362,7 +377,7 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
         <div class="settings-title">📊 당직 통계</div>
         <div id="dutyStats"></div>
       </div>
-      <div class="settings-box">
+      <div class="settings-box" id="adminResetSection" style="display:none;">
         <div class="settings-title">🔄 데이터 초기화</div>
         <div class="settings-desc" style="color:#e74c3c;">⚠️ 관리자만 가능. 변경이력은 유지됩니다.</div>
         <div class="btn-group">
@@ -487,6 +502,7 @@ let DUTY_START_DATE = new Date(2026,6,5);
 let DUTY_START_INDEX = MEMBERS.indexOf('정세정');
 let allRows = {}, allWanted = {};
 let prevRowsSnap = {};
+let isFirstLoad = true; // 로그인 직후 첫 onValue 콜백에서 기존 요청 알림 방지용
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function pdl(s) { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); }
@@ -539,13 +555,14 @@ function updateExchangeBadge() {
 function initFirebaseListeners() {
   onValue(ref(db,'requests'), snap => {
     const rows = snap.val() || {};
-    // [버그수정] hadApproval을 checkNotif 호출 전에 계산해야 함
-    // checkNotif()가 prevRowsSnap을 덮어쓰기 때문에 순서가 중요
-    const hadApproval = Object.keys(rows).some(k => {
-      const prev=prevRowsSnap[k], cur=rows[k];
-      return cur && cur.status==='승인완료' && (!prev || prev.status!=='승인완료');
-    });
-    checkNotif(rows);
+    // 첫 로드(로그인 직후)에는 기존 요청에 대한 알림을 표시하지 않음
+    // 이후 변경사항부터만 알림 처리
+    if(isFirstLoad) {
+      prevRowsSnap = Object.assign({}, rows);
+      isFirstLoad = false;
+    } else {
+      checkNotif(rows);
+    }
     allRows = rows;
     if(currentUser) {
       renderMyRequests(); renderExchangeTab(); renderMyDuty();
@@ -566,7 +583,13 @@ function initFirebaseListeners() {
     MEMBERS = (s.members && Array.isArray(s.members) && s.members.length>0) ? s.members : [...DEFAULT_MEMBERS];
     if(s.dutyStartDate) { const p=s.dutyStartDate.split('-'); DUTY_START_DATE=new Date(+p[0],+p[1]-1,+p[2]); }
     if(s.dutyStartPerson) { const i=MEMBERS.indexOf(s.dutyStartPerson); DUTY_START_INDEX=i>=0?i:0; }
-    HOLIDAYS = {...DEFAULT_HOLIDAYS}; if(s.holidays) Object.assign(HOLIDAYS, s.holidays);
+    HOLIDAYS = {...DEFAULT_HOLIDAYS};
+    if(s.holidays) {
+      // '__deleted__' 마킹된 날짜는 DEFAULT_HOLIDAYS에서도 제거 (관리자 삭제 반영)
+      Object.entries(s.holidays).forEach(([d,v]) => {
+        if(v==='__deleted__') delete HOLIDAYS[d]; else HOLIDAYS[d]=v;
+      });
+    }
     SPECIAL_SCHEDULE = {...DEFAULT_SPECIAL}; if(s.special) Object.assign(SPECIAL_SCHEDULE, s.special);
     populateMemberSelects();
     const tm = document.getElementById('totalMembers'); if(tm) tm.textContent = MEMBERS.length;
@@ -635,11 +658,11 @@ function populateMemberSelects() {
   const userSel = document.getElementById('userSelect'); if(!userSel) return;
   const curVal = userSel.value;
   userSel.innerHTML = '<option value="">이름을 선택하세요</option>';
-  MEMBERS.forEach(m => { userSel.innerHTML += '<option value="'+m+'">'+m+'</option>'; });
+  MEMBERS.forEach(m => { const o=document.createElement('option'); o.value=m; o.textContent=m; userSel.appendChild(o); });
   if(curVal) userSel.value = curVal;
   ['specialPerson','newStartPerson'].forEach(id => {
     const el = document.getElementById(id);
-    if(el) { el.innerHTML=''; MEMBERS.forEach(m => { el.innerHTML += '<option>'+m+'</option>'; }); }
+    if(el) { el.innerHTML=''; MEMBERS.forEach(m => { const o=document.createElement('option'); o.textContent=m; el.appendChild(o); }); }
   });
 }
 
@@ -652,7 +675,7 @@ function initApplyForm() {
   myDates.forEach(d => { ms.innerHTML += '<option value="'+d+'">'+d+' ('+dn[pdl(d).getDay()]+')</option>'; });
   const ts = document.getElementById('fmTarget');
   ts.innerHTML = '<option value="">선택하세요</option>';
-  MEMBERS.filter(m => m!==currentUser).forEach(m => { ts.innerHTML += '<option value="'+m+'">'+m+'</option>'; });
+  MEMBERS.filter(m => m!==currentUser).forEach(m => { const o=document.createElement('option'); o.value=m; o.textContent=m; ts.appendChild(o); });
   ts.onchange = function() {
     const tds = document.getElementById('fmTargetDate');
     if(!this.value) { tds.innerHTML='<option>대상자를 먼저 선택하세요</option>'; return; }
@@ -666,6 +689,7 @@ window.submitExchangeRequest = async function() {
   const myDate=document.getElementById('fmMyDate').value, target=document.getElementById('fmTarget').value,
         targetDate=document.getElementById('fmTargetDate').value, reason=document.getElementById('fmReason').value.trim();
   if(!myDate||!target||!targetDate||!reason) { alert('모든 항목을 입력해주세요!'); return; }
+  if(myDate===targetDate) { alert('내 당직 날짜와 상대방 날짜가 같습니다.\n서로 다른 날짜로 교환해야 합니다!'); return; }
   if(Object.values(allRows).find(r=>r.requester===currentUser&&r.myDate===myDate&&r.status!=='반려')) { alert('이미 해당 날짜로 신청한 교환이 있습니다!'); return; }
   if(!confirm('교환 신청:\n'+currentUser+' ('+myDate+') ↔ '+target+' ('+targetDate+')\n사유: '+reason)) return;
   const btn=document.getElementById('submitBtn'); btn.disabled=true; btn.textContent='등록 중...';
@@ -695,7 +719,7 @@ window.closeWantedModal = function() { document.getElementById('wantedModal').cl
 window.submitWanted = async function() {
   const myDate=document.getElementById('wantedMyDate').value, reason=document.getElementById('wantedReason').value.trim();
   if(!myDate||!reason) { alert('날짜와 사유를 입력해주세요!'); return; }
-  if(Object.values(allWanted).find(w=>w.requester===currentUser&&w.myDate===myDate&&w.status==='active')) { alert('이미 해당 날짜로 게시된 글이 있습니다!'); return; }
+  if(Object.values(allWanted).find(w=>w.requester===currentUser&&w.myDate===myDate&&(w.status==='active'||w.status==='matched'))) { alert('이미 해당 날짜로 게시된 글이 있습니다!'); return; }
   try {
     const nr = push(ref(db,'wanted'));
     await set(nr, {id:nr.key,requester:currentUser,myDate,reason,status:'active',createdAt:new Date().toLocaleString('ko-KR')});
@@ -742,7 +766,20 @@ window.confirmWantedAccept = async function() {
   const myDate=document.getElementById('wantedAcceptMyDate').value;
   if(!myDate) { alert('내 당직 날짜를 선택해주세요!'); return; }
   if(!wantedAccData) return;
-  if(!confirm(wantedAccData.requester+'님('+wantedAccData.myDate+') ↔ 나('+myDate+')\n교환 신청하시겠습니까?')) return;
+  // 동일 게시글에 이미 제안했는지 중복 확인
+  const alreadyProposed = Object.values(allRows).find(r =>
+    r.requester===currentUser && r.target===wantedAccData.requester &&
+    r.targetDate===wantedAccData.myDate && r.status!=='반려'
+  );
+  if(alreadyProposed) { alert('⚠️ 이미 해당 구합니다 게시글에 제안하셨습니다!'); return; }
+  // 내가 제공하는 날짜가 이미 다른 활성 교환에 사용 중인지 확인
+  const wantedDateInUse = Object.values(allRows).find(r =>
+    r.status !== '반려' && (r.myDate === myDate || r.targetDate === myDate)
+  );
+  const wantedConfirmMsg = (wantedDateInUse
+    ? '⚠️ 선택한 날짜('+myDate+')가 이미 다른 교환 신청에 사용 중입니다.\n'
+    : '') + wantedAccData.requester+'님('+wantedAccData.myDate+') ↔ 나('+myDate+')\n교환 신청하시겠습니까?';
+  if(!confirm(wantedConfirmMsg)) return;
   try {
     const nr=push(ref(db,'requests'));
     await set(nr, {id:nr.key,requester:currentUser,myDate,target:wantedAccData.requester,targetDate:wantedAccData.myDate,reason:'🙋 당직 교환 구합니다!! 게시판을 통한 교환 신청',status:'대기중',createdAt:new Date().toLocaleString('ko-KR')});
@@ -751,7 +788,11 @@ window.confirmWantedAccept = async function() {
     closeWantedAcceptModal(); alert('✅ 교환 신청 완료!\n교환현황 탭에서 확인하세요.');
   } catch(e) { alert('❌ 오류: '+e.message); }
 };
-window.deleteWanted = async function(id) { if(!confirm('게시글을 삭제하시겠습니까?')) return; await remove(ref(db,'wanted/'+id)); };
+window.deleteWanted = async function(id) {
+  if(!allWanted[id] || allWanted[id].requester !== currentUser) { alert('본인 게시글만 삭제할 수 있습니다!'); return; }
+  if(!confirm('게시글을 삭제하시겠습니까?')) return;
+  await remove(ref(db,'wanted/'+id));
+};
 
 const STATUS_LABEL={'대기중':'⏳ 대기중','수락완료':'🤝 수락완료','승인완료':'✅ 승인완료','반려':'❌ 반려'};
 const STATUS_CLS={'대기중':'status-pending','수락완료':'status-accepted','승인완료':'status-accepted','반려':'status-rejected'};
@@ -792,15 +833,18 @@ function renderExchangeTab() {
   }
   const allEl=document.getElementById('allRequests');
   if(allEl) {
-    if(!rows.length) { allEl.innerHTML='<div class="empty-msg">교환 신청 내역이 없습니다.</div>'; return; }
-    allEl.innerHTML='';
-    rows.slice().reverse().forEach(r => {
-      const div=document.createElement('div'); div.className='conf-row';
-      div.innerHTML='<div class="conf-row-top"><span class="conf-row-info">'+esc(r.requester)+' ('+r.myDate+') ↔ '+esc(r.target)+' ('+r.targetDate+')</span>'
-        +'<span class="status-badge '+(STATUS_CLS[r.status]||'status-pending')+'">'+(STATUS_LABEL[r.status]||r.status)+'</span></div>'
-        +'<div class="conf-row-detail">사유: '+esc(r.reason)+'</div>';
-      allEl.appendChild(div);
-    });
+    if(!rows.length) {
+      allEl.innerHTML='<div class="empty-msg">교환 신청 내역이 없습니다.</div>';
+    } else {
+      allEl.innerHTML='';
+      rows.slice().reverse().forEach(r => {
+        const div=document.createElement('div'); div.className='conf-row status-'+r.status;
+        div.innerHTML='<div class="conf-row-top"><span class="conf-row-info">'+esc(r.requester)+' ('+r.myDate+') ↔ '+esc(r.target)+' ('+r.targetDate+')</span>'
+          +'<span class="status-badge '+(STATUS_CLS[r.status]||'status-pending')+'">'+(STATUS_LABEL[r.status]||r.status)+'</span></div>'
+          +'<div class="conf-row-detail">사유: '+esc(r.reason)+'</div>';
+        allEl.appendChild(div);
+      });
+    }
   }
   if(isAdmin) renderAdminApproval();
   updateExchangeBadge();
@@ -845,11 +889,29 @@ window.confirmAccept = async function() {
   const myDate=document.getElementById('accMyDate').value;
   if(!myDate) { alert('내 당직 날짜를 선택해주세요!'); return; }
   if(!accData) return;
-  if(!confirm('수락하시겠습니까?\n'+currentUser+'('+myDate+') ↔ '+accData.requester+'('+accData.myDate+')')) return;
-  await update(ref(db,'requests/'+accData.id), {status:'수락완료',targetDate:myDate});
-  await addHistory({type:'교환수락',from:currentUser,to:accData.requester,date:accData.myDate,reason:currentUser+'('+myDate+') ↔ '+accData.requester+'('+accData.myDate+')'});
-  await sendPushToUser(accData.requester, '✅ 교환 요청 수락됨!', currentUser+'님이 수락했습니다. 관리자 최종 승인 대기 중입니다.');
-  closeAcceptModal(); alert('✅ 수락 완료! 관리자 최종 승인을 기다려주세요.');
+  // 모달 열어둔 사이 요청이 취소·반려됐을 수 있으므로 현재 상태 재확인
+  const currentRow = allRows[accData.id];
+  if(!currentRow || currentRow.status !== '대기중') {
+    alert('⚠️ 이미 취소되었거나 처리된 요청입니다.'); closeAcceptModal(); return;
+  }
+  // 내가 제공하는 날짜가 이미 다른 활성 교환에 사용 중인지 확인
+  const dateInUse = Object.values(allRows).find(r =>
+    r.id !== accData.id && r.status !== '반려' &&
+    (r.myDate === myDate || r.targetDate === myDate)
+  );
+  const confirmMsg = (dateInUse
+    ? '⚠️ 선택한 날짜('+myDate+')가 이미 다른 교환 신청에 사용 중입니다.\n'
+    : '') + '수락하시겠습니까?\n'+currentUser+'('+myDate+') ↔ '+accData.requester+'('+accData.myDate+')';
+  if(!confirm(confirmMsg)) return;
+  const confirmBtn=document.querySelector('#acceptModal .modal-confirm');
+  if(confirmBtn) { confirmBtn.disabled=true; confirmBtn.textContent='처리 중...'; }
+  try {
+    await update(ref(db,'requests/'+accData.id), {status:'수락완료',targetDate:myDate});
+    await addHistory({type:'교환수락',from:currentUser,to:accData.requester,date:accData.myDate,reason:currentUser+'('+myDate+') ↔ '+accData.requester+'('+accData.myDate+')'});
+    await sendPushToUser(accData.requester, '✅ 교환 요청 수락됨!', currentUser+'님이 수락했습니다. 관리자 최종 승인 대기 중입니다.');
+    closeAcceptModal(); alert('✅ 수락 완료! 관리자 최종 승인을 기다려주세요.');
+  } catch(e) { alert('❌ 오류: '+e.message); }
+  if(confirmBtn) { confirmBtn.disabled=false; confirmBtn.textContent='수락하기'; }
 };
 
 function restoreMatchedWanted(row) {
@@ -859,36 +921,49 @@ function restoreMatchedWanted(row) {
   return Promise.resolve();
 }
 window.rejectRequest = async function(id) {
-  if(!confirm('거절하시겠습니까?')) return;
   const row=allRows[id];
+  if(!row || row.status !== '대기중') { alert('⚠️ 이미 처리된 요청입니다.'); return; }
+  if(!confirm('거절하시겠습니까?')) return;
   await update(ref(db,'requests/'+id), {status:'반려'});
-  await addHistory({type:'교환거절',from:currentUser,to:'',date:'',reason:'거절'});
-  await sendPushToUser(row && row.requester, '❌ 교환 거절', currentUser+'님이 '+((row&&row.myDate)||'')+" 당직 교환을 거절했습니다.");
+  await addHistory({type:'교환거절',from:currentUser,to:row.requester,date:row.myDate,reason:currentUser+'님이 거절'});
+  await sendPushToUser(row.requester, '❌ 교환 거절', currentUser+'님이 '+row.myDate+' 당직 교환을 거절했습니다.');
   await restoreMatchedWanted(row);
 };
 window.cancelRequest = async function(id) {
-  if(!confirm('교환 신청을 취소하시겠습니까?')) return;
   const row=allRows[id];
+  if(!row || row.status !== '대기중') { alert('⚠️ 대기중 상태인 요청만 취소할 수 있습니다.'); return; }
+  if(!confirm('교환 신청을 취소하시겠습니까?')) return;
   await remove(ref(db,'requests/'+id));
-  await addHistory({type:'교환취소',from:currentUser,to:'',date:'',reason:'신청 취소'});
+  await addHistory({type:'교환취소',from:currentUser,to:row.target,date:row.myDate,reason:'신청 취소'});
   await restoreMatchedWanted(row);
 };
 window.adminApprove = async function(id) {
-  if(!confirm('최종 승인하시겠습니까? 당직표에 반영됩니다.')) return;
   const row=allRows[id];
+  if(!row || row.status !== '수락완료') { alert('⚠️ 이미 처리된 요청입니다.'); return; }
+  // 날짜 충돌 체크: 동일 날짜가 이미 다른 교환에 승인됐는지 확인
+  const usedDates = new Set();
+  Object.values(allRows).filter(r => r.status==='승인완료').forEach(r => { usedDates.add(r.myDate); usedDates.add(r.targetDate); });
+  if(usedDates.has(row.myDate) || usedDates.has(row.targetDate)) {
+    if(!confirm('⚠️ 해당 날짜가 이미 다른 교환에 사용 중입니다.\n계속 최종 승인하시겠습니까?')) return;
+  } else {
+    if(!confirm('최종 승인하시겠습니까? 당직표에 반영됩니다.')) return;
+  }
   await update(ref(db,'requests/'+id), {status:'승인완료'});
-  await addHistory({type:'관리자승인',from:currentUser,to:'',date:'',reason:'최종 승인: '+id});
-  const msg='관리자가 당직 교환을 최종 승인했습니다! '+((row&&row.myDate)||'')+' ↔ '+((row&&row.targetDate)||'');
-  await sendPushToUser(row && row.requester, '🎉 교환 최종 승인!', msg);
-  await sendPushToUser(row && row.target,    '🎉 교환 최종 승인!', msg);
+  await addHistory({type:'관리자승인',from:row.requester,to:row.target,date:row.myDate,reason:row.myDate+' ↔ '+row.targetDate+' 최종 승인'});
+  const msg='관리자가 당직 교환을 최종 승인했습니다! '+row.myDate+' ↔ '+row.targetDate;
+  await sendPushToUser(row.requester, '🎉 교환 최종 승인!', msg);
+  await sendPushToUser(row.target,    '🎉 교환 최종 승인!', msg);
   alert('✅ 최종 승인 완료!');
 };
 window.adminReject = async function(id) {
-  if(!confirm('반려하시겠습니까?')) return;
   const row=allRows[id];
+  if(!row || row.status !== '수락완료') { alert('⚠️ 이미 처리된 요청입니다.'); return; }
+  if(!confirm('반려하시겠습니까?')) return;
   await update(ref(db,'requests/'+id), {status:'반려'});
-  await addHistory({type:'관리자반려',from:currentUser,to:'',date:'',reason:'반려: '+id});
-  await sendPushToUser(row && row.requester, '❌ 교환 반려', '관리자가 '+((row&&row.myDate)||'')+' 당직 교환 요청을 반려했습니다.');
+  await addHistory({type:'관리자반려',from:row.requester,to:row.target,date:row.myDate,reason:'관리자 반려: '+row.myDate+' ↔ '+row.targetDate});
+  const rejectMsg = '관리자가 '+row.myDate+' ↔ '+row.targetDate+' 당직 교환 요청을 반려했습니다.';
+  await sendPushToUser(row.requester, '❌ 교환 반려', rejectMsg);
+  await sendPushToUser(row.target,    '❌ 교환 반려', rejectMsg); // 수락했던 상대방에게도 알림
   await restoreMatchedWanted(row);
 };
 
@@ -925,7 +1000,7 @@ function renderMemberList() {
   MEMBERS.forEach((name,idx) => {
     const div=document.createElement('div'); div.className='member-item';
     div.innerHTML='<span class="member-order">'+(idx+1)+'번째</span>'
-      +'<span class="member-name">'+name+(name===ADMIN_USER?' 👑':'')+'</span>'
+      +'<span class="member-name">'+esc(name)+(name===ADMIN_USER?' 👑':'')+'</span>'
       +'<div class="member-btns">'
       +'<button class="order-btn" onclick="moveMemberUp('+idx+')" '+(idx===0?'disabled':'')+'>▲</button>'
       +'<button class="order-btn" onclick="moveMemberDown('+idx+')" '+(idx===MEMBERS.length-1?'disabled':'')+'>▼</button>'
@@ -994,7 +1069,9 @@ function renderMyDuty() {
   myDates.forEach(str => {
     const date=pdl(str), dow=date.getDay();
     const isEx=!!exd[str], isSp=!!SPECIAL_SCHEDULE[str];
-    const reqRow=rows.find(r=>r.requester===currentUser&&r.myDate===str);
+    // 반려가 아닌 활성 요청 우선 탐색 (반려 후 재신청 시 반려 요청이 먼저 매칭되는 버그 방지)
+    const reqRow=rows.find(r=>r.requester===currentUser&&r.myDate===str&&r.status!=='반려')
+              ||rows.find(r=>r.requester===currentUser&&r.myDate===str);
     const isWanted=wi.find(w=>w.myDate===str);
     let type=HOLIDAYS[str]||(dow===0?'일요일':dow===6?'토요일':''); if(isSp&&!type) type='특별배정';
     let btnTxt='교환 요청', btnCls='request-btn', btnDis='';
@@ -1007,7 +1084,7 @@ function renderMyDuty() {
     const card=document.createElement('div'); card.className='duty-card';
     card.innerHTML='<div>'
       +'<div class="duty-date">📅 '+str.replace(/^\d{4}-/,'')+'  ('+dn[dow]+')</div>'
-      +(type?'<div class="duty-type">'+type+'</div>':'')
+      +(type?'<div class="duty-type">'+esc(type)+'</div>':'')
       +(isEx?'<div style="font-size:12px;color:#27ae60;">🔄 교환완료</div>':'')
       +(isWanted?'<div style="font-size:12px;color:#e74c3c;">🙋 교환구합니다 게시중</div>':'')
       +'</div>'
@@ -1042,10 +1119,12 @@ async function addHistory(item) { item.changedAt=new Date().toLocaleString('ko-K
 async function sendPushToUser(targetUser, title, body) {
   if(!targetUser) return;
 
-  // [방법1] OneSignal REST API (OS_APP_ID 설정 시 사용)
+  let deliveredViaOneSignal = false;
+
+  // [방법1] OneSignal REST API
   if(OS_APP_ID && OS_REST_API_KEY) {
     try {
-      await fetch('https://onesignal.com/api/v1/notifications', {
+      const res = await fetch('https://onesignal.com/api/v1/notifications', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1059,23 +1138,28 @@ async function sendPushToUser(targetUser, title, body) {
           contents: { ko: body,  en: body  },
         })
       });
-      return; // OneSignal 성공 시 Firebase 방식 생략
-    } catch(e) { console.warn('OneSignal 발송 실패, Firebase 방식으로 대체:', e); }
+      const data = await res.json();
+      // recipients > 0 이면 실제로 전달 성공 (0이면 미등록 기기 → fallback 필요)
+      if(data && data.recipients > 0) deliveredViaOneSignal = true;
+      else console.warn('[OneSignal] recipients=0 →', targetUser, '기기 미등록. Firebase fallback 실행');
+    } catch(e) { console.warn('OneSignal 발송 실패, Firebase fallback:', e); }
   }
 
-  // [방법2] Firebase EventSource 방식 (OneSignal 미설정 시 fallback)
+  // [방법2] Firebase EventSource 방식
+  // OneSignal이 실제 전달한 경우 shown:true(SW 무시), 못한 경우 shown:false(SW가 알림 표시)
   try {
     const safe = targetUser.replace(/[.#$[\]]/g,'_');
     const nr = push(ref(db,'notifications/'+safe));
-    await set(nr, {title, body, shown:false, createdAt:new Date().toLocaleString('ko-KR')});
-  } catch(e) { console.warn('푸시 알림 전송 실패:', e); }
+    await set(nr, {title, body, shown: deliveredViaOneSignal, createdAt:new Date().toLocaleString('ko-KR')});
+  } catch(e) { console.warn('Firebase 알림 저장 실패:', e); }
 }
 
 const HISTORY_LABELS = {
   '교환신청':'📝 교환 신청','교환수락':'✅ 교환 수락','교환거절':'❌ 교환 거절',
   '교환취소':'🚫 교환 취소','관리자승인':'👑 관리자 승인','관리자반려':'👑 관리자 반려',
   '순번변경':'⚙️ 순번 변경','멤버추가':'👤 멤버 추가','멤버삭제':'👤 멤버 삭제',
-  '공휴일추가':'🎉 공휴일 추가','공휴일삭제':'🗑️ 공휴일 삭제','특별배정추가':'📌 특별배정',
+  '공휴일추가':'🎉 공휴일 추가','공휴일삭제':'🗑️ 공휴일 삭제',
+  '특별배정추가':'📌 특별배정 추가','특별배정삭제':'🗑️ 특별배정 삭제',
   '교환구합니다':'🙋 교환구합니다','교환제안':'🤝 교환제안'
 };
 
@@ -1087,7 +1171,7 @@ function buildHistoryCard(item) {
       +(item.date?' ('+item.date+')':'')+'<br>사유: '+esc(item.reason||'');
   else
     detail='<strong>'+esc(item.from||'')+'</strong>님: '+esc(item.reason||'');
-  card.innerHTML='<div class="history-badge">'+(HISTORY_LABELS[item.type]||item.type)+'</div>'
+  card.innerHTML='<div class="history-badge">'+(HISTORY_LABELS[item.type]||item.type||'기타')+'</div>'
     +'<div class="history-detail">'+detail+'</div>'
     +'<div class="history-time">⏰ '+fmtDate(item.changedAt)+'</div>';
   return card;
@@ -1138,27 +1222,30 @@ window.addSpecialSchedule = async function() {
   document.getElementById('specialDate').value=''; alert('✅ 특별배정: '+date+' → '+person);
 };
 window.deleteSpecialSchedule = async function(date) {
-  if(!confirm('특별배정 삭제: '+date)) return;
+  const person = SPECIAL_SCHEDULE[date]||'';
+  if(!confirm('특별배정 삭제: '+date+(person?' ('+person+')':''))) return;
   await remove(ref(db,'settings/special/'+date));
+  await addHistory({type:'특별배정삭제',from:currentUser,to:person,date,reason:'특별배정 삭제: '+date+(person?' → '+person:'')});
 };
 window.addHoliday = async function() {
   const date=document.getElementById('newHolidayDate').value, name=document.getElementById('newHolidayName').value.trim();
   if(!date||!name) { alert('날짜와 이름을 입력해주세요!'); return; }
-  if(HOLIDAYS[date]&&!confirm('이미 '+HOLIDAYS[date]+'(으)로 등록된 날짜입니다. 덮어쓰시겠습니까?')) return;
+  if(HOLIDAYS[date] && HOLIDAYS[date]!=='__deleted__' && !confirm('이미 '+HOLIDAYS[date]+'(으)로 등록된 날짜입니다. 덮어쓰시겠습니까?')) return;
   await update(ref(db,'settings/holidays'),{[date]:name});
   await addHistory({type:'공휴일추가',from:currentUser,to:'',date,reason:'공휴일 추가: '+date+' ('+name+')'});
   document.getElementById('newHolidayDate').value=''; document.getElementById('newHolidayName').value='';
 };
 window.deleteHoliday = async function(date) {
   if(!confirm('공휴일 삭제: '+date+' ('+HOLIDAYS[date]+')')) return;
-  await remove(ref(db,'settings/holidays/'+date));
+  // '__deleted__' 마킹: DEFAULT_HOLIDAYS 날짜도 삭제 가능하도록 (remove 시 기본값 복원 버그 방지)
+  await update(ref(db,'settings/holidays'),{[date]:'__deleted__'});
   await addHistory({type:'공휴일삭제',from:currentUser,to:'',date,reason:'공휴일 삭제: '+date});
 };
 function renderHolidayList() {
   const c=document.getElementById('holidayListContainer'); if(!c) return; c.innerHTML='';
   Object.keys(HOLIDAYS).sort().forEach(date => {
     const item=document.createElement('div'); item.className='list-item';
-    item.innerHTML='<span class="list-item-date">'+date+'</span><span class="list-item-name">'+HOLIDAYS[date]+'</span><span class="list-item-delete" onclick="deleteHoliday(\''+date+'\')">🗑️</span>';
+    item.innerHTML='<span class="list-item-date">'+date+'</span><span class="list-item-name">'+esc(HOLIDAYS[date])+'</span><span class="list-item-delete" onclick="deleteHoliday(\''+date+'\')">🗑️</span>';
     c.appendChild(item);
   });
 }
@@ -1168,7 +1255,7 @@ function renderSpecialList() {
   if(!sorted.length) { c.innerHTML='<div style="padding:16px;text-align:center;color:#aaa;">특별배정이 없습니다.</div>'; return; }
   sorted.forEach(date => {
     const item=document.createElement('div'); item.className='list-item';
-    item.innerHTML='<span class="list-item-date">'+date+'</span><span style="color:#888;font-size:12px;margin-right:8px;">('+dn[pdl(date).getDay()]+')</span><span class="list-item-person">'+SPECIAL_SCHEDULE[date]+'</span><span class="list-item-delete" onclick="deleteSpecialSchedule(\''+date+'\')">🗑️</span>';
+    item.innerHTML='<span class="list-item-date">'+date+'</span><span style="color:#888;font-size:12px;margin-right:8px;">('+dn[pdl(date).getDay()]+')</span><span class="list-item-person">'+esc(SPECIAL_SCHEDULE[date])+'</span><span class="list-item-delete" onclick="deleteSpecialSchedule(\''+date+'\')">🗑️</span>';
     c.appendChild(item);
   });
 }
@@ -1179,13 +1266,14 @@ function renderSettings() {
   document.getElementById('curStartPerson').textContent=MEMBERS[DUTY_START_INDEX]||'-';
   if(isAdmin) {
     document.getElementById('adminBadge').style.display='inline-block';
-    ['adminNoticeSection','adminMemberSection','adminRotationSection','adminHolidaySection','adminSpecialSection','adminApprovalSection'].forEach(id=>{document.getElementById(id).style.display='block';});
+    ['adminNoticeSection','adminMemberSection','adminRotationSection','adminHolidaySection','adminSpecialSection','adminApprovalSection','adminResetSection'].forEach(id=>{document.getElementById(id).style.display='block';});
     renderMemberList(); renderHolidayList(); renderSpecialList(); renderAdminApproval();
   } else {
     document.getElementById('adminBadge').style.display='none';
-    ['adminNoticeSection','adminMemberSection','adminRotationSection','adminHolidaySection','adminSpecialSection','adminApprovalSection'].forEach(id=>{document.getElementById(id).style.display='none';});
+    ['adminNoticeSection','adminMemberSection','adminRotationSection','adminHolidaySection','adminSpecialSection','adminApprovalSection','adminResetSection'].forEach(id=>{document.getElementById(id).style.display='none';});
   }
   renderDutyStats();
+  updateNotifStatus();
 }
 
 window.resetExchangeData = async function() {
@@ -1214,11 +1302,11 @@ window.login = function() {
     if(pwd!==ADMIN_PASSWORD) { alert('비밀번호가 틀렸습니다!'); document.getElementById('adminPassword').value=''; return; }
     isAdmin=true;
   }
-  currentUser=sel; prevRowsSnap={};
+  currentUser=sel; prevRowsSnap={}; isFirstLoad=true;
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('mainScreen').style.display='block';
   document.getElementById('userBadge').textContent=sel+(isAdmin?' 👑 관리자':' 님');
-  document.getElementById('tabSettingsBtn').style.display=isAdmin?'':'none';
+  document.getElementById('tabSettingsBtn').style.display='';
   const now=new Date();
   currentYear=now.getFullYear()<2026?2026:now.getFullYear();
   currentMonth=now.getFullYear()<2026?0:now.getMonth();
@@ -1263,6 +1351,51 @@ function showToast(title, body) {
 
 // FCM 미사용 (OneSignal로 대체) - 함수 유지하되 빈 함수로
 function initFCM() {}
+
+// 알림 권한 요청 버튼
+window.requestNotifPermission = function() {
+  if(!('Notification' in window)) { alert('이 브라우저는 알림을 지원하지 않습니다.'); return; }
+  Notification.requestPermission().then(p => {
+    if(p === 'granted') {
+      alert('✅ 알림 권한이 허용되었습니다!');
+      if(window.OneSignal && OS_APP_ID) OneSignal.login(currentUser).catch(()=>{});
+    } else {
+      alert('❌ 알림이 차단되었습니다.\n폰 설정 > 브라우저 > 알림에서 허용해주세요.');
+    }
+    updateNotifStatus();
+  });
+};
+
+// 알림 테스트 버튼
+window.testNotification = function() {
+  if(Notification.permission !== 'granted') {
+    alert('먼저 알림 권한을 허용해주세요!\n"알림 권한 요청" 버튼을 눌러주세요.'); return;
+  }
+  // 브라우저 직접 알림
+  showBrowserNotif('🔔 알림 테스트!', '당직 관리 앱 알림이 정상 작동 중입니다.', 'test-'+Date.now());
+  showToast('🔔 알림 테스트!', '알림이 정상 작동 중입니다.');
+  // OneSignal 통해 나에게 발송 테스트
+  if(OS_APP_ID && OS_REST_API_KEY && currentUser) {
+    sendPushToUser(currentUser, '🔔 알림 테스트!', currentUser+'님 당직 알림이 정상 작동 중입니다!')
+      .then(() => console.log('OneSignal 테스트 발송 완료'))
+      .catch(e => console.warn('OneSignal 테스트 실패:', e));
+  }
+};
+
+// 알림 상태 표시 업데이트
+function updateNotifStatus() {
+  const ps = document.getElementById('notifPermStatus');
+  const os = document.getElementById('osStatus');
+  if(ps) {
+    const p = ('Notification' in window) ? Notification.permission : 'unsupported';
+    ps.textContent = p === 'granted' ? '✅ 허용됨' : p === 'denied' ? '❌ 차단됨' : p === 'default' ? '⚠️ 미설정' : '❌ 미지원';
+    ps.style.color = p === 'granted' ? '#27ae60' : '#e74c3c';
+  }
+  if(os) {
+    os.textContent = OS_APP_ID ? '✅ 연결됨 (백그라운드 알림 지원)' : '⚠️ 미설정';
+    os.style.color = OS_APP_ID ? '#27ae60' : '#f39c12';
+  }
+}
 
 window.logout = function() {
   // OneSignal 사용자 연결 해제
