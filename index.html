@@ -2,165 +2,283 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#667eea">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#05141F">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="당직관리">
+<meta name="apple-mobile-web-app-title" content="당직ON">
 <link rel="manifest" href="./manifest.json">
-<link rel="apple-touch-icon" href="./launchericon-192x192.png">
-<title>화성차체3부 당직 관리 시스템 v3.2</title>
+<link rel="apple-touch-icon" href="./180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./32.png">
+<title>당직ON · 화성차체3부 v4.1</title>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100vh; }
-.login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-.login-box { background: white; border-radius: 16px; padding: 40px; width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; }
-.login-box h1 { color: #667eea; font-size: 22px; margin-bottom: 8px; }
-.login-box p { color: #888; font-size: 14px; margin-bottom: 30px; }
-.login-box select, .login-box input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; margin-bottom: 10px; outline: none; }
-.login-box select:focus, .login-box input:focus { border-color: #667eea; }
-.login-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 6px; }
-.main-screen { display: none; }
-.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-.header h1 { font-size: 18px; }
-.header-right { display: flex; align-items: center; gap: 12px; }
-.user-badge { background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 600; }
-.logout-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 14px; }
-.tabs { display: flex; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-.tabs::-webkit-scrollbar { display: none; }
-.tab { flex: 0 0 auto; min-width: 48px; padding: 12px 8px; text-align: center; cursor: pointer; font-size: 10px; font-weight: 600; color: #888; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; position: relative; }
-.tab.active { color: #667eea; border-bottom-color: #667eea; }
-.tab-badge { position: absolute; top: 4px; right: 2px; background: #e74c3c; color: white; border-radius: 10px; padding: 1px 5px; font-size: 9px; font-weight: 800; min-width: 14px; text-align: center; line-height: 14px; }
-.content { padding: 20px; max-width: 900px; margin: 0 auto; }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-.notice-banner { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 12px 16px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; font-weight: 600; display: none; }
-.notice-banner.show { display: block; }
-.wanted-banner { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 12px 16px; border-radius: 10px; margin-bottom: 10px; font-size: 13px; }
-.wanted-banner-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-.wanted-accept-btn { background: white; color: #e74c3c; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
-.calendar-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.calendar-nav h2 { font-size: 18px; color: #333; }
-.nav-btn { background: #667eea; color: white; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 18px; font-weight: 700; }
-.calendar-grid { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; }
-.day-headers { display: grid; grid-template-columns: repeat(7, 1fr); background: #667eea; }
-.day-header { padding: 10px; text-align: center; color: white; font-size: 13px; font-weight: 600; }
-.days-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
-.day-cell { min-height: 80px; padding: 6px; border: 1px solid #f0f0f0; }
-.day-cell.empty { background: #fafafa; }
-.day-cell.today { background: #fff9e6; }
-.day-cell.duty-day { background: #f0f4ff; }
-.day-cell.my-duty { background: #fff0f0; }
-.day-cell.exchanged { background: #f0fff4; }
-.day-cell.holiday-cell { background: #fff5f5; }
-.day-num { font-size: 13px; font-weight: 600; color: #333; margin-bottom: 4px; }
-.day-cell.sunday .day-num { color: #e74c3c; }
-.day-cell.saturday .day-num { color: #3498db; }
-.duty-name { font-size: 11px; padding: 2px 6px; border-radius: 10px; background: #667eea; color: white; display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.duty-name.my-name { background: #e74c3c; }
-.duty-name.special-name { background: #8e44ad; }
-.duty-name.exchanged-name { background: #27ae60; }
-.holiday-label { font-size: 10px; color: #e74c3c; margin-bottom: 2px; }
-.duty-order-box { margin-top: 16px; background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.duty-order-list { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
-.order-badge { padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; color: white; }
-.order-arrow { color: #aaa; font-size: 14px; }
-.section-title { font-size: 16px; font-weight: 700; color: #333; padding-bottom: 8px; border-bottom: 2px solid #667eea; margin-bottom: 12px; }
-.empty-msg { text-align: center; color: #aaa; padding: 40px; font-size: 14px; }
-.gap-section { margin-bottom: 24px; }
-.duty-card { background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
-.duty-date { font-size: 16px; font-weight: 700; color: #333; }
-.duty-type { font-size: 12px; color: #667eea; font-weight: 600; }
-.request-btn { background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
-.request-btn.accepted { background: #27ae60; cursor: default; }
-.request-btn.requested { background: #f39c12; }
-.wanted-btn { background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
-.conf-row { background: white; border-radius: 10px; padding: 14px 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.07); margin-bottom: 10px; border-left: 4px solid #667eea; }
-.conf-row.status-대기중 { border-left-color: #f39c12; }
-.conf-row.status-수락완료 { border-left-color: #3498db; }
-.conf-row.status-승인완료 { border-left-color: #27ae60; }
-.conf-row.status-반려 { border-left-color: #e74c3c; }
-.conf-row-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px; }
-.conf-row-info { font-size: 14px; font-weight: 600; color: #333; }
-.conf-row-detail { font-size: 13px; color: #666; line-height: 1.7; }
-.conf-row-actions { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
-.status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-.status-pending { background: #fff3cd; color: #856404; }
-.status-accepted { background: #d4edda; color: #155724; }
-.status-rejected { background: #f8d7da; color: #721c24; }
-.accept-btn { background: #27ae60; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
-.reject-btn { background: #e74c3c; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
-.cancel-btn { background: #e74c3c; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
-.history-card { background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 12px; border-left: 4px solid #f39c12; }
-.history-badge { background: #fff3cd; color: #856404; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 8px; }
-.history-detail { font-size: 13px; color: #555; line-height: 1.8; }
-.history-time { font-size: 11px; color: #aaa; margin-top: 6px; }
-.settings-box { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 16px; }
-.settings-title { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #667eea; }
-.settings-desc { font-size: 13px; color: #666; margin-bottom: 12px; line-height: 1.6; }
-.info-box { background: #f8f9fa; border-left: 4px solid #667eea; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px; }
-.info-box p { font-size: 13px; color: #555; margin: 4px 0; }
-.btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
-.action-btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; }
-.btn-primary { background: #667eea; color: white; }
-.btn-warning { background: #f39c12; color: white; }
-.btn-danger { background: #e74c3c; color: white; }
-.list-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; margin: 4px 0; background: #f8f9fa; border-radius: 6px; }
-.list-item-date { font-weight: 600; color: #333; margin-right: 12px; font-size: 13px; }
-.list-item-name { flex: 1; color: #555; font-size: 13px; }
-.list-item-person { color: #667eea; font-weight: 600; font-size: 13px; margin-right: 8px; }
-.list-item-delete { color: #e74c3c; font-size: 16px; cursor: pointer; }
-.member-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; margin: 4px 0; background: #f8f9fa; border-radius: 8px; }
-.member-name { font-weight: 600; color: #333; font-size: 14px; flex: 1; }
-.member-order { color: #667eea; font-size: 12px; margin-right: 8px; min-width: 40px; }
-.member-btns { display: flex; gap: 4px; }
-.order-btn { background: #667eea; color: white; border: none; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; font-size: 14px; }
-.order-btn:disabled { background: #ccc; cursor: default; }
-.member-delete { background: #e74c3c; color: white; border: none; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; font-size: 14px; }
-.member-delete:disabled { background: #ccc; cursor: default; }
-.apply-form { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; }
-.apply-form h3 { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #667eea; }
-.form-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
-.form-row > * { flex: 1; min-width: 130px; }
-.form-row label { font-size: 12px; color: #888; font-weight: 600; display: block; margin-bottom: 4px; }
-.form-row select, .form-row input, .form-row textarea { width: 100%; padding: 9px 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; outline: none; font-family: inherit; }
-.form-row select:focus, .form-row input:focus, .form-row textarea:focus { border-color: #667eea; }
-.submit-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 6px; }
-.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
-.modal-overlay.show { display: flex; }
-.modal { background: white; border-radius: 16px; padding: 30px; width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; }
-.modal h3 { font-size: 18px; color: #333; margin-bottom: 16px; }
-.modal label { font-size: 14px; color: #555; font-weight: 600; display: block; margin-bottom: 6px; margin-top: 12px; }
-.modal select, .modal textarea, .modal input[type=text] { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; outline: none; font-family: inherit; }
-.modal textarea { resize: none; height: 80px; }
-.modal-btns { display: flex; gap: 10px; margin-top: 20px; }
-.modal-confirm { flex: 1; padding: 12px; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; }
-.modal-cancel-btn { flex: 1; padding: 12px; background: #f0f0f0; color: #555; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; }
-.fb-status { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
-.fb-status.ok { background: #d4edda; color: #155724; }
-.fb-status.err { background: #f8d7da; color: #721c24; }
-.fb-status.loading { background: #fff3cd; color: #856404; }
-.offline-banner { display: none; position: fixed; top: 0; left: 0; right: 0; background: #e74c3c; color: white; padding: 10px; text-align: center; font-size: 13px; font-weight: 600; z-index: 1001; }
-.offline-banner.show { display: block; }
-.install-banner { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 16px 20px; z-index: 999; }
-.install-banner.show { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-.install-btn { background: white; color: #667eea; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
-.install-close { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; margin-left: 8px; }
-.stat-bar-wrap { margin: 8px 0; }
-.stat-name { font-size: 13px; font-weight: 600; color: #333; margin-bottom: 3px; display: flex; justify-content: space-between; }
-.stat-bar-bg { background: #f0f0f0; border-radius: 10px; height: 12px; overflow: hidden; }
-.stat-bar { background: linear-gradient(135deg, #667eea, #764ba2); height: 100%; border-radius: 10px; transition: width 0.5s; }
-.stat-bar.my-bar { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-@media (max-width: 600px) {
-  .day-cell { min-height: 60px; padding: 4px; }
-  .day-num { font-size: 11px; }
-  .duty-name { font-size: 9px; padding: 1px 4px; }
-  .content { padding: 12px; }
-  .modal { width: 95vw; padding: 20px; }
-  .header h1 { font-size: 15px; }
-}
+@font-face{font-family:'KIA';src:url(./kia-regular.woff) format('woff');font-weight:400 600;font-display:swap}
+@font-face{font-family:'KIA';src:url(./kia-bold.woff) format('woff');font-weight:700 900;font-display:swap}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--navy:#05141F;--navy2:#111827;--blue:#1E40AF;--blue2:#2563EB;--ttl:#1E3A8A;--bd:#DBEAFE;--bg:#F1F5FB;--mut:#475569;--red:#E5002B;--txt:#0F172A;--ok:#15803D}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'KIA','Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:#DDE3EC;color:var(--txt);font-weight:700;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font-family:inherit}
+.logo{background:url(./kia-logo.png) no-repeat center/contain;aspect-ratio:300/71;display:block}
+
+/* ---------- 로그인 ---------- */
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;min-height:100dvh;padding:24px;background:linear-gradient(160deg,#05141F 0%,#111827 55%,#1E3A8A 135%)}
+.login-wrap{width:100%;max-width:360px;text-align:center;color:#fff}
+.login-wrap .logo{width:120px;margin:0 auto 22px}
+.login-wrap h1{font-size:26px;letter-spacing:-.8px}
+.login-wrap p{font-size:13.5px;color:#9EA2A2;font-weight:400;margin:6px 0 24px}
+.login-box{background:#fff;border-radius:20px;padding:22px 20px 20px;text-align:left;color:var(--txt);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.login-box label{display:block;font-size:13px;color:var(--mut);margin-bottom:6px}
+.login-box select,.login-box input{width:100%;padding:14px 12px;border:1.5px solid #CBD5E1;border-radius:12px;font-size:16px;font-weight:700;margin-bottom:14px;outline:none;background:#fff;color:var(--txt)}
+.login-box select:focus,.login-box input:focus{border-color:var(--blue2)}
+.login-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:800;cursor:pointer}
+.login-foot{margin-top:18px;font-size:11.5px;color:#64748B;font-weight:400}
+
+/* ---------- 레이아웃 ---------- */
+.main-screen{display:none}
+.app{max-width:430px;margin:0 auto;min-height:100vh;min-height:100dvh;background:var(--bg);position:relative}
+.hd{background:linear-gradient(180deg,var(--navy),var(--navy2));color:#fff;padding:12px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20}
+.hd .logo{width:56px;flex:none}
+.hd .t{flex:1;min-width:0;border-left:1px solid rgba(255,255,255,.22);padding-left:11px}
+.hd h1{font-size:16px;letter-spacing:-.4px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hd p{font-size:11.5px;color:#9EA2A2;font-weight:400;margin-top:1px}
+.user-badge{background:rgba(255,255,255,.12);border-radius:20px;padding:7px 12px;font-size:13px;white-space:nowrap}
+.logout-btn{background:rgba(255,255,255,.12);border:0;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
+.content{padding:14px 14px 96px}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* ---------- 하단 탭 ---------- */
+.tb{position:fixed;bottom:0;left:0;right:0;margin:0 auto;max-width:430px;background:#fff;border-top:1px solid #E2E8F0;display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px calc(10px + env(safe-area-inset-bottom));z-index:30}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;color:#7B8BA1;padding:6px 0;position:relative;cursor:pointer;font-weight:700;border:0;background:none}
+.tab.active{color:var(--blue2)}
+.tab.active:before{content:'';position:absolute;top:-7px;width:28px;height:3px;border-radius:0 0 3px 3px;background:var(--red)}
+.tab-badge{position:absolute;top:1px;right:calc(50% - 22px);background:var(--red);color:#fff;border-radius:9px;padding:0 5px;font-size:10px;font-weight:800;min-width:16px;text-align:center;line-height:16px}
+
+/* ---------- 교환 하위 탭 ---------- */
+.seg{display:none;background:#fff;border-bottom:1px solid #E2E8F0;padding:8px 14px;gap:6px;position:sticky;top:58px;z-index:15}
+.seg button{flex:1;white-space:nowrap;border:0;background:#EEF2F7;color:var(--mut);padding:10px 4px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;position:relative}
+.seg button.on{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+.seg .seg-n{background:var(--red);color:#fff;border-radius:9px;font-size:10px;padding:0 5px;margin-left:4px;line-height:15px;display:inline-block;vertical-align:1px}
+
+/* ---------- 카드/공통 ---------- */
+.card{background:#fff;border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(30,64,175,.05)}
+.card.calc{padding:12px 8px}
+.card.calc .sec{padding:0 6px}
+.sec{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-title{display:flex;align-items:center;justify-content:flex-start;margin-bottom:12px}
+.sec h2,.section-title{font-size:17px;color:var(--ttl);display:flex;align-items:center;gap:8px;border:0;padding:0}
+.sec h2:before,.section-title:before{content:'';width:4px;height:16px;border-radius:2px;background:linear-gradient(var(--blue),var(--blue2));flex:none}
+.sec small{font-size:12px;color:var(--mut);font-weight:400}
+.gap-section{margin-bottom:20px}
+.empty-msg{text-align:center;color:#7B8BA1;padding:32px 10px;font-size:14px;font-weight:400;line-height:1.6}
+.notice-banner{display:none;background:#FFF8E6;border:1px solid #FDE7A8;color:#8A5A00;border-radius:12px;padding:11px 14px;font-size:13.5px;margin-bottom:12px;font-weight:700;line-height:1.5}
+.notice-banner.show{display:block}
+.pill{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border-radius:12px;padding:13px 14px;font-size:15px;border:0;font-weight:800;cursor:pointer}
+.sm{border:1px solid #BFD3FA;color:var(--blue2);background:#fff;border-radius:10px;padding:8px 13px;font-size:13px;font-weight:700;cursor:pointer}
+.tag{display:inline-block;font-size:11.5px;border-radius:6px;padding:2px 7px;margin:0 4px 2px 0;font-weight:800}
+.tag.r{background:#FFE4E8;color:var(--red)}.tag.b{background:#DBEAFE;color:#1E40AF}.tag.o{background:#FFEDD5;color:#C2410C}.tag.g{background:#DCFCE7;color:var(--ok)}.tag.p{background:#F3E8FF;color:#7E22CE}
+.plate{display:inline-block;font-size:13px;background:#F1F5F9;border:1px solid #CBD5E1;border-radius:6px;padding:1px 7px;color:var(--txt);margin:0 5px 2px 0;font-weight:700;white-space:nowrap}
+.nolist{color:#7B8BA1;font-size:13px;font-weight:400}
+
+/* ---------- KPI 띠 ---------- */
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border:1px solid var(--bd);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.k{padding:9px 2px 8px;text-align:center;border-left:1px solid #EEF2F7}
+.k:first-child{border-left:0;background:#EFF6FF}
+.k small{display:block;font-size:11.5px;color:var(--mut);font-weight:400}
+.k b{display:block;font-size:19px;letter-spacing:-.5px;margin-top:2px;line-height:1.15}
+.k b u{font-size:11.5px;text-decoration:none;color:var(--mut);margin-left:1px;font-weight:400}
+.k:first-child b{color:var(--blue)}.k.alert b{color:var(--red)}
+
+/* ---------- 캘린더 ---------- */
+.cal-nav{display:flex;gap:6px}
+.cal-nav button{width:38px;height:38px;border-radius:10px;border:1px solid #BFD3FA;background:#fff;color:var(--blue2);font-size:18px;cursor:pointer;font-weight:700}
+.cal-nav .today-btn{width:auto;padding:0 12px;font-size:13px}
+.cal-head,.cal-grid{display:grid;grid-template-columns:26px repeat(7,1fr);gap:3px}
+.cal-head div{text-align:center;font-size:12.5px;color:var(--mut);padding:4px 0}
+.cal-head .su{color:var(--red)}.cal-head .sa{color:#2B5FB0}.cal-head .bh{font-size:12px}
+.wk{display:flex;align-items:center;justify-content:center;font-size:17px;border-radius:7px;font-weight:800}
+.wk.A{background:#BFD6FF;color:#17338F}.wk.B{background:#FFD9A8;color:#9A3412}
+.c{height:66px;border-radius:8px;background:#F8FAFC;padding:5px 2px 3px;text-align:center;position:relative;border:1.5px solid transparent;cursor:pointer}
+.c.e{background:none;cursor:default}
+.c b{display:block;font-size:15px;line-height:1.1;color:var(--txt);text-align:left;padding-left:4px;letter-spacing:-.5px}
+.c.sa b{color:#2B5FB0}.c.su b,.c.ho b{color:var(--red)}
+.c i{display:block;font-style:normal;font-size:10px;color:var(--red);font-weight:700;margin-top:2px;line-height:1;text-align:left;padding-left:4px;white-space:nowrap}
+.c u{position:absolute;left:1px;right:1px;bottom:3px;font-size:11.5px;text-decoration:none;color:var(--ttl);background:#E3EBFB;border-radius:5px;padding:2px 0;line-height:1.2;white-space:nowrap;overflow:hidden}
+.c.ho{background:#FFF1F3}
+.c.ex u{background:#DCFCE7;color:var(--ok)}
+.c.sp u{background:#F3E8FF;color:#7E22CE}
+.c.me{background:linear-gradient(135deg,var(--blue),var(--blue2))}
+.c.me b,.c.me i{color:#fff}.c.me u{background:#fff;color:var(--blue)}
+.c.today{border-color:var(--red)}
+.c.today b:after{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--red);margin-left:2px;vertical-align:3px}
+.c .xb{position:absolute;right:2px;top:2px;background:#F59E0B;color:#fff;font-size:9.5px;font-weight:800;border-radius:7px;padding:0 3px;line-height:13px}
+.lg{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:12px;padding:0 6px;font-size:12px;color:var(--mut);font-weight:400}
+.lg s{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px;text-decoration:none}
+
+/* ---------- 당직 순번 ---------- */
+.ord{display:flex;flex-wrap:wrap;gap:8px 4px;align-items:center}
+.ord span{display:inline-flex;align-items:center;gap:5px;background:#EEF2F7;color:var(--txt);border-radius:18px;padding:5px 10px 5px 6px;font-size:14px}
+.ord span i{font-style:normal;background:#CBD5E1;color:#fff;width:20px;height:20px;border-radius:50%;font-size:11px;display:inline-flex;align-items:center;justify-content:center}
+.ord span.me{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}.ord span.me i{background:rgba(255,255,255,.3)}
+.ord span.nx{background:#FFE4E8;color:var(--red);box-shadow:inset 0 0 0 1.5px var(--red)}.ord span.nx i{background:var(--red)}
+.ord em{font-style:normal;color:#94A3B8;font-size:13px}
+.ord-cap{font-size:13px;color:var(--mut);font-weight:400;margin-bottom:10px}
+
+/* ---------- 목록 행 ---------- */
+.row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid #EEF2F7}
+.row:first-child{border-top:0}
+.db{width:56px;flex:none;text-align:center;background:#EFF6FF;border-radius:12px;padding:7px 0 6px}
+.db b{display:block;font-size:25px;line-height:1.05;color:var(--ttl)}
+.db small{display:block;margin-top:2px;font-size:14px;font-weight:700;color:var(--ttl)}
+.db.ho{background:#FFF1F3}.db.ho b,.db.ho small{color:var(--red)}
+.row .m{flex:1;min-width:0}
+.row .m b{font-size:15.5px;display:block;margin-bottom:3px}
+.row .m small{display:block;font-size:12.5px;color:var(--mut);font-weight:400;line-height:1.6}
+.mh{font-size:13px;color:var(--mut);padding:14px 0 2px;border-top:1px solid #EEF2F7}
+.mh:first-child{border-top:0;padding-top:4px}
+.btn-col{display:flex;flex-direction:column;gap:6px;align-items:stretch;flex:none}
+.request-btn{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border:0;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:800;white-space:nowrap}
+.request-btn.accepted{background:#16A34A;cursor:default}.request-btn.requested{background:#F59E0B;cursor:default}
+.request-btn:disabled{opacity:1}
+.wanted-btn{background:#fff;color:var(--red);border:1px solid #FDA4AF;padding:8px 10px;border-radius:10px;cursor:pointer;font-size:12.5px;font-weight:800;white-space:nowrap}
+
+/* ---------- 내 당직 히어로 ---------- */
+.hero{background:linear-gradient(135deg,#05141F 0%,#1E3A8A 100%);color:#fff;border-radius:18px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden}
+.hero .logo{position:absolute;right:-8px;top:16px;width:120px;opacity:.1}
+.hero small{font-size:12px;color:#9EA2A2;font-weight:400}
+.hero .big{font-size:46px;letter-spacing:-2px;line-height:1.1;margin:4px 0}
+.hero p{font-size:14px;color:#C7D2FE;font-weight:400}
+.hs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.hs div{background:rgba(255,255,255,.1);border-radius:12px;padding:9px 10px}.hs b{display:block;font-size:20px}.hs small{font-size:11.5px;color:#C7D2FE}
+
+/* ---------- 폼 ---------- */
+.apply-form{background:#fff;border:1px solid var(--bd);border-radius:16px;padding:18px;margin-bottom:18px}
+.apply-form h3{font-size:17px;color:var(--ttl);margin-bottom:14px}
+.form-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.form-row>*{flex:1;min-width:0}
+@media (max-width:400px){.form-row{flex-direction:column;gap:10px}}
+.form-row label{font-size:13px;color:var(--mut);display:block;margin-bottom:5px}
+.form-row select{text-overflow:ellipsis}
+.form-row select,.form-row input,.form-row textarea,.modal select,.modal textarea,.modal input[type=text]{width:100%;padding:12px 10px;border:1.5px solid #CBD5E1;border-radius:10px;font-size:15px;font-weight:700;outline:none;color:var(--txt);background:#fff}
+.form-row textarea,.modal textarea{resize:none;height:84px;font-weight:400}
+.form-row select:focus,.form-row input:focus,.form-row textarea:focus,.modal select:focus,.modal textarea:focus{border-color:var(--blue2)}
+.submit-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border:0;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;margin-top:6px}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ---------- 교환 현황 ---------- */
+.conf-row{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px;border-left:5px solid var(--blue2)}
+.conf-row.status-대기중{border-left-color:#F59E0B}.conf-row.status-수락완료{border-left-color:#3B82F6}.conf-row.status-승인완료{border-left-color:#16A34A}.conf-row.status-반려{border-left-color:var(--red)}
+.conf-row-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap;gap:6px}
+.conf-row-info{font-size:15px;line-height:1.4}
+.conf-row-detail{font-size:13.5px;color:var(--mut);line-height:1.7;font-weight:400}
+.conf-row-detail strong{color:var(--txt)}
+.conf-row-actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.status-badge{padding:4px 11px;border-radius:20px;font-size:12.5px;font-weight:800;white-space:nowrap}
+.status-pending{background:#FEF3C7;color:#92400E}.status-accepted{background:#DCFCE7;color:#166534}.status-rejected{background:#FFE4E8;color:#BE123C}
+.accept-btn{background:#16A34A;color:#fff;border:0;padding:9px 16px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:800}
+.reject-btn,.cancel-btn{background:#fff;color:var(--red);border:1px solid #FDA4AF;padding:9px 16px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:800}
+
+/* ---------- 구합니다 ---------- */
+.wanted-banner{background:linear-gradient(135deg,#BE123C,#E5002B);color:#fff;padding:14px;border-radius:14px;margin-bottom:10px;font-size:14px}
+.wanted-banner.mine{background:linear-gradient(135deg,#1E3A8A,#2563EB)}
+.wanted-banner.matched{background:linear-gradient(135deg,#B45309,#F59E0B)}
+.wanted-banner-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.wanted-accept-btn{background:#fff;color:var(--red);border:0;padding:9px 13px;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap}
+.wanted-banner.mine .wanted-accept-btn{color:var(--blue)}
+
+/* ---------- 이력 ---------- */
+.history-card{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:13px 14px;margin-bottom:10px;border-left:5px solid #F59E0B}
+.history-badge{background:#FEF3C7;color:#92400E;padding:3px 11px;border-radius:20px;font-size:12.5px;font-weight:800;display:inline-block;margin-bottom:7px}
+.history-detail{font-size:14px;color:var(--txt);line-height:1.7;font-weight:400}
+.history-detail strong{font-weight:800}
+.history-time{font-size:12px;color:#7B8BA1;margin-top:6px;font-weight:400}
+
+/* ---------- 더보기/설정 ---------- */
+.settings-box,.acc{background:#fff;border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:12px}
+.settings-title{font-size:16px;color:var(--ttl);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.settings-title:before{content:'';width:4px;height:15px;border-radius:2px;background:linear-gradient(var(--blue),var(--blue2))}
+.settings-desc{font-size:13.5px;color:var(--mut);margin-bottom:12px;line-height:1.6;font-weight:400}
+.acc{padding:0;overflow:hidden}
+.acc>summary{list-style:none;cursor:pointer;padding:16px;font-size:16px;color:var(--ttl);display:flex;align-items:center;gap:8px}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary:before{content:'';width:4px;height:15px;border-radius:2px;background:linear-gradient(var(--red),#FB7185)}
+.acc>summary:after{content:'›';margin-left:auto;color:#94A3B8;font-size:22px;transition:transform .2s}
+.acc[open]>summary:after{transform:rotate(90deg)}
+.acc>.acc-body{padding:0 16px 16px}
+.info-box{background:#F8FAFC;border-left:4px solid var(--blue2);padding:12px 14px;border-radius:10px;margin-bottom:12px}
+.info-box p{font-size:14px;color:var(--mut);margin:4px 0;font-weight:400}.info-box p strong{color:var(--txt)}
+.btn-group{display:flex;gap:10px;flex-wrap:wrap}
+.action-btn{padding:11px 18px;border:0;border-radius:10px;cursor:pointer;font-size:14px;font-weight:800}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}.btn-warning{background:#F59E0B;color:#fff}.btn-danger{background:var(--red);color:#fff}
+.acc input[type=text],.acc input[type=date],.acc select,.acc textarea,.settings-box textarea{width:100%;padding:12px 10px;border:1.5px solid #CBD5E1;border-radius:10px;font-size:15px;font-weight:700;outline:none;color:var(--txt);background:#fff}
+.acc textarea{height:84px;font-weight:400;resize:none;margin-bottom:10px;font-family:inherit}
+.list-item{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;margin:4px 0;background:#F8FAFC;border-radius:8px}
+.list-item-date{font-weight:800;margin-right:10px;font-size:14px}
+.list-item-name{flex:1;color:var(--mut);font-size:14px;font-weight:400}
+.list-item-person{color:var(--blue2);font-size:14px;margin-right:8px}
+.list-item-delete{color:var(--red);font-size:18px;cursor:pointer;padding:2px 6px}
+.member-item{display:flex;align-items:center;padding:9px 10px;margin:4px 0;background:#F8FAFC;border-radius:10px;gap:8px}
+.member-name{flex:1;font-size:15px}.member-order{color:var(--blue2);font-size:12.5px;min-width:44px}
+.member-btns{display:flex;gap:4px}
+.order-btn,.member-delete{width:36px;height:36px;border-radius:8px;border:0;cursor:pointer;font-size:14px;color:#fff;background:var(--blue2)}
+.member-delete{background:var(--red)}.order-btn:disabled,.member-delete:disabled{background:#CBD5E1;cursor:default}
+.stat-bar-wrap{margin:9px 0}
+.stat-name{font-size:14px;margin-bottom:4px;display:flex;justify-content:space-between}
+.stat-bar-bg{background:#E8EEF8;border-radius:8px;height:11px;overflow:hidden}
+.stat-bar{background:linear-gradient(90deg,var(--blue),var(--blue2));height:100%;border-radius:8px;transition:width .5s}
+.stat-bar.my-bar{background:linear-gradient(90deg,var(--red),#FB7185)}
+.chips{display:flex;gap:8px;margin-bottom:12px}
+.chips button{background:#fff;border:1px solid var(--bd);border-radius:20px;padding:7px 15px;font-size:13px;color:var(--mut);cursor:pointer;font-weight:700}
+.chips button.on{background:var(--ttl);color:#fff;border-color:var(--ttl)}
+.fb-status{padding:9px 14px;border-radius:10px;font-size:13px;margin-bottom:14px}
+.fb-status.ok{background:#DCFCE7;color:#166534}.fb-status.err{background:#FFE4E8;color:#BE123C}.fb-status.loading{background:#FEF3C7;color:#92400E}
+
+/* ---------- 차량번호 편집 ---------- */
+.vp{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:11px 12px;margin-bottom:9px}
+.vh{display:flex;align-items:center;gap:8px;margin-bottom:8px}.vh b{font-size:16px}.vh .tag{margin:0}.vh .vdel{margin-left:auto;border:0;background:none;color:var(--red);font-size:17px;cursor:pointer}
+.vi{display:flex;gap:6px;margin-bottom:6px}
+.vi input{border:1.5px solid #CBD5E1;border-radius:10px;padding:11px 9px;font-size:15px;font-weight:700;color:var(--txt);min-width:0;width:100%;background:#fff}
+.vi input:first-child{flex:1.5}.vi input+input{flex:1}
+.vi .x{flex:none;width:40px;border:1.5px solid #FECACA;background:#FFF1F3;color:var(--red);border-radius:10px;font-size:15px;cursor:pointer}
+.vadd{border:1.5px dashed #93C5FD;background:#F5F9FF;color:var(--blue2);border-radius:10px;padding:9px;width:100%;font-size:13.5px;font-weight:700;cursor:pointer}
+.vsave{position:sticky;top:112px;z-index:5;margin-bottom:10px}
+.pool-add{display:flex;gap:8px;margin:10px 0 4px}.pool-add input{flex:1}
+
+/* ---------- 날짜 시트 / 모달 ---------- */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(5,20,31,.5);z-index:100;align-items:flex-end;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal,.sheet{background:#fff;border-radius:22px 22px 0 0;padding:12px 18px calc(20px + env(safe-area-inset-bottom));width:100%;max-width:430px;max-height:92vh;overflow-y:auto;box-shadow:0 -10px 30px rgba(0,0,0,.2)}
+.grab{display:block;width:40px;height:4px;border-radius:2px;background:#CBD5E1;margin:0 auto 12px}
+.modal h3{font-size:19px;color:var(--ttl);margin-bottom:12px}
+.modal label{font-size:14px;color:var(--mut);display:block;margin-bottom:6px;margin-top:12px}
+.modal-btns{display:flex;gap:10px;margin-top:18px}
+.modal-confirm{flex:1.4;padding:14px;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border:0;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer}
+.modal-cancel-btn{flex:1;padding:14px;background:#EEF2F7;color:var(--mut);border:0;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer}
+.sh-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.sheet h3{font-size:21px;margin:8px 0 0;letter-spacing:-.5px}
+.blk{background:#F8FAFC;border-radius:12px;padding:11px 13px;margin-bottom:8px}
+.blk>small{display:block;font-size:13px;color:var(--mut);font-weight:700;margin-bottom:4px}
+.blk .nm{font-size:23px;color:var(--ttl);margin-bottom:5px;letter-spacing:-.5px}
+.blk .sw{font-size:13px;color:var(--ok);margin-top:5px}
+.xr{padding:7px 0;border-top:1px solid #E2E8F0;display:flex;align-items:center;gap:8px}.xr:first-of-type{border-top:0}
+.xr .xi{flex:1}.xr b{font-size:17px;display:block;margin-bottom:3px}
+.xr .xd{border:0;background:#FFF1F3;color:var(--red);width:34px;height:34px;border-radius:9px;font-size:15px;cursor:pointer}
+.xadd{display:flex;gap:8px;margin-top:8px}.xadd select{flex:1;padding:11px 9px;border:1.5px solid #CBD5E1;border-radius:10px;font-size:15px;font-weight:700;background:#fff}
+.sheet .btns{display:flex;gap:10px;margin-top:12px}.sheet .btns>*{flex:1}
+
+/* ---------- 배너/토스트 ---------- */
+.offline-banner{display:none;position:fixed;top:0;left:0;right:0;background:var(--red);color:#fff;padding:10px;text-align:center;font-size:13px;z-index:200}
+.offline-banner.show{display:block}
+.install-banner{display:none;position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,var(--navy),#1E3A8A);color:#fff;padding:16px 20px;z-index:120}
+.install-banner.show{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.install-btn{background:#fff;color:var(--blue);border:0;padding:9px 16px;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer}
+.install-close{background:rgba(255,255,255,.2);color:#fff;border:0;padding:9px 16px;border-radius:10px;font-size:14px;cursor:pointer;margin-left:8px}
+@media (max-width:360px){.hd h1{font-size:15px}.user-badge{padding:6px 9px;font-size:12px}.c b{font-size:14px}}
+
+.acc.fold{margin-bottom:16px}.acc.fold>summary .cnt{background:#EEF2F7;color:var(--mut);border-radius:20px;padding:2px 10px;font-size:12.5px;font-weight:800}
+
 </style>
 </head>
 <body>
@@ -169,8 +287,8 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 
 <div class="install-banner" id="installBanner">
   <div>
-    <div style="font-size:15px;font-weight:700;">📱 앱으로 설치하기</div>
-    <div style="font-size:13px;opacity:0.9;">홈 화면에 추가하여 편리하게 사용하세요!</div>
+    <div style="font-size:15px;font-weight:800;">📱 앱으로 설치하기</div>
+    <div style="font-size:13px;opacity:.9;font-weight:400;">홈 화면에 추가하여 편리하게 사용하세요!</div>
   </div>
   <div>
     <button class="install-btn" id="installBtn">설치</button>
@@ -179,82 +297,94 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 </div>
 
 <div class="login-screen" id="loginScreen">
-  <div class="login-box">
-    <h1>🗓️ 화성차체3부</h1>
-    <p>당직 관리 시스템 v3.2</p>
-    <select id="userSelect">
-      <option value="">이름을 선택하세요</option>
-    </select>
-    <div id="adminPasswordDiv" style="display:none;">
-      <input type="password" id="adminPassword" placeholder="관리자 비밀번호 입력">
+  <div class="login-wrap">
+    <span class="logo" role="img" aria-label="KIA"></span>
+    <h1>당직ON</h1>
+    <p>화성차체3부 · 당직 근무 관리</p>
+    <div class="login-box">
+      <label for="userSelect">이름</label>
+      <select id="userSelect"><option value="">이름을 선택하세요</option></select>
+      <div id="adminPasswordDiv" style="display:none;">
+        <label for="adminPassword">관리자 비밀번호</label>
+        <input type="password" id="adminPassword" placeholder="비밀번호 입력">
+      </div>
+      <button class="login-btn" onclick="login()">입장하기</button>
     </div>
-    <button class="login-btn" onclick="login()">입장하기</button>
+    <div class="login-foot">v4.1</div>
   </div>
 </div>
 
 <div class="main-screen" id="mainScreen">
-  <div class="header">
-    <h1>🗓️ 화성차체3부 당직 관리</h1>
-    <div class="header-right">
-      <div class="user-badge" id="userBadge"></div>
-      <button class="logout-btn" onclick="logout()">로그아웃</button>
-    </div>
+<div class="app">
+
+  <header class="hd">
+    <span class="logo" role="img" aria-label="KIA"></span>
+    <div class="t"><h1>당직ON</h1><p>화성차체3부</p></div>
+    <div class="user-badge" id="userBadge"></div>
+    <button class="logout-btn" onclick="logout()" aria-label="로그아웃">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a1 1 0 01-1-1V4a1 1 0 011-1h4M16 17l5-5-5-5M21 12H9"/></svg>
+    </button>
+  </header>
+
+  <div class="seg" id="exSeg">
+    <button data-seg="wanted" onclick="showTab('wanted')">🙋 구합니다</button>
+    <button data-seg="apply" onclick="showTab('apply')">📝 신청</button>
+    <button data-seg="exchange" onclick="showTab('exchange')">✅ 현황·승인<span class="seg-n" id="segBadge" style="display:none"></span></button>
   </div>
-  <div class="tabs">
-    <div class="tab active" onclick="showTab('calendar')">📅 캘린더</div>
-    <div class="tab" onclick="showTab('myduty')">👤 내당직</div>
-    <div class="tab" onclick="showTab('wanted')">🙋 당직교환</div>
-    <div class="tab" onclick="showTab('apply')">📝 교환신청</div>
-    <div class="tab" id="tabExchangeBtn" onclick="showTab('exchange')">🔄 교환승인</div>
-    <div class="tab" onclick="showTab('history')">📋 이력</div>
-    <div class="tab" id="tabSettingsBtn" onclick="showTab('settings')" style="display:none;">⚙️ 설정</div>
-  </div>
+
   <div class="content">
 
+    <!-- 캘린더 -->
     <div class="tab-content active" id="tab-calendar">
       <div id="noticeBannerCal" class="notice-banner"></div>
-      <div class="calendar-nav">
-        <button class="nav-btn" onclick="changeMonth(-1)">◀</button>
-        <h2 id="calendarTitle"></h2>
-        <button class="nav-btn" onclick="changeMonth(1)">▶</button>
-      </div>
-      <div class="calendar-grid">
-        <div class="day-headers">
-          <div class="day-header" style="color:#ffcccc;">일</div>
-          <div class="day-header">월</div><div class="day-header">화</div>
-          <div class="day-header">수</div><div class="day-header">목</div>
-          <div class="day-header">금</div>
-          <div class="day-header" style="color:#cce5ff;">토</div>
+      <div class="kpi" id="kpiStrip"></div>
+      <div class="card calc">
+        <div class="sec"><h2 id="calendarTitle"></h2>
+          <div class="cal-nav"><button onclick="changeMonth(-1)" aria-label="이전 달">‹</button><button class="today-btn" onclick="goToday()">오늘</button><button onclick="changeMonth(1)" aria-label="다음 달">›</button></div>
         </div>
-        <div class="days-grid" id="calendarDays"></div>
+        <div class="cal-head"><div class="bh">조</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div class="sa">토</div><div class="su">일</div></div>
+        <div class="cal-grid" id="calendarDays"></div>
+        <div class="lg">
+          <span><s style="background:linear-gradient(135deg,#1E40AF,#2563EB)"></s>내 당직</span>
+          <span><s style="background:#DCFCE7"></s>교환됨</span>
+          <span><s style="background:#F3E8FF"></s>특별배정</span>
+          <span><s style="background:#FFF1F3;border:1px solid #E5002B"></s>휴일·휴무</span>
+          <span><s style="background:#F59E0B"></s>추가 출근</span>
+          <span><s style="background:#BFD6FF"></s>A조 주</span>
+          <span><s style="background:#FFD9A8"></s>B조 주</span>
+        </div>
       </div>
-      <div class="duty-order-box">
-        <div style="font-size:13px;color:#888;font-weight:600;">※ 당직 순번</div>
-        <div class="duty-order-list" id="dutyOrderList"></div>
-      </div>
+      <div class="card"><div class="sec"><h2>당직 순번</h2><small>빨간 표시 = 다음 차례</small></div><div class="ord" id="dutyOrderList"></div></div>
+      <div class="card"><div class="sec"><h2>다가오는 휴일·휴무</h2><small>눌러서 이동</small></div><div id="upcomingHolidays"></div></div>
     </div>
 
+    <!-- 내 당직 -->
     <div class="tab-content" id="tab-myduty">
       <div id="noticeBannerDuty" class="notice-banner"></div>
-      <div class="section-title" style="margin-bottom:16px;">👤 내 당직 일정</div>
-      <div id="myDutyList"></div>
+      <div id="myHero"></div>
+      <div class="chips" id="dutyChips">
+        <button data-f="upcoming" class="on" onclick="setDutyFilter('upcoming')">다가오는 당직</button>
+        <button data-f="holiday" onclick="setDutyFilter('holiday')">휴일만</button>
+        <button data-f="past" onclick="setDutyFilter('past')">지난 당직</button>
+      </div>
+      <div class="card" style="padding:6px 16px 8px" id="myDutyList"></div>
     </div>
 
+    <!-- 교환: 구합니다 -->
     <div class="tab-content" id="tab-wanted">
       <div id="noticeBannerWanted" class="notice-banner"></div>
       <div class="gap-section">
-        <div class="section-title">🙋 당직 교환 구합니다!! 게시판</div>
-        <div style="margin-bottom:12px;">
-          <button class="submit-btn" onclick="openWantedModal()" style="max-width:220px;padding:10px;">🙋 당직 교환 구합니다!! 게시하기</button>
-        </div>
+        <div class="section-title">당직 교환 구합니다</div>
+        <button class="submit-btn" onclick="openWantedModal()" style="margin:0 0 14px">🙋 구합니다 게시하기</button>
         <div id="wantedList"><div class="empty-msg">게시된 글이 없습니다.</div></div>
       </div>
     </div>
 
+    <!-- 교환: 신청 -->
     <div class="tab-content" id="tab-apply">
-      <div id="fbStatusBanner" class="fb-status loading">⏳ Firebase 연결 중...</div>
+      <div id="fbStatusBanner" class="fb-status loading">⏳ 연결 중...</div>
       <div class="apply-form">
-        <h3>📝 당직 교환 신청</h3>
+        <h3>당직 교환 신청</h3>
         <div class="form-row">
           <div><label>신청자</label><select id="fmRequester" disabled></select></div>
           <div><label>내 당직 날짜</label><select id="fmMyDate"><option value="">선택하세요</option></select></div>
@@ -268,139 +398,153 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
         </div>
         <button class="submit-btn" id="submitBtn" onclick="submitExchangeRequest()">📤 교환 신청 등록</button>
       </div>
-      <div class="gap-section">
-        <div class="section-title">📤 내가 신청한 교환 요청</div>
-        <div id="myRequests"><div class="empty-msg">불러오는 중...</div></div>
-      </div>
+      <details class="acc fold" id="myReqFold">
+        <summary>내가 신청한 교환 <span class="cnt" id="myReqCount">0</span></summary>
+        <div class="acc-body"><div id="myRequests"><div class="empty-msg">불러오는 중...</div></div></div>
+      </details>
     </div>
 
+    <!-- 교환: 현황·승인 -->
     <div class="tab-content" id="tab-exchange">
+      <div class="gap-section" id="adminApprovalSection" style="display:none;">
+        <div class="section-title">관리자 · 최종 승인 대기</div>
+        <div id="adminApprovalList"><div class="empty-msg">승인 대기 없음</div></div>
+      </div>
       <div class="gap-section">
-        <div class="section-title">📥 나에게 온 교환 요청</div>
+        <div class="section-title">나에게 온 교환 요청</div>
         <div id="incomingRequests"><div class="empty-msg">불러오는 중...</div></div>
       </div>
       <div class="gap-section">
-        <div class="section-title">📋 전체 교환 현황</div>
+        <div class="section-title">전체 교환 현황</div>
         <div id="allRequests"><div class="empty-msg">불러오는 중...</div></div>
       </div>
     </div>
 
+    <!-- 이력 -->
     <div class="tab-content" id="tab-history">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-        <div class="section-title" style="border:none;margin-bottom:0;">📋 당직 변경 이력</div>
-        <button onclick="renderHistory()" style="background:#667eea;color:white;border:none;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">🔄 새로고침</button>
-      </div>
-      <div id="historyList"><div class="empty-msg" style="color:#aaa;">이력 탭을 클릭하면 로드됩니다.</div></div>
+      <details class="acc fold" id="histFold">
+        <summary>당직 변경 이력 <span class="cnt" id="histCount">0</span></summary>
+        <div class="acc-body">
+          <div style="text-align:right;margin-bottom:8px"><button class="sm" onclick="renderHistory()">새로고침</button></div>
+          <div id="historyList"><div class="empty-msg">이력 탭을 클릭하면 로드됩니다.</div></div>
+        </div>
+      </details>
     </div>
 
+    <!-- 더보기 -->
     <div class="tab-content" id="tab-settings">
       <div class="settings-box">
-        <div class="settings-title">📊 시스템 정보</div>
+        <div class="settings-title">내 정보</div>
         <div class="info-box">
-          <p><strong>현재 사용자:</strong> <span id="settingsUserName"></span>
-            <span id="adminBadge" style="display:none;background:#e74c3c;color:white;padding:2px 8px;border-radius:12px;font-size:11px;margin-left:6px;">관리자</span>
-          </p>
-          <p><strong>저장 방식:</strong> Firebase 실시간 DB</p>
-          <p><strong>연결 상태:</strong> <span id="fbConnStatus">확인 중...</span></p>
-          <p><strong>총 멤버:</strong> <span id="totalMembers">-</span>명</p>
-          <p><strong>버전:</strong> v3.2.0 (캘린더·이력·알림 개선)</p>
+          <p><strong>사용자</strong> <span id="settingsUserName"></span> <span id="adminBadge" class="tag r" style="display:none;margin-left:4px">관리자</span></p>
+          <p><strong>연결 상태</strong> <span id="fbConnStatus">확인 중...</span></p>
+          <p><strong>총 멤버</strong> <span id="totalMembers">-</span>명</p>
+          <p><strong>버전</strong> v4.1</p>
         </div>
       </div>
+
+      <div class="settings-box" id="adminStatsBox" style="display:none;">
+        <div class="settings-title">연간 당직 횟수 <span class="tag r" style="margin-left:4px">관리자</span></div>
+        <div class="chips" id="statChips"><button data-y="0" class="on" onclick="setStatYear(0)">올해</button><button data-y="1" onclick="setStatYear(1)">내년</button></div>
+        <div id="dutyStats"></div>
+      </div>
+
       <div class="settings-box">
-        <div class="settings-title">🔔 알림 설정 & 테스트</div>
+        <div class="settings-title">알림 설정</div>
         <div class="info-box">
-          <p><strong>알림 권한:</strong> <span id="notifPermStatus">확인 중...</span></p>
-          <p><strong>OneSignal:</strong> <span id="osStatus">확인 중...</span></p>
+          <p><strong>알림 권한</strong> <span id="notifPermStatus">확인 중...</span></p>
+          <p><strong>OneSignal</strong> <span id="osStatus">확인 중...</span></p>
         </div>
-        <div class="btn-group" style="margin-top:10px;">
+        <div class="btn-group">
           <button class="action-btn btn-primary" onclick="testNotification()">🔔 알림 테스트</button>
           <button class="action-btn btn-warning" onclick="requestNotifPermission()">📲 알림 권한 요청</button>
         </div>
-        <div style="font-size:12px;color:#aaa;margin-top:10px;line-height:1.6;">
-          ※ 알림 테스트: 내 폰에 즉시 테스트 알림을 보냅니다.<br>
-          ※ 처음 사용 시 "알림 권한 요청" 버튼을 먼저 눌러주세요.
-        </div>
+        <div class="settings-desc" style="margin:10px 0 0;font-size:12.5px;">처음 사용 시 "알림 권한 요청"을 먼저 눌러주세요.</div>
       </div>
-      <div class="settings-box" id="adminNoticeSection" style="display:none;">
-        <div class="settings-title">📢 관리자 - 공지사항</div>
-        <textarea id="noticeInput" placeholder="공지사항을 입력하세요..." style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;height:80px;font-family:inherit;margin-bottom:10px;resize:none;"></textarea>
-        <div class="btn-group">
-          <button class="action-btn btn-primary" onclick="saveNotice()">📢 공지 등록</button>
-          <button class="action-btn btn-danger" onclick="clearNotice()">🗑️ 공지 삭제</button>
-        </div>
-      </div>
-      <div class="settings-box" id="adminMemberSection" style="display:none;">
-        <div class="settings-title">👥 관리자 - 멤버 관리</div>
-        <div class="settings-desc">멤버 추가/삭제 및 당직 순번을 조정합니다.<br><strong style="color:#e74c3c;">⚠️ 변경 즉시 캘린더에 반영됩니다!</strong></div>
-        <div style="display:flex;gap:8px;margin-bottom:12px;">
-          <input type="text" id="newMemberName" placeholder="새 멤버 이름 입력" style="flex:1;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
-          <button class="action-btn btn-primary" onclick="addMember()">➕ 추가</button>
-        </div>
-        <div id="memberList" style="max-height:350px;overflow-y:auto;"></div>
-      </div>
-      <div class="settings-box" id="adminRotationSection" style="display:none;">
-        <div class="settings-title">⚙️ 관리자 - 당직 시작 설정</div>
-        <div class="info-box">
-          <p><strong>현재 시작 날짜:</strong> <span id="curStartDate">-</span></p>
-          <p><strong>현재 시작 담당자:</strong> <span id="curStartPerson">-</span></p>
-        </div>
-        <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">시작 날짜</label>
-        <input type="date" id="newStartDate" style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:10px;">
-        <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">시작 담당자</label>
-        <select id="newStartPerson" style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;margin-bottom:12px;"></select>
-        <button class="action-btn btn-warning" onclick="updateDutyRotation()">✅ 순번 변경 적용</button>
-      </div>
-      <div class="settings-box" id="adminHolidaySection" style="display:none;">
-        <div class="settings-title">🎉 관리자 - 스마트 휴일 관리</div>
-        <div class="settings-desc">휴일 지정 시 해당 날짜 당직이 없어지고<br><strong>이후 순번이 자동으로 재계산됩니다!</strong></div>
+
+      <details class="acc" id="adminNoticeSection" style="display:none;"><summary>관리자 · 공지사항</summary><div class="acc-body">
+        <textarea id="noticeInput" placeholder="공지사항을 입력하세요..."></textarea>
+        <div class="btn-group"><button class="action-btn btn-primary" onclick="saveNotice()">공지 등록</button><button class="action-btn btn-danger" onclick="clearNotice()">공지 삭제</button></div>
+      </div></details>
+
+      <details class="acc" id="adminVehicleSection" style="display:none;"><summary>관리자 · 차량번호</summary><div class="acc-body">
+        <div class="settings-desc">이름별 차량번호·차종을 수정하고 <strong>저장</strong>을 누르세요. 여러 대면 ＋ 차량 추가. 저장하면 모든 부서원에게 바로 보입니다.</div>
+        <button class="pill vsave" id="vehSaveBtn" style="width:100%" onclick="saveVehicles()">저장</button>
+        <div id="vehicleEditor"></div>
+        <div class="settings-title" style="margin-top:14px;font-size:14.5px">추가 출근 인원 등록</div>
+        <div class="settings-desc" style="margin-bottom:6px">당직 멤버가 아닌 사람이 추가 출근할 때 고를 수 있도록 명단에 넣습니다.</div>
+        <div class="pool-add"><input type="text" id="newPoolName" placeholder="이름 입력"><button class="action-btn btn-primary" onclick="addPoolPerson()">추가</button></div>
+      </div></details>
+
+      <details class="acc" id="adminMemberSection" style="display:none;"><summary>관리자 · 멤버·순번</summary><div class="acc-body">
+        <div class="settings-desc">멤버 추가/삭제 및 당직 순번을 조정합니다.<br><strong style="color:#E5002B">변경 즉시 캘린더에 반영됩니다!</strong></div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;"><input type="text" id="newMemberName" placeholder="새 멤버 이름 입력"><button class="action-btn btn-primary" onclick="addMember()">추가</button></div>
+        <div id="memberList" style="max-height:360px;overflow-y:auto;"></div>
+      </div></details>
+
+      <details class="acc" id="adminRotationSection" style="display:none;"><summary>관리자 · 당직 시작 설정</summary><div class="acc-body">
+        <div class="info-box"><p><strong>시작 날짜</strong> <span id="curStartDate">-</span></p><p><strong>시작 담당자</strong> <span id="curStartPerson">-</span></p></div>
+        <label class="settings-desc" style="display:block;margin-bottom:4px">시작 날짜</label>
+        <input type="date" id="newStartDate" style="margin-bottom:10px">
+        <label class="settings-desc" style="display:block;margin-bottom:4px">시작 담당자</label>
+        <select id="newStartPerson" style="margin-bottom:12px"></select>
+        <button class="action-btn btn-warning" onclick="updateDutyRotation()">순번 변경 적용</button>
+      </div></details>
+
+      <details class="acc" id="adminHolidaySection" style="display:none;"><summary>관리자 · 휴일 관리</summary><div class="acc-body">
+        <div class="settings-desc">휴일을 지정하면 그날 당직이 생기고 <strong>이후 순번이 자동 재계산</strong>됩니다.</div>
         <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
-          <input type="date" id="newHolidayDate" style="flex:1;min-width:130px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
-          <input type="text" id="newHolidayName" placeholder="휴일 이름" style="flex:1;min-width:100px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
-          <button class="action-btn btn-primary" onclick="addHoliday()">➕ 추가</button>
+          <input type="date" id="newHolidayDate" style="flex:1;min-width:130px">
+          <input type="text" id="newHolidayName" placeholder="휴일 이름" style="flex:1;min-width:100px">
+          <button class="action-btn btn-primary" onclick="addHoliday()">추가</button>
         </div>
-        <div id="holidayListContainer" style="max-height:280px;overflow-y:auto;border:2px solid #e0e0e0;border-radius:8px;padding:8px;"></div>
-      </div>
-      <div class="settings-box" id="adminSpecialSection" style="display:none;">
-        <div class="settings-title">📌 관리자 - 특별배정</div>
+        <div id="holidayListContainer" style="max-height:300px;overflow-y:auto;"></div>
+      </div></details>
+
+      <details class="acc" id="adminSpecialSection" style="display:none;"><summary>관리자 · 특별배정</summary><div class="acc-body">
         <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
-          <input type="date" id="specialDate" style="flex:1;min-width:130px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;">
-          <select id="specialPerson" style="flex:1;min-width:100px;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;outline:none;"></select>
-          <button class="action-btn btn-primary" onclick="addSpecialSchedule()">➕ 추가</button>
+          <input type="date" id="specialDate" style="flex:1;min-width:130px">
+          <select id="specialPerson" style="flex:1;min-width:100px"></select>
+          <button class="action-btn btn-primary" onclick="addSpecialSchedule()">추가</button>
         </div>
-        <div id="specialScheduleList" style="max-height:250px;overflow-y:auto;border:2px solid #e0e0e0;border-radius:8px;padding:8px;"></div>
-      </div>
-      <div class="settings-box" id="adminApprovalSection" style="display:none;">
-        <div class="settings-title">✅ 관리자 - 교환 최종 승인</div>
-        <div id="adminApprovalList"><div class="empty-msg">승인 대기 없음</div></div>
-      </div>
-      <div class="settings-box">
-        <div class="settings-title">📊 당직 통계</div>
-        <div id="dutyStats"></div>
-      </div>
-      <div class="settings-box" id="adminResetSection" style="display:none;">
-        <div class="settings-title">🔄 데이터 초기화</div>
-        <div class="settings-desc" style="color:#e74c3c;">⚠️ 관리자만 가능. 변경이력은 유지됩니다.</div>
-        <div class="btn-group">
-          <button class="action-btn btn-danger" onclick="resetExchangeData()">교환·게시판 초기화</button>
-          <button class="action-btn btn-warning" onclick="resetHistoryData()">변경이력 삭제</button>
-        </div>
-      </div>
-      <div class="settings-box">
-        <div class="settings-title">ℹ️ 색상 안내</div>
-        <div class="settings-desc">🔴 빨간색 = 내 당직 &nbsp; 🔵 파란색 = 다른 사람 당직<br>🟣 보라색 = 특별배정 &nbsp; 🟢 초록색 = 교환 완료</div>
-      </div>
+        <div id="specialScheduleList" style="max-height:260px;overflow-y:auto;"></div>
+      </div></details>
+
+      <details class="acc" id="adminResetSection" style="display:none;"><summary>관리자 · 데이터 초기화</summary><div class="acc-body">
+        <div class="settings-desc" style="color:#E5002B">⚠️ 관리자만 가능. 변경이력은 유지됩니다.</div>
+        <div class="btn-group"><button class="action-btn btn-danger" onclick="resetExchangeData()">교환·게시판 초기화</button><button class="action-btn btn-warning" onclick="resetHistoryData()">변경이력 삭제</button></div>
+      </div></details>
     </div>
 
   </div>
+
+  <nav class="tb">
+    <button class="tab active" data-tab="calendar" onclick="showTab('calendar')">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 011 1v13a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z"/></svg>캘린더</button>
+    <button class="tab" data-tab="myduty" onclick="showTab('myduty')">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg>내 당직</button>
+    <button class="tab" id="tabExchangeBtn" data-tab="exchange" onclick="openExchangeTab()">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h14l-3-3M20 16H6l3 3"/></svg>교환</button>
+    <button class="tab" data-tab="history" onclick="showTab('history')">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>이력</button>
+    <button class="tab" id="tabSettingsBtn" data-tab="settings" onclick="showTab('settings')">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/></svg>더보기</button>
+  </nav>
+
 </div>
+</div>
+
+<!-- 날짜 상세 시트 -->
+<div class="modal-overlay" id="dayModal"><div class="sheet" id="daySheet"></div></div>
 
 <div class="modal-overlay" id="acceptModal">
   <div class="modal">
+    <i class="grab"></i>
     <h3>✅ 교환 수락</h3>
-    <p style="font-size:14px;color:#555;margin-bottom:12px;"><strong id="accRequester"></strong>님의 <strong id="accReqDate"></strong> 당직과 교환합니다.</p>
+    <p style="font-size:15px;color:var(--mut);font-weight:400;line-height:1.6"><strong id="accRequester" style="color:var(--txt)"></strong>님의 <strong id="accReqDate" style="color:var(--txt)"></strong> 당직과 교환합니다.</p>
     <label>내가 줄 당직 날짜</label>
     <select id="accMyDate"><option value="">선택하세요</option></select>
-    <div id="accSummary" style="background:#f8f9fa;padding:12px;border-radius:8px;font-size:13px;color:#555;margin-top:10px;display:none;"></div>
+    <div id="accSummary" style="background:#F8FAFC;padding:12px;border-radius:10px;font-size:14px;color:var(--mut);margin-top:10px;display:none;line-height:1.7;font-weight:400"></div>
     <div class="modal-btns">
       <button class="modal-cancel-btn" onclick="closeAcceptModal()">취소</button>
       <button class="modal-confirm" onclick="confirmAccept()">수락하기</button>
@@ -410,8 +554,9 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 
 <div class="modal-overlay" id="wantedModal">
   <div class="modal">
-    <h3>🙋 당직 교환 구합니다!!</h3>
-    <p style="font-size:14px;color:#555;margin-bottom:12px;">게시하면 모든 부서원에게 표시됩니다.</p>
+    <i class="grab"></i>
+    <h3>🙋 당직 교환 구합니다</h3>
+    <p style="font-size:14px;color:var(--mut);font-weight:400">게시하면 모든 부서원에게 표시됩니다.</p>
     <label>내 당직 날짜</label>
     <select id="wantedMyDate"><option value="">선택하세요</option></select>
     <label>사유</label>
@@ -425,8 +570,9 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100
 
 <div class="modal-overlay" id="wantedAcceptModal">
   <div class="modal">
+    <i class="grab"></i>
     <h3>🤝 교환 제안하기</h3>
-    <p style="font-size:14px;color:#555;margin-bottom:12px;"><strong id="wantedAcceptName"></strong>님의 <strong id="wantedAcceptDate"></strong> 당직과 교환 제안합니다.</p>
+    <p style="font-size:15px;color:var(--mut);font-weight:400;line-height:1.6"><strong id="wantedAcceptName" style="color:var(--txt)"></strong>님의 <strong id="wantedAcceptDate" style="color:var(--txt)"></strong> 당직과 교환 제안합니다.</p>
     <label>내가 줄 당직 날짜</label>
     <select id="wantedAcceptMyDate"><option value="">선택하세요</option></select>
     <div class="modal-btns">
@@ -473,6 +619,26 @@ const ADMIN_USER = '이진모';
 const ADMIN_PASSWORD = 'admin1234';
 const DEFAULT_MEMBERS = ['류재근','정희주','정세정','이진모','권영재','김병오','안제만','인원교','고현우','정민규','권석일'];
 const DEFAULT_HOLIDAYS = {
+  /* ===== 2027년 (우주항공청 월력요항 + 회사 휴무) ===== */
+  '2027-01-01':'신정',
+  '2027-02-06':'설날연휴','2027-02-07':'설날','2027-02-08':'설날연휴','2027-02-09':'대체휴무(설날)',
+  '2027-02-10':'설날 다음날(회사휴무)',
+  '2027-03-01':'삼일절',
+  '2027-05-01':'노동절','2027-05-03':'대체휴무(노동절)',
+  '2027-05-05':'어린이날',
+  '2027-05-13':'석가탄신일',
+  '2027-06-06':'현충일',
+  '2027-07-17':'제헌절','2027-07-19':'대체휴무(제헌절)',
+  '2027-08-01':'하기휴무','2027-08-02':'하기휴무','2027-08-03':'하기휴무','2027-08-04':'하기휴무',
+  '2027-08-05':'하기휴무','2027-08-06':'하기휴무','2027-08-07':'하기휴무','2027-08-08':'하기휴무',
+  '2027-08-15':'광복절','2027-08-16':'대체휴무(광복절)',
+  '2027-09-14':'추석연휴','2027-09-15':'추석','2027-09-16':'추석연휴',
+  '2027-09-17':'추석 다음날(회사휴무)',
+  '2027-10-03':'개천절','2027-10-04':'대체휴무(개천절)',
+  '2027-10-09':'한글날','2027-10-11':'대체휴무(한글날)',
+  '2027-10-24':'노조창립기념일(휴무)',
+  '2027-12-25':'성탄절','2027-12-27':'대체휴무(성탄절)',
+  /* ===== 2026년 ===== */
   '2026-01-01':'신정','2026-01-28':'설날연휴','2026-01-29':'설날','2026-01-30':'설날연휴',
   '2026-03-01':'삼일절','2026-05-05':'어린이날','2026-05-24':'석가탄신일',
   '2026-06-06':'현충일','2026-07-17':'제헌절',
@@ -485,6 +651,20 @@ const DEFAULT_HOLIDAYS = {
   '2026-10-03':'개천절','2026-10-05':'대체휴무','2026-10-09':'한글날',
   '2026-12-25':'성탄절'
 };
+const DEFAULT_VEHICLES = {
+  "류재근":[{"p": "398루 4111", "c": "쏘렌토"}],
+  "정희주":[{"p": "102조 4240", "c": "K7"}],
+  "정세정":[{"p": "192고 7342", "c": "카니발"}, {"p": "57노 5585", "c": "레이"}],
+  "이진모":[{"p": "220조 4068", "c": "쏘렌토"}],
+  "권영재":[{"p": "399저 1048", "c": "쏘렌토"}],
+  "김병오":[{"p": "166무 9641", "c": "카니발"}],
+  "안제만":[{"p": "339서 9013", "c": "K3"}],
+  "인원교":[{"p": "29거 1973", "c": "쏘울"}],
+  "고현우":[{"p": "100로 8509", "c": "쏘렌토"}],
+  "신영상":[{"p": "171누 4200", "c": "쏘렌토"}],
+  "송미선":[{"p": "149라 7067", "c": "쏘렌토"}]
+};
+const DEFAULT_EXTRA_POOL = ['신영상','송미선'];
 const DEFAULT_SPECIAL = {
   '2026-06-03':'김병오','2026-06-06':'정희주','2026-06-07':'안제만',
   '2026-06-13':'김병오','2026-06-14':'권석일','2026-06-20':'인원교',
@@ -502,7 +682,9 @@ let DUTY_START_DATE = new Date(2026,6,5);
 let DUTY_START_INDEX = MEMBERS.indexOf('정세정');
 let allRows = {}, allWanted = {};
 let prevRowsSnap = {};
-let isFirstLoad = true; // 로그인 직후 첫 onValue 콜백에서 기존 요청 알림 방지용
+let isFirstLoad = true;
+let VEHICLES = JSON.parse(JSON.stringify(DEFAULT_VEHICLES)), EXTRA = {}, EXTRA_POOL = [...DEFAULT_EXTRA_POOL];
+let _baseCache = null, dayOpen = null, lastExSeg = 'apply', statYearOff = 0, vehDirty = false; // 로그인 직후 첫 onValue 콜백에서 기존 요청 알림 방지용
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function pdl(s) { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); }
@@ -546,13 +728,18 @@ function checkNotif(newRows) {
 }
 
 function updateExchangeBadge() {
-  const cnt = Object.values(allRows).filter(r=>r.target===currentUser&&r.status==='대기중').length;
-  const btn = document.getElementById('tabExchangeBtn'); if(!btn) return;
-  let badge = btn.querySelector('.tab-badge');
-  if(cnt > 0) {
-    if(!badge) { badge = document.createElement('span'); badge.className='tab-badge'; btn.appendChild(badge); }
-    badge.textContent = cnt;
-  } else if(badge) badge.remove();
+  const cnt = pendingCount();
+  const btn = document.getElementById('tabExchangeBtn');
+  if(btn) {
+    let badge = btn.querySelector('.tab-badge');
+    if(cnt > 0) {
+      if(!badge) { badge = document.createElement('span'); badge.className='tab-badge'; btn.appendChild(badge); }
+      badge.textContent = cnt;
+    } else if(badge) badge.remove();
+  }
+  const sb = document.getElementById('segBadge');
+  if(sb) { sb.style.display = cnt>0 ? 'inline-block' : 'none'; sb.textContent = cnt; }
+  renderKpi();
 }
 
 function initFirebaseListeners() {
@@ -570,6 +757,7 @@ function initFirebaseListeners() {
     if(currentUser) {
       renderMyRequests(); renderExchangeTab(); renderMyDuty();
       renderCalendar(); // [버그수정] 교환 상태 변경 시 항상 캘린더 갱신 (hadApproval 조건 제거)
+      if(dayOpen) renderDaySheet();
       updateExchangeBadge();
     }
     const fb = document.getElementById('fbStatusBanner');
@@ -594,10 +782,18 @@ function initFirebaseListeners() {
       });
     }
     SPECIAL_SCHEDULE = {...DEFAULT_SPECIAL}; if(s.special) Object.assign(SPECIAL_SCHEDULE, s.special);
-    populateMemberSelects();
+    _baseCache = null;
+    if(s.vehicles) {   // 관리자가 한 번이라도 저장했다면 Firebase 값이 기본값을 완전히 대체 (삭제도 반영)
+      VEHICLES = {};
+      Object.entries(s.vehicles).forEach(([n,l]) => { if(n!=='__saved__' && Array.isArray(l)) VEHICLES[n] = l.filter(x => x && x.p); });
+    } else VEHICLES = JSON.parse(JSON.stringify(DEFAULT_VEHICLES));
+    EXTRA_POOL = Array.isArray(s.extraPool) ? s.extraPool : (s.vehicles ? [] : [...DEFAULT_EXTRA_POOL]);
+    populateMemberSelects(); renderVehicleEditor();
     const tm = document.getElementById('totalMembers'); if(tm) tm.textContent = MEMBERS.length;
-    if(currentUser) { renderCalendar(); renderMyDuty(); if(isAdmin) renderSettings(); }
+    if(currentUser) { renderCalendar(); renderMyDuty(); if(dayOpen) renderDaySheet(); if(isAdmin) renderSettings(); }
   });
+
+  onValue(ref(db,'extraWork'), snap => { EXTRA = snap.val() || {}; if(currentUser) { renderCalendar(); if(dayOpen) renderDaySheet(); } });
 
   onValue(ref(db,'wanted'), snap => { allWanted=snap.val()||{}; if(currentUser) renderWantedList(); });
 
@@ -622,14 +818,24 @@ function getExchangedDuties() {
   Object.values(allRows).forEach(r => { if(r.status==='승인완료') { result[r.myDate]=r.target; result[r.targetDate]=r.requester; } });
   return result;
 }
-function getDutyPerson(date) {
-  if(MEMBERS.length===0) return null;
-  const s = dateToStr(date), exd = getExchangedDuties();
-  if(exd[s]) return exd[s];
-  if(SPECIAL_SCHEDULE[s]) return SPECIAL_SCHEDULE[s];
-  if(!isDutyDay(date)) return null;
-  let count = 0; const cur = new Date(DUTY_START_DATE);
+function ensureBaseCache() {
+  if(_baseCache) return;
+  _baseCache = new Map();
+  let count = 0; const cur = new Date(DUTY_START_DATE), end = new Date(DUTY_START_DATE.getFullYear()+6, 11, 31);
+  while(cur <= end) {
+    const cs = dateToStr(cur); _baseCache.set(cs, count);
+    if(!SPECIAL_SCHEDULE[cs] && (cur.getDay()===0 || cur.getDay()===6 || HOLIDAYS[cs])) count++;
+    cur.setDate(cur.getDate()+1);
+  }
+}
+// 교환·특별배정을 반영하지 않은 기본 순번 (원본 getDutyPerson의 순번 계산 그대로)
+function getBasePerson(date) {
+  const s = dateToStr(date);
   if(new Date(date) >= DUTY_START_DATE) {
+    ensureBaseCache();
+    const c = _baseCache.get(s);
+    if(c !== undefined) return MEMBERS[(DUTY_START_INDEX+c) % MEMBERS.length];
+    let count = 0; const cur = new Date(DUTY_START_DATE);
     while(dateToStr(cur) !== s) {
       const cs = dateToStr(cur);
       if(!SPECIAL_SCHEDULE[cs] && (cur.getDay()===0 || cur.getDay()===6 || HOLIDAYS[cs])) count++;
@@ -648,13 +854,25 @@ function getDutyPerson(date) {
     return null;
   }
 }
-function getMyDutyDates(user) {
-  const result = []; const now = new Date(); const year = now.getFullYear()<2026?2026:now.getFullYear();
-  for(let m=0;m<12;m++) {
-    const days = new Date(year,m+1,0).getDate();
-    for(let d=1;d<=days;d++) { const date=new Date(year,m,d); if(isDutyDay(date) && getDutyPerson(date)===user) result.push(dateToStr(date)); }
+function getDutyPerson(date) {
+  if(MEMBERS.length===0) return null;
+  const s = dateToStr(date), exd = getExchangedDuties();
+  if(exd[s]) return exd[s];
+  if(SPECIAL_SCHEDULE[s]) return SPECIAL_SCHEDULE[s];
+  if(!isDutyDay(date)) return null;
+  return getBasePerson(date);
+}
+function dutyDatesBetween(user, from, to) {
+  const out = [];
+  for(let t = new Date(from.getFullYear(), from.getMonth(), from.getDate()); t <= to; t.setDate(t.getDate()+1)) {
+    if(isDutyDay(t) && getDutyPerson(t) === user) out.push(dateToStr(t));
   }
-  return result;
+  return out;
+}
+function getMyDutyDates(user) {
+  // 교환·구합니다 선택용: 오늘 이후 ~ 내년 말
+  const now = new Date(), t0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return dutyDatesBetween(user, t0, new Date(now.getFullYear()+1, 11, 31));
 }
 
 function populateMemberSelects() {
@@ -739,7 +957,7 @@ function renderWantedList() {
   items.sort((a,b)=>pdl(a.myDate)-pdl(b.myDate)).forEach(w => {
     const isMe=w.requester===currentUser, isMatched=w.status==='matched';
     const div=document.createElement('div'); div.className='wanted-banner';
-    div.style.background=isMe?(isMatched?'linear-gradient(135deg,#f39c12,#e67e22)':'linear-gradient(135deg,#8e44ad,#6c3483)'):'linear-gradient(135deg,#e74c3c,#c0392b)';
+    if(isMe) div.classList.add(isMatched?'matched':'mine');
     div.innerHTML='<div class="wanted-banner-top"><div style="flex:1;">'
       +'<div style="font-size:14px;font-weight:700;">📢 '+esc(w.requester)+'님 '+w.myDate+' 당직 교환 구합니다!!</div>'
       +(isMatched?'<div style="font-size:11px;opacity:0.9;margin-top:2px;">🤝 교환 제안 수신됨</div>':'')
@@ -801,16 +1019,22 @@ const STATUS_LABEL={'대기중':'⏳ 대기중','수락완료':'🤝 수락완�
 const STATUS_CLS={'대기중':'status-pending','수락완료':'status-accepted','승인완료':'status-accepted','반려':'status-rejected'};
 
 function renderMyRequests() {
-  const rows=Object.values(allRows).filter(r=>r.requester===currentUser);
   const el=document.getElementById('myRequests'); if(!el) return;
+  const hid=hiddenSet('req');
+  const rows=Object.entries(allRows).map(([k,r])=>Object.assign({},r,{id:r.id||k})).filter(r=>r.requester===currentUser&&!hid.has(r.id));
+  const cnt=document.getElementById('myReqCount'); if(cnt) cnt.textContent=rows.length;
   if(!rows.length) { el.innerHTML='<div class="empty-msg">신청한 교환이 없습니다.</div>'; return; }
   el.innerHTML='';
   rows.slice().reverse().forEach(r => {
     const div=document.createElement('div'); div.className='conf-row status-'+r.status;
+    let act='';
+    if(r.status==='대기중') act='<button class="cancel-btn" onclick="cancelRequest(\''+esc(r.id)+'\')">취소</button>';
+    else if(r.status==='반려') act='<button class="cancel-btn" onclick="hideMyRequest(\''+esc(r.id)+'\')">목록에서 삭제</button>';
+    else if(r.status==='승인완료') act='<button class="cancel-btn" onclick="hideMyRequest(\''+esc(r.id)+'\')">목록에서 삭제</button>';
     div.innerHTML='<div class="conf-row-top"><span class="conf-row-info">📅 '+r.myDate+' ↔ '+r.targetDate+'</span>'
       +'<span class="status-badge '+(STATUS_CLS[r.status]||'status-pending')+'">'+(STATUS_LABEL[r.status]||r.status)+'</span></div>'
       +'<div class="conf-row-detail">상대방: <strong>'+esc(r.target)+'</strong> | 사유: '+esc(r.reason)+'</div>'
-      +(r.status==='대기중'?'<div class="conf-row-actions"><button class="cancel-btn" onclick="cancelRequest(\''+r.id+'\')">취소</button></div>':'');
+      +(act?'<div class="conf-row-actions">'+act+'</div>':'');
     el.appendChild(div);
   });
 }
@@ -1023,86 +1247,101 @@ window.changeMonth = function(dir) {
 function renderCalendar() {
   const mn=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
   document.getElementById('calendarTitle').textContent = currentYear+'년 '+mn[currentMonth];
-  const firstDay=new Date(currentYear,currentMonth,1).getDay();
-  const daysInMonth=new Date(currentYear,currentMonth+1,0).getDate();
-  const today=new Date(), exd=getExchangedDuties();
+  const first=new Date(currentYear,currentMonth,1), dim=new Date(currentYear,currentMonth+1,0).getDate();
+  const lead=(first.getDay()+6)%7, total=Math.ceil((lead+dim)/7)*7;   // 월요일 시작 → 주 단위 A/B조 칩이 행과 일치
+  const todayStr=dateToStr(new Date()), exd=getExchangedDuties();
   const grid=document.getElementById('calendarDays'); grid.innerHTML='';
-  for(let i=0;i<firstDay;i++) { const e=document.createElement('div'); e.className='day-cell empty'; grid.appendChild(e); }
-  for(let d=1;d<=daysInMonth;d++) {
-    const date=new Date(currentYear,currentMonth,d), str=dateToStr(date), dow=date.getDay();
-    const cell=document.createElement('div');
-    let cls='day-cell';
-    if(dow===0) cls+=' sunday'; if(dow===6) cls+=' saturday';
-    if(date.toDateString()===today.toDateString()) cls+=' today';
-    if(HOLIDAYS[str]) cls+=' holiday-cell';
-    const duty=isDutyDay(date), person=duty?getDutyPerson(date):null;
-    const isEx=!!exd[str], isSp=!!SPECIAL_SCHEDULE[str]&&!isEx;
-    if(duty) { if(isEx&&person===currentUser) cls+=' exchanged'; else if(person===currentUser) cls+=' my-duty'; else cls+=' duty-day'; }
-    cell.className=cls;
-    const nd=document.createElement('div'); nd.className='day-num'; nd.textContent=d; cell.appendChild(nd);
-    if(HOLIDAYS[str]) { const hd=document.createElement('div'); hd.className='holiday-label'; hd.textContent=HOLIDAYS[str]; cell.appendChild(hd); }
-    if(person) {
-      const pd=document.createElement('div');
-      let nc='duty-name';
-      if(isEx) nc+=' exchanged-name'; else if(isSp) nc+=' special-name'; else if(person===currentUser) nc+=' my-name';
-      pd.className=nc; pd.textContent=person; cell.appendChild(pd);
+  for(let i=0;i<total;i++) {
+    if(i%7===0) {
+      const t=abTeamOf(new Date(currentYear,currentMonth,1-lead+i));
+      const w=document.createElement('div'); w.className='wk '+t; w.textContent=t; grid.appendChild(w);
     }
+    const d=i-lead+1;
+    if(d<1||d>dim) { const e=document.createElement('div'); e.className='c e'; grid.appendChild(e); continue; }
+    const date=new Date(currentYear,currentMonth,d), str=dateToStr(date), dow=date.getDay();
+    const hol=HOLIDAYS[str]||'', duty=isDutyDay(date), person=duty?getDutyPerson(date):null;
+    const isEx=!!exd[str], isSp=!!SPECIAL_SCHEDULE[str]&&!isEx, xs=extraOf(str);
+    let cls='c';
+    if(dow===0) cls+=' su'; if(dow===6) cls+=' sa';
+    if(hol) cls+=' ho';
+    if(person===currentUser) cls+=' me'; else if(isEx) cls+=' ex'; else if(isSp) cls+=' sp';
+    if(str===todayStr) cls+=' today';
+    const cell=document.createElement('div'); cell.className=cls; cell.dataset.d=str;
+    cell.innerHTML='<b>'+d+'</b>'+(xs.length?'<span class="xb">+'+xs.length+'</span>':'')
+      +(hol?'<i>'+esc(holShort(hol))+'</i>':'')+(person?'<u>'+esc(person)+'</u>':'');
     grid.appendChild(cell);
   }
-  renderDutyOrder();
+  grid.onclick=e=>{ const c=e.target.closest('.c'); if(c&&c.dataset.d) openDay(c.dataset.d); };
+  renderDutyOrder(); renderKpi(); renderUpcomingHolidays();
 }
 
 function renderDutyOrder() {
   const c=document.getElementById('dutyOrderList'); if(!c) return; c.innerHTML='';
+  const nx=nextRotationPerson();
   MEMBERS.forEach((name,i) => {
-    const b=document.createElement('div'); b.className='order-badge';
-    b.style.background=name===currentUser?'#e74c3c':'#667eea';
-    b.textContent=name; c.appendChild(b);
-    if(i<MEMBERS.length-1) { const a=document.createElement('div'); a.className='order-arrow'; a.textContent='→'; c.appendChild(a); }
+    const sp=document.createElement('span');
+    sp.className=(name===currentUser?'me ':'')+(name===nx?'nx':'');
+    sp.innerHTML='<i>'+(i+1)+'</i>'+esc(name); c.appendChild(sp);
+    if(i<MEMBERS.length-1) { const a=document.createElement('em'); a.textContent='›'; c.appendChild(a); }
   });
 }
 
 function renderMyDuty() {
-  const list=document.getElementById('myDutyList'); list.innerHTML='';
-  const dn=['일','월','화','수','목','금','토'];
-  const myDates=getMyDutyDates(currentUser), exd=getExchangedDuties();
-  const rows=Object.values(allRows);
-  const wi=Object.values(allWanted).filter(w=>w.requester===currentUser&&w.status==='active');
-  if(!myDates.length) { list.innerHTML='<div class="empty-msg">담당 당직이 없습니다.</div>'; return; }
-  myDates.forEach(str => {
-    const date=pdl(str), dow=date.getDay();
-    const isEx=!!exd[str], isSp=!!SPECIAL_SCHEDULE[str];
+  const list=document.getElementById('myDutyList'), hero=document.getElementById('myHero'); if(!list||!hero||!currentUser) return;
+  const now=new Date(), t0=new Date(now.getFullYear(),now.getMonth(),now.getDate()), todayStr=dateToStr(t0), y=t0.getFullYear();
+  const all=dutyDatesBetween(currentUser,new Date(y,0,1),new Date(y+1,11,31));
+  const up=all.filter(s=>s>=todayStr), past=all.filter(s=>s<todayStr).reverse();
+  const left=up.filter(s=>s.startsWith(y+'-')).length, nextY=all.filter(s=>s.startsWith((y+1)+'-')).length;
+  const nx=up[0], dd=nx?Math.round((pdl(nx)-t0)/864e5):null;
+  hero.innerHTML='<div class="hero"><span class="logo" role="img" aria-label=""></span><small>내 다음 당직</small>'
+    +(nx?'<div class="big">'+(dd===0?'오늘':'D-'+dd)+'</div><p>'+fmtKo(nx)+' · '+abTeamOf(pdl(nx))+'조'+(HOLIDAYS[nx]?' · '+esc(HOLIDAYS[nx]):'')+'</p>'
+        :'<div class="big" style="font-size:30px">예정 없음</div><p>예정된 당직이 없습니다.</p>')
+    +'<div class="hs"><div><b>'+left+'</b><small>올해 남은</small></div><div><b>'+nextY+'</b><small>'+(y+1)+'년 전체</small></div><div><b>'+pendingCount()+'</b><small>교환 대기</small></div></div></div>';
+  const isPast=dutyFilter==='past';
+  let dates=isPast?past:up; if(dutyFilter==='holiday') dates=up.filter(s=>HOLIDAYS[s]);
+  if(!dates.length) { list.innerHTML='<div class="empty-msg">해당하는 당직이 없습니다.</div>'; return; }
+  const rows=Object.values(allRows), wi=Object.values(allWanted).filter(w=>w.requester===currentUser&&w.status==='active'), exd=getExchangedDuties();
+  let html='', lastM='';
+  dates.forEach(str => {
+    const date=pdl(str), dow=date.getDay(), isEx=!!exd[str], isSp=!!SPECIAL_SCHEDULE[str], hol=HOLIDAYS[str]||'', team=abTeamOf(date);
     // 반려가 아닌 활성 요청 우선 탐색 (반려 후 재신청 시 반려 요청이 먼저 매칭되는 버그 방지)
-    const reqRow=rows.find(r=>r.requester===currentUser&&r.myDate===str&&r.status!=='반려')
-              ||rows.find(r=>r.requester===currentUser&&r.myDate===str);
+    const reqRow=rows.find(r=>r.requester===currentUser&&r.myDate===str&&r.status!=='반려')||rows.find(r=>r.requester===currentUser&&r.myDate===str);
     const isWanted=wi.find(w=>w.myDate===str);
-    let type=HOLIDAYS[str]||(dow===0?'일요일':dow===6?'토요일':''); if(isSp&&!type) type='특별배정';
-    let btnTxt='교환 요청', btnCls='request-btn', btnDis='';
-    if(isEx) { btnTxt='🔄 교환완료'; btnCls='request-btn accepted'; btnDis='disabled'; }
+    let btnTxt='교환 신청', btnCls='request-btn', btnDis='';
+    if(isEx) { btnTxt='교환완료'; btnCls='request-btn accepted'; btnDis='disabled'; }
     else if(reqRow) {
-      if(reqRow.status==='대기중') { btnTxt='⏳ 요청중'; btnCls='request-btn requested'; btnDis='disabled'; }
-      else if(reqRow.status==='수락완료') { btnTxt='🤝 수락됨'; btnCls='request-btn requested'; btnDis='disabled'; }
-      else if(reqRow.status==='승인완료') { btnTxt='✅ 승인완료'; btnCls='request-btn accepted'; btnDis='disabled'; }
+      if(reqRow.status==='대기중') { btnTxt='요청중'; btnCls='request-btn requested'; btnDis='disabled'; }
+      else if(reqRow.status==='수락완료') { btnTxt='수락됨'; btnCls='request-btn requested'; btnDis='disabled'; }
+      else if(reqRow.status==='승인완료') { btnTxt='승인완료'; btnCls='request-btn accepted'; btnDis='disabled'; }
     }
-    const card=document.createElement('div'); card.className='duty-card';
-    card.innerHTML='<div>'
-      +'<div class="duty-date">📅 '+str.replace(/^\d{4}-/,'')+'  ('+dn[dow]+')</div>'
-      +(type?'<div class="duty-type">'+esc(type)+'</div>':'')
-      +(isEx?'<div style="font-size:12px;color:#27ae60;">🔄 교환완료</div>':'')
-      +(isWanted?'<div style="font-size:12px;color:#e74c3c;">🙋 교환구합니다 게시중</div>':'')
-      +'</div>'
-      +'<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">'
-      +'<button class="'+btnCls+'" '+btnDis+' '+(!btnDis?'onclick="showTab(\'apply\')"':'')+'>'+btnTxt+'</button>'
-      +(!isEx&&!reqRow&&!isWanted?'<button class="wanted-btn" onclick="openWantedModal(\''+str+'\')">🙋 구합니다</button>':'')
+    const ym=date.getFullYear()+'년 '+(date.getMonth()+1)+'월';
+    if(ym!==lastM) { html+='<div class="mh">'+ym+'</div>'; lastM=ym; }
+    const tags=(hol?'<span class="tag r">'+esc(hol)+'</span>':((dow===0||dow===6)?'<span class="tag b">'+(dow===0?'일요일':'토요일')+'</span>':''))
+      +(isSp&&!isEx?'<span class="tag p">특별배정</span>':'')+(isEx?'<span class="tag g">교환완료</span>':'')
+      +'<span class="tag '+(team==='A'?'b':'o')+'">'+team+'조</span>'+(isWanted?'<span class="tag r">🙋 구합니다 게시중</span>':'');
+    html+='<div class="row" data-d="'+str+'"><div class="db'+(hol?' ho':'')+'"><b>'+date.getDate()+'</b><small>'+DN[dow]+'</small></div>'
+      +'<div class="m"><b>'+(date.getMonth()+1)+'월 '+date.getDate()+'일 ('+DN[dow]+')</b><small>'+tags+'</small></div>'
+      +(isPast?'':'<div class="btn-col"><button class="'+btnCls+'" '+btnDis+' data-act="req" data-d="'+str+'">'+btnTxt+'</button>'
+        +(!isEx&&!reqRow&&!isWanted?'<button class="wanted-btn" data-act="wanted" data-d="'+str+'">🙋 구합니다</button>':'')+'</div>')
       +'</div>';
-    list.appendChild(card);
   });
+  list.innerHTML=html;
+  list.onclick=e => {
+    const b=e.target.closest('button[data-act]');
+    if(b) {
+      if(b.disabled) return;
+      if(b.dataset.act==='req') { showTab('apply'); const s=document.getElementById('fmMyDate'); if(s) s.value=b.dataset.d; }
+      else if(b.dataset.act==='wanted') openWantedModal(b.dataset.d);
+      return;
+    }
+    const r=e.target.closest('.row'); if(r&&r.dataset.d) openDay(r.dataset.d);
+  };
 }
 
 function renderDutyStats() {
   const el=document.getElementById('dutyStats'); if(!el||!MEMBERS.length) return;
   const stats={}; MEMBERS.forEach(m=>{stats[m]=0;});
-  const now=new Date(), year=now.getFullYear()<2026?2026:now.getFullYear();
+  const now=new Date(), year=Math.max(now.getFullYear(),2026)+statYearOff;
   for(let mo=0;mo<12;mo++) {
     const days=new Date(year,mo+1,0).getDate();
     for(let d=1;d<=days;d++) { const date=new Date(year,mo,d); if(isDutyDay(date)) { const p=getDutyPerson(date); if(p&&stats[p]!==undefined) stats[p]++; } }
@@ -1110,7 +1349,7 @@ function renderDutyStats() {
   const max=Math.max(...Object.values(stats),1); el.innerHTML='';
   Object.entries(stats).sort((a,b)=>b[1]-a[1]).forEach(([name,cnt]) => {
     const div=document.createElement('div'); div.className='stat-bar-wrap';
-    div.innerHTML='<div class="stat-name"><span>'+name+(name===currentUser?' (나)':'')+'</span><span>'+cnt+'회</span></div>'
+    div.innerHTML='<div class="stat-name"><span>'+esc(name)+(name===currentUser?' (나)':'')+'</span><span>'+cnt+'회</span></div>'
       +'<div class="stat-bar-bg"><div class="stat-bar'+(name===currentUser?' my-bar':'')+'" style="width:'+(cnt/max*100).toFixed(0)+'%"></div></div>';
     el.appendChild(div);
   });
@@ -1163,10 +1402,11 @@ const HISTORY_LABELS = {
   '순번변경':'⚙️ 순번 변경','멤버추가':'👤 멤버 추가','멤버삭제':'👤 멤버 삭제',
   '공휴일추가':'🎉 공휴일 추가','공휴일삭제':'🗑️ 공휴일 삭제',
   '특별배정추가':'📌 특별배정 추가','특별배정삭제':'🗑️ 특별배정 삭제',
-  '교환구합니다':'🙋 교환구합니다','교환제안':'🤝 교환제안'
+  '교환구합니다':'🙋 교환구합니다','교환제안':'🤝 교환제안',
+  '추가출근등록':'🚗 추가 출근 등록','추가출근삭제':'🚗 추가 출근 삭제','차량번호수정':'🚗 차량번호 수정'
 };
 
-function buildHistoryCard(item) {
+function buildHistoryCard(item, key) {
   const card=document.createElement('div'); card.className='history-card';
   let detail='';
   if(item.type==='교환신청')
@@ -1176,18 +1416,21 @@ function buildHistoryCard(item) {
     detail='<strong>'+esc(item.from||'')+'</strong>님: '+esc(item.reason||'');
   card.innerHTML='<div class="history-badge">'+(HISTORY_LABELS[item.type]||item.type||'기타')+'</div>'
     +'<div class="history-detail">'+detail+'</div>'
-    +'<div class="history-time">⏰ '+fmtDate(item.changedAt)+'</div>';
+    +'<div class="history-time">⏰ '+fmtDate(item.changedAt)+'</div>'
+    +(key?'<div class="conf-row-actions"><button class="cancel-btn" onclick="'+(isAdmin?'deleteHistory':'hideHistory')+'(\''+esc(key)+'\')">삭제</button></div>':'');
   return card;
 }
 
 // onValue 스냅샷을 직접 받아 렌더링 (실시간 업데이트용)
 function renderHistoryFromSnap(snap) {
   const list=document.getElementById('historyList'); if(!list) return;
-  const raw=snap.val();
-  const hist=raw?Object.values(raw).reverse():[];
-  if(!hist.length) { list.innerHTML='<div class="empty-msg">변경 이력이 없습니다.<br><small style="color:#ccc;">교환 신청·수락·승인 시 자동 기록됩니다</small></div>'; return; }
-  list.innerHTML='<div style="font-size:12px;color:#aaa;margin-bottom:12px;">총 '+hist.length+'건 (최근 200건)</div>';
-  hist.slice(0,200).forEach(item => list.appendChild(buildHistoryCard(item)));
+  const raw=snap.val()||{};
+  let items=Object.entries(raw).reverse().map(([k,v])=>({k,v}));
+  if(!isAdmin) { const hid=hiddenSet('hist'); items=items.filter(o=>!hid.has(o.k)); }
+  const hc=document.getElementById('histCount'); if(hc) hc.textContent=items.length;
+  if(!items.length) { list.innerHTML='<div class="empty-msg">변경 이력이 없습니다.<br><small style="color:#ccc;">교환 신청·수락·승인 시 자동 기록됩니다</small></div>'; return; }
+  list.innerHTML=isAdmin?'<div style="font-size:12px;color:#7B8BA1;margin-bottom:10px;">관리자: 삭제하면 모든 사람에게서 지워집니다 (최근 200건 표시)</div>':'<div style="font-size:12px;color:#7B8BA1;margin-bottom:10px;">삭제는 내 화면에서만 적용됩니다 (최근 200건 표시)</div>';
+  items.slice(0,200).forEach(o => list.appendChild(buildHistoryCard(o.v,o.k)));
 }
 
 // 탭 클릭 시 Firebase에서 직접 조회 (로딩 표시 포함)
@@ -1269,11 +1512,11 @@ function renderSettings() {
   document.getElementById('curStartPerson').textContent=MEMBERS[DUTY_START_INDEX]||'-';
   if(isAdmin) {
     document.getElementById('adminBadge').style.display='inline-block';
-    ['adminNoticeSection','adminMemberSection','adminRotationSection','adminHolidaySection','adminSpecialSection','adminApprovalSection','adminResetSection'].forEach(id=>{document.getElementById(id).style.display='block';});
-    renderMemberList(); renderHolidayList(); renderSpecialList(); renderAdminApproval();
+    ['adminNoticeSection','adminVehicleSection','adminStatsBox','adminMemberSection','adminRotationSection','adminHolidaySection','adminSpecialSection','adminApprovalSection','adminResetSection'].forEach(id=>{const e=document.getElementById(id); if(e) e.style.display='block';});
+    renderMemberList(); renderHolidayList(); renderSpecialList(); renderAdminApproval(); renderVehicleEditor();
   } else {
     document.getElementById('adminBadge').style.display='none';
-    ['adminNoticeSection','adminMemberSection','adminRotationSection','adminHolidaySection','adminSpecialSection','adminApprovalSection','adminResetSection'].forEach(id=>{document.getElementById(id).style.display='none';});
+    ['adminNoticeSection','adminVehicleSection','adminStatsBox','adminMemberSection','adminRotationSection','adminHolidaySection','adminSpecialSection','adminApprovalSection','adminResetSection'].forEach(id=>{const e=document.getElementById(id); if(e) e.style.display='none';});
   }
   renderDutyStats();
   updateNotifStatus();
@@ -1305,11 +1548,11 @@ window.login = function() {
     if(pwd!==ADMIN_PASSWORD) { alert('비밀번호가 틀렸습니다!'); document.getElementById('adminPassword').value=''; return; }
     isAdmin=true;
   }
-  currentUser=sel; prevRowsSnap={}; isFirstLoad=true;
+  const aps=document.getElementById('adminApprovalSection'); if(aps) aps.style.display=isAdmin?'block':'none';
+  currentUser=sel; prevRowsSnap={}; isFirstLoad=true; dayOpen=null; dutyFilter='upcoming'; vehDirty=false;
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('mainScreen').style.display='block';
-  document.getElementById('userBadge').textContent=sel+(isAdmin?' 👑 관리자':' 님');
-  document.getElementById('tabSettingsBtn').style.display='';
+  document.getElementById('userBadge').textContent=sel+(isAdmin?' · 관리자':'');
   const now=new Date();
   currentYear=now.getFullYear()<2026?2026:now.getFullYear();
   currentMonth=now.getFullYear()<2026?0:now.getMonth();
@@ -1406,7 +1649,7 @@ window.logout = function() {
   // 서비스 워커에 로그아웃 알림 → 감청 중지
   if(navigator.serviceWorker && navigator.serviceWorker.controller)
     navigator.serviceWorker.controller.postMessage({type:'CLEAR_USER'});
-  currentUser=''; isAdmin=false; prevRowsSnap={}; allRows={}; allWanted={};
+  closeDay(); currentUser=''; isAdmin=false; prevRowsSnap={}; allRows={}; allWanted={};
   document.getElementById('loginScreen').style.display='flex';
   document.getElementById('mainScreen').style.display='none';
   document.getElementById('userSelect').value='';
@@ -1418,10 +1661,14 @@ window.logout = function() {
 };
 
 window.showTab = function(name) {
-  const tabs=['calendar','myduty','wanted','apply','exchange','history','settings'];
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', tabs[i]===name));
+  const EX = ['wanted','apply','exchange'];
+  const key = EX.includes(name) ? 'exchange' : name;
+  if(EX.includes(name)) lastExSeg = name;
+  document.querySelectorAll('.tb .tab').forEach(t => t.classList.toggle('active', t.dataset.tab===key));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
+  const seg = document.getElementById('exSeg');
+  if(seg) { seg.style.display = EX.includes(name) ? 'flex' : 'none'; seg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.seg===name)); }
   if(name==='apply') { initApplyForm(); renderMyRequests(); }
   if(name==='exchange') renderExchangeTab();
   if(name==='history') renderHistory();
@@ -1429,6 +1676,7 @@ window.showTab = function(name) {
   if(name==='myduty') renderMyDuty();
   if(name==='wanted') renderWantedList();
   if(name==='settings') renderSettings();
+  window.scrollTo(0,0);
 };
 
 let deferredPrompt=null;
@@ -1477,8 +1725,260 @@ if('serviceWorker' in navigator) {
   }).catch(() => {});
 }
 
+// ===================== v4.0 추가 기능 =====================
+const DN = ['일','월','화','수','목','금','토'];
+const AB_ANCHOR = { date:'2026-11-16', team:'A' };   // 2026-11-16(월)~ A조, 11-23(월)~ B조, 이후 매주 교대
+function abTeamOf(date) {
+  const a = pdl(AB_ANCHOR.date);
+  const mon = new Date(date.getFullYear(), date.getMonth(), date.getDate() - ((date.getDay()+6)%7));
+  const wk = Math.round((mon - a) / 604800000);
+  const same = ((wk % 2) + 2) % 2 === 0;
+  return same ? AB_ANCHOR.team : (AB_ANCHOR.team==='A' ? 'B' : 'A');
+}
+function fmtPlate(p) { return String(p||'').replace(/([가-힣])\s*(\d)/, '$1 $2'); }
+function plateHtml(name) {
+  const v = VEHICLES[name];
+  if(!v || !v.length) return '<span class="nolist">차량번호 미등록</span>';
+  return v.map(x => '<span class="plate">'+esc(fmtPlate(x.p))+'</span>'+esc(x.c||'')).join(' &nbsp;');
+}
+function extraOf(s) { return Object.keys((EXTRA[s]) || {}); }
+function fmtKo(s) { const d = pdl(s); return (d.getMonth()+1)+'월 '+d.getDate()+'일 ('+DN[d.getDay()]+')'; }
+function holShort(h) {
+  if(!h) return '';
+  if(h.startsWith('대체')) return '대체';
+  if(h.includes('다음날')) return '추가휴무';
+  if(h.includes('연휴')) return '연휴';
+  if(h==='하기휴무') return '하기';
+  if(h==='석가탄신일') return '석탄일';
+  return h.length>4 ? h.slice(0,4) : h;
+}
+function pendingCount() {
+  const rows = Object.values(allRows);
+  return rows.filter(r => r.target===currentUser && r.status==='대기중').length
+       + (isAdmin ? rows.filter(r => r.status==='수락완료').length : 0);
+}
+function nextRotationPerson() {
+  const now = new Date();
+  for(let i=0;i<400;i++) {
+    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate()+i);
+    if(isDutyDay(d) && !SPECIAL_SCHEDULE[dateToStr(d)]) return getBasePerson(d);
+  }
+  return null;
+}
+function renderKpi() {
+  const el = document.getElementById('kpiStrip'); if(!el || !currentUser) return;
+  const now = new Date(), t0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const nx = dutyDatesBetween(currentUser, t0, new Date(now.getFullYear()+1, 11, 31))[0];
+  const d = nx ? pdl(nx) : null, dd = d ? Math.round((d-t0)/864e5) : null, pc = pendingCount();
+  el.innerHTML = '<div class="k"><small>내 다음 당직</small><b>'+(d?(d.getMonth()+1)+'/'+d.getDate()+'<u>'+DN[d.getDay()]+'</u>':'-')+'</b></div>'
+    +'<div class="k"><small>D-day</small><b>'+(dd===null?'-':dd===0?'오늘':'D-'+dd)+'</b></div>'
+    +'<div class="k'+(pc?' alert':'')+'"><small>교환 대기</small><b>'+pc+'<u>건</u></b></div>'
+    +'<div class="k"><small>이번 주</small><b>'+abTeamOf(now)+'<u>조</u></b></div>';
+}
+function gotoDate(s) { currentYear = +s.slice(0,4); currentMonth = +s.slice(5,7)-1; renderCalendar(); }
+window.goToday = function() { const n = new Date(); currentYear = n.getFullYear(); currentMonth = n.getMonth(); renderCalendar(); };
+function renderUpcomingHolidays() {
+  const el = document.getElementById('upcomingHolidays'); if(!el) return;
+  const todayStr = dateToStr(new Date());
+  const days = Object.keys(HOLIDAYS).filter(d => d>=todayStr).sort();
+  const groups = [];
+  days.forEach(s => {
+    const g = groups[groups.length-1];
+    if(g) { const nx = pdl(g.end); nx.setDate(nx.getDate()+1); if(dateToStr(nx)===s) { g.end = s; g.days.push(s); return; } }
+    groups.push({start:s, end:s, days:[s]});
+  });
+  const titleOf = g => {
+    const labs = g.days.map(x => HOLIDAYS[x]);
+    const main = labs.find(l => !/연휴|대체|다음날/.test(l)) || labs[0];
+    return (g.days.length>1 && !/휴무|연휴/.test(main)) ? main+' 연휴' : main;
+  };
+  if(!groups.length) { el.innerHTML = '<div class="empty-msg">예정된 휴일이 없습니다.</div>'; return; }
+  el.innerHTML = groups.slice(0,5).map(g => {
+    const s = pdl(g.start), e = pdl(g.end);
+    const sub = g.days.length>1
+      ? (s.getMonth()+1)+'/'+s.getDate()+'('+DN[s.getDay()]+') ~ '+(e.getMonth()+1)+'/'+e.getDate()+'('+DN[e.getDay()]+') · '+g.days.length+'일'
+      : '당직 <strong>'+esc(getDutyPerson(s)||'-')+'</strong> · '+abTeamOf(s)+'조';
+    const car = g.days.length===1 && getDutyPerson(s) && VEHICLES[getDutyPerson(s)] ? '<small style="margin-top:3px">'+plateHtml(getDutyPerson(s))+'</small>' : '';
+    return '<div class="row" data-d="'+g.start+'"><div class="db ho"><b>'+s.getDate()+'</b><small>'+(s.getMonth()+1)+'월 '+DN[s.getDay()]+'</small></div>'
+      +'<div class="m"><b>'+esc(titleOf(g))+'</b><small>'+sub+'</small>'+car+'</div></div>';
+  }).join('');
+  el.onclick = e => { const r = e.target.closest('.row'); if(r && r.dataset.d) { gotoDate(r.dataset.d); openDay(r.dataset.d); } };
+}
+
+window.openExchangeTab = function() { showTab(lastExSeg); };
+let dutyFilter = 'upcoming';
+window.setDutyFilter = function(f) {
+  dutyFilter = f;
+  document.querySelectorAll('#dutyChips button').forEach(b => b.classList.toggle('on', b.dataset.f===f));
+  renderMyDuty();
+};
+window.setStatYear = function(n) {
+  statYearOff = n;
+  document.querySelectorAll('#statChips button').forEach(b => b.classList.toggle('on', +b.dataset.y===n));
+  renderDutyStats();
+};
+
+// ---------- 날짜 상세 시트 ----------
+function extraCandidates(s, who) {
+  const have = new Set(extraOf(s));
+  return [...MEMBERS, ...EXTRA_POOL.filter(n => !MEMBERS.includes(n))].filter(n => n!==who && !have.has(n));
+}
+function renderDaySheet() {
+  const s = dayOpen, sheet = document.getElementById('daySheet'); if(!s || !sheet) return;
+  const date = pdl(s), dow = date.getDay();
+  const todayStr = dateToStr(new Date());
+  const duty = isDutyDay(date), who = duty ? getDutyPerson(date) : null, exd = getExchangedDuties();
+  const isEx = !!exd[s], isSp = !!SPECIAL_SCHEDULE[s] && !isEx, hol = HOLIDAYS[s] || '', team = abTeamOf(date);
+  const base = (duty && !SPECIAL_SCHEDULE[s]) ? getBasePerson(date) : null, xs = extraOf(s);
+  const tags = '<span class="tag '+(team==='A'?'b':'o')+'">'+team+'조</span>'+(hol?'<span class="tag r">'+esc(hol)+'</span>':'')
+    +(isEx?'<span class="tag g">교환 반영</span>':'')+(isSp?'<span class="tag p">특별배정</span>':'');
+  let h = '<i class="grab"></i><div class="sh-top"><div>'+tags+'<h3>'+(date.getMonth()+1)+'월 '+date.getDate()+'일 '+DN[dow]+'요일</h3></div>'
+    +'<div class="db'+(hol?' ho':'')+'"><b>'+date.getDate()+'</b><small>'+DN[dow]+'</small></div></div>';
+  if(who) {
+    const seq = MEMBERS.indexOf(who);
+    h += '<div class="blk"><small>당직자'+(seq>=0?' · 순번 '+(seq+1)+'번':'')+'</small><div class="nm">'+esc(who)+(who===currentUser?' (나)':'')+'</div><div>'+plateHtml(who)+'</div>'
+      +(isEx&&base&&base!==who?'<div class="sw">원래 순번 '+esc(base)+' → '+esc(who)+' 교환</div>':'')+'</div>';
+  } else h += '<div class="blk"><small>당직</small><div class="nolist">이 날은 당직이 없습니다.</div></div>';
+  h += '<div class="blk"><small>추가 출근자 ('+xs.length+'명)</small>';
+  if(xs.length) xs.forEach(n => {
+    h += '<div class="xr"><div class="xi"><b>'+esc(n)+'</b>'+plateHtml(n)+'</div>'
+      +(isAdmin?'<button class="xd" data-act="xdel" data-n="'+esc(n)+'" aria-label="삭제">✕</button>':'')+'</div>';
+  });
+  else h += '<div class="nolist">등록된 추가 출근자 없음</div>';
+  if(isAdmin) h += '<div class="xadd"><select id="xSel"><option value="">추가 출근자 선택</option>'+extraCandidates(s,who).map(n=>'<option>'+esc(n)+'</option>').join('')+'</select><button class="sm" data-act="xadd">＋ 추가</button></div>';
+  h += '</div>';
+  const future = s >= todayStr;
+  let primary = '';
+  if(future && who===currentUser && !isEx) primary = '<button class="modal-confirm" data-act="req">교환 신청</button>';
+  else if(future && who && who!==currentUser && MEMBERS.includes(who)) primary = '<button class="modal-confirm" data-act="swap">이 날과 교환 신청</button>';
+  h += '<div class="modal-btns"><button class="modal-cancel-btn" data-act="close">닫기</button>'+primary+'</div>';
+  if(future && who===currentUser && !isEx) h += '<button class="sm" data-act="wanted" style="width:100%;margin-top:10px;padding:12px">🙋 구합니다 게시</button>';
+  sheet.innerHTML = h;
+}
+window.openDay = function(s) { dayOpen = s; renderDaySheet(); document.getElementById('dayModal').classList.add('show'); };
+window.closeDay = function() { dayOpen = null; document.getElementById('dayModal').classList.remove('show'); };
+function badKey(n) { return /[.#$\[\]\/]/.test(n); }
+document.getElementById('dayModal').addEventListener('click', async e => {
+  if(e.target.id === 'dayModal') { closeDay(); return; }
+  const b = e.target.closest('[data-act]'); if(!b) return;
+  const s = dayOpen, act = b.dataset.act;
+  if(act==='close') closeDay();
+  else if(act==='req') { closeDay(); showTab('apply'); const m = document.getElementById('fmMyDate'); if(m) m.value = s; }
+  else if(act==='wanted') { closeDay(); openWantedModal(s); }
+  else if(act==='swap') {
+    const who = getDutyPerson(pdl(s)); closeDay(); showTab('apply');
+    const t = document.getElementById('fmTarget'); t.value = who; t.dispatchEvent(new Event('change'));
+    document.getElementById('fmTargetDate').value = s;
+  }
+  else if(act==='xadd') {
+    if(!isAdmin) return;
+    const sel = document.getElementById('xSel'); if(!sel || !sel.value) { alert('추가 출근자를 선택해주세요!'); return; }
+    const n = sel.value; if(badKey(n)) { alert('이름에 사용할 수 없는 문자가 있습니다.'); return; }
+    try {
+      await update(ref(db,'extraWork/'+s), {[n]:true});
+      await addHistory({type:'추가출근등록', from:currentUser, to:n, date:s, reason:s+' 추가 출근: '+n});
+    } catch(err) { alert('❌ 오류: '+err.message); }
+  }
+  else if(act==='xdel') {
+    if(!isAdmin) return;
+    const n = b.dataset.n; if(!confirm(n+'님을 '+s+' 추가 출근에서 삭제할까요?')) return;
+    try {
+      await remove(ref(db,'extraWork/'+s+'/'+n));
+      await addHistory({type:'추가출근삭제', from:currentUser, to:n, date:s, reason:s+' 추가 출근 삭제: '+n});
+    } catch(err) { alert('❌ 오류: '+err.message); }
+  }
+});
+
+// ---------- 관리자: 차량번호 / 추가 출근 인원 ----------
+function vehRow(v) {
+  return '<div class="vi"><input type="text" value="'+esc(fmtPlate(v.p))+'" placeholder="차량번호" maxlength="20" inputmode="text">'
+    +'<input type="text" value="'+esc(v.c||'')+'" placeholder="차종" maxlength="12"><button class="x" data-act="delveh" aria-label="차량 삭제">✕</button></div>';
+}
+function vehCard(name, list, isPool) {
+  return '<div class="vp" data-name="'+esc(name)+'" data-pool="'+(isPool?1:0)+'"><div class="vh"><b>'+esc(name)+'</b>'
+    +(isPool?'<span class="tag o">추가 출근</span>':'')+(list.length?'':'<span class="tag r">미등록</span>')
+    +(isPool?'<button class="vdel" data-act="delpool" aria-label="명단에서 삭제">🗑️</button>':'')+'</div>'
+    +'<div class="vrows">'+(list.length?list:[{p:'',c:''}]).map(vehRow).join('')+'</div>'
+    +'<button class="vadd" data-act="addveh">＋ 차량 추가</button></div>';
+}
+function renderVehicleEditor() {
+  const el = document.getElementById('vehicleEditor'); if(!el || vehDirty) return;
+  const pool = EXTRA_POOL.filter(n => !MEMBERS.includes(n));
+  el.innerHTML = MEMBERS.map(n => vehCard(n, VEHICLES[n]||[], false)).join('')
+    + (pool.length ? '<div class="settings-title" style="margin:14px 0 8px;font-size:14.5px">추가 출근 인원</div>' : '')
+    + pool.map(n => vehCard(n, VEHICLES[n]||[], true)).join('');
+}
+(function bindVehicleEditor() {
+  const el = document.getElementById('vehicleEditor'); if(!el) return;
+  el.addEventListener('input', () => { vehDirty = true; });
+  el.addEventListener('click', e => {
+    const b = e.target.closest('[data-act]'); if(!b) return;
+    const card = b.closest('.vp');
+    if(b.dataset.act==='addveh') { card.querySelector('.vrows').insertAdjacentHTML('beforeend', vehRow({p:'',c:''})); vehDirty = true; }
+    else if(b.dataset.act==='delveh') {
+      b.closest('.vi').remove();
+      if(!card.querySelector('.vi')) card.querySelector('.vrows').insertAdjacentHTML('beforeend', vehRow({p:'',c:''}));
+      vehDirty = true;
+    }
+    else if(b.dataset.act==='delpool') {
+      if(!confirm(card.dataset.name+'님을 추가 출근 명단에서 삭제할까요?\n(저장을 눌러야 반영됩니다)')) return;
+      card.remove(); vehDirty = true;
+    }
+  });
+})();
+window.addPoolPerson = function() {
+  if(!isAdmin) return;
+  const inp = document.getElementById('newPoolName'), n = inp.value.trim();
+  if(!n) { alert('이름을 입력해주세요!'); return; }
+  if(badKey(n)) { alert('이름에 . # $ [ ] / 문자는 사용할 수 없습니다.'); return; }
+  const names = [...document.querySelectorAll('#vehicleEditor .vp')].map(c => c.dataset.name);
+  if(names.includes(n)) { alert('이미 명단에 있는 이름입니다!'); return; }
+  document.getElementById('vehicleEditor').insertAdjacentHTML('beforeend', vehCard(n, [], true));
+  inp.value = ''; vehDirty = true;
+};
+window.saveVehicles = async function() {
+  if(!isAdmin) { alert('관리자만 수정할 수 있습니다!'); return; }
+  const veh = {__saved__:true}, pool = [];
+  for(const card of document.querySelectorAll('#vehicleEditor .vp')) {
+    const n = card.dataset.name; if(card.dataset.pool==='1') pool.push(n);
+    const list = [...card.querySelectorAll('.vi')].map(r => { const i = r.querySelectorAll('input'); return {p:i[0].value.trim(), c:i[1].value.trim()}; }).filter(v => v.p);
+    if(list.length) veh[n] = list;
+  }
+  const btn = document.getElementById('vehSaveBtn'); btn.disabled = true; btn.textContent = '저장 중...';
+  try {
+    await update(ref(db,'settings'), {vehicles:veh, extraPool:pool.length?pool:null});
+    await addHistory({type:'차량번호수정', from:currentUser, to:'', date:'', reason:'차량번호/추가 출근 명단 수정 (등록 '+(Object.keys(veh).length-1)+'명)'});
+    vehDirty = false; alert('✅ 저장되었습니다!');
+  } catch(err) { alert('❌ 오류: '+err.message); }
+  btn.disabled = false; btn.textContent = '저장';
+};
+
+// ---- 목록 삭제(내 화면 전용) / 이력 삭제(관리자 전용: DB 삭제) ----
+function hiddenSet(kind) {
+  try { return new Set(JSON.parse(localStorage.getItem('hide-'+kind+'-'+currentUser) || '[]')); } catch(e) { return new Set(); }
+}
+function hideAdd(kind, id) {
+  const s = hiddenSet(kind); s.add(id);
+  localStorage.setItem('hide-'+kind+'-'+currentUser, JSON.stringify([...s]));
+}
+window.hideMyRequest = function(id) {
+  const r = allRows[id]; if(!r) return;
+  if(!confirm('이 교환 신청을 내 목록에서 삭제할까요?\n(내 화면에서만 사라지며, 당직표와 전체 현황에는 영향이 없습니다)')) return;
+  hideAdd('req', id); renderMyRequests();
+};
+window.hideHistory = function(key) {
+  if(!confirm('이 이력을 내 화면에서 삭제할까요?\n(내 화면에서만 사라지며 다른 사람에게는 그대로 보입니다)')) return;
+  hideAdd('hist', key); renderHistory();
+};
+window.deleteHistory = async function(key) {
+  if(!isAdmin) { alert('관리자만 삭제할 수 있습니다!'); return; }
+  if(!confirm('이 이력을 삭제할까요?\n모든 사람의 화면에서 사라지며 되돌릴 수 없습니다.')) return;
+  await remove(ref(db, 'history/' + key));
+};
+
 populateMemberSelects();
 initFirebaseListeners();
+
 </script>
 </body>
 </html>
