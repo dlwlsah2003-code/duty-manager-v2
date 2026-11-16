@@ -1,4 +1,4 @@
-const CACHE_NAME = 'duty-manager-v4-1'; // 버전 올려서 구 캐시 강제 삭제
+const CACHE_NAME = 'duty-manager-v4-2'; // 버전 올려서 구 캐시 강제 삭제
 const STATIC = ['./', './index.html', './manifest.json', './launchericon-192x192.png', './kia-logo.png', './kia-regular.woff', './kia-bold.woff'];
 const DB = 'https://duty-manager-3c981-default-rtdb.asia-southeast1.firebasedatabase.app';
 
